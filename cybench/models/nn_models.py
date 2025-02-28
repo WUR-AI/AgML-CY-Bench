@@ -17,6 +17,7 @@ from cybench.models.model import BaseModel
 from cybench.config import (
     KEY_TARGET,
     STATIC_PREDICTORS,
+    YIELD_TREND_FEATURES,
     TIME_SERIES_PREDICTORS,
     ALL_PREDICTORS,
 )
@@ -32,9 +33,10 @@ def separate_ts_static_inputs(batch: dict) -> tuple:
       A tuple of torch tensors for time series and static inputs
     """
     ts = torch.cat([batch[k].unsqueeze(2) for k in TIME_SERIES_PREDICTORS], dim=2)
+    trend = torch.cat([batch[k].unsqueeze(1) for k in YIELD_TREND_FEATURES], dim=1)
     static = torch.cat([batch[k].unsqueeze(1) for k in STATIC_PREDICTORS], dim=1)
 
-    return ts, static
+    return ts, trend, static
 
 
 class BaseNNModel(BaseModel, nn.Module):
@@ -602,6 +604,7 @@ class BaselineLSTM(BaseNNModel):
     ):
         # Add all arguments to init_args to enable model reconstruction in fit method
         n_ts_inputs = len(TIME_SERIES_PREDICTORS)
+        n_trend_features = len(YIELD_TREND_FEATURES)
         n_static_inputs = len(STATIC_PREDICTORS)
         if not time_series_have_same_length:
             kwargs["interpolate_time_series"] = True
@@ -613,7 +616,7 @@ class BaselineLSTM(BaseNNModel):
 
         super().__init__(**kwargs)
         self._lstm = nn.LSTM(n_ts_inputs, hidden_size, num_layers, batch_first=True)
-        self._fc = nn.Linear(hidden_size + n_static_inputs, output_size)
+        self._fc = nn.Linear(hidden_size + + n_trend_features + n_static_inputs, output_size)
 
     def fit(
         self,
@@ -661,9 +664,9 @@ class BaselineLSTM(BaseNNModel):
         )
 
     def forward(self, x):
-        x_ts, x_static = separate_ts_static_inputs(x)
+        x_ts, x_trend, x_static = separate_ts_static_inputs(x)
         x_ts, _ = self._lstm(x_ts)
-        x = torch.cat([x_ts[:, -1, :], x_static], dim=1)
+        x = torch.cat([x_ts[:, -1, :], x_trend, x_static], dim=1)
         output = self._fc(x)
         return output
 

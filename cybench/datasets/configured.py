@@ -21,6 +21,8 @@ from cybench.datasets.alignment import (
     align_inputs_and_labels,
 )
 
+from cybench.util.data import get_trend_features
+
 
 def _load_and_preprocess_time_series_data(
     crop, country_code, ts_input, index_cols, ts_cols, df_crop_cal
@@ -74,10 +76,16 @@ def load_dfs(crop: str, country_code: str) -> tuple:
     df_y = df_y[[KEY_LOC, KEY_YEAR, KEY_TARGET]]
     df_y = df_y.dropna(axis=0)
     df_y = df_y[df_y[KEY_TARGET] > 0.0]
-    df_y.set_index([KEY_LOC, KEY_YEAR], inplace=True)
     # check empty targets
     if df_y.empty:
         return df_y, {}
+
+    # yield trend
+    df_y_trend = get_trend_features(df_y, 5)
+    df_y_trend.set_index([KEY_LOC, KEY_YEAR], inplace=True)
+
+    # set index of df_y
+    df_y.set_index([KEY_LOC, KEY_YEAR], inplace=True)
 
     # soil
     df_x_soil = pd.read_csv(
@@ -86,7 +94,10 @@ def load_dfs(crop: str, country_code: str) -> tuple:
     )
     df_x_soil = df_x_soil[[KEY_LOC] + SOIL_PROPERTIES]
     df_x_soil.set_index([KEY_LOC], inplace=True)
-    dfs_x = {"soil": df_x_soil}
+    dfs_x = {
+        "soil": df_x_soil,
+        "yield_trend" : df_y_trend
+    }
 
     # crop calendar
     df_crop_cal = pd.read_csv(
