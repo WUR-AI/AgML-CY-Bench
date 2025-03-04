@@ -88,16 +88,165 @@ def compute_crop_season_window(df, min_year, max_year, lead_time=FORECAST_LEAD_T
 
     df = add_cutoff_days(df, lead_time)
     df["cutoff_date"] = df["eos_date"] - pd.to_timedelta(df["cutoff_days"], unit="d")
-    df["season_window_length"] = np.where(
-        df["season_length"] + SPINUP_DAYS <= 365,
-        df["season_length"] + SPINUP_DAYS - df["cutoff_days"],
-        365 - df["cutoff_days"],
-    )
+    df["season_window_length"] = df["season_length"] + SPINUP_DAYS - df["cutoff_days"]
 
     # drop redundant information
     df.drop(columns=CROP_CALENDAR_DOYS + ["season_length", "cutoff_days"], inplace=True)
 
     return df
+
+
+def ensure_same_categories_union(df_1, df_2, cat_key=KEY_LOC):
+    """Ensures that cat_key has the same categories in both DataFrames, using the union of unique values."""
+
+    # Convert cat_key to categorical in both DataFrames
+    if cat_key in df_1.columns:
+        df_1[cat_key] = df_1[cat_key].astype("category")
+    if cat_key in df_2.columns:
+        df_2[cat_key] = df_2[cat_key].astype("category")
+
+    # Combine unique values
+    if cat_key in df_1.columns and cat_key in df_2.columns:
+        unique_values_df = df_1[cat_key].unique()
+        unique_values_crop = df_2[cat_key].unique()
+        combined_categories = pd.Index(
+            list(set(unique_values_df) | set(unique_values_crop))
+        )
+
+        # Set categories in both DataFrames
+        df_1[cat_key] = df_1[cat_key].cat.set_categories(combined_categories)
+        df_2[cat_key] = df_2[cat_key].cat.set_categories(combined_categories)
+
+    return df_1, df_2
+
+
+def process_crop_seasons(
+    locs,
+    years,
+    dates,
+    crop_season_keys,
+    sos_dates,
+    eos_dates,
+    cutoff_dates,
+    season_window_lengths,
+):
+    """Processes crop season data efficiently using NumPy."""
+    # assert years.base is not None
+    N = len(locs)
+    # Initialize arrays
+    sos_values = np.full(N, np.datetime64("NaT"), dtype="datetime64[ns]")
+    eos_values = np.full(N, np.datetime64("NaT"), dtype="datetime64[ns]")
+    cutoff_values = np.full(N, np.datetime64("NaT"), dtype="datetime64[ns]")
+    season_window_values = np.zeros(N, dtype=int)
+
+    # Create crop indices based on (loc, year) mapping
+    crop_indices = np.array(
+        [crop_season_keys.get((loc, year), -1) for loc, year in zip(locs, years)]
+    )
+    valid_indices = crop_indices != -1  # Mask for valid crop seasons
+    # Assign values using valid indices
+    np.putmask(sos_values, valid_indices, sos_dates[crop_indices])
+    np.putmask(eos_values, valid_indices, eos_dates[crop_indices])
+    np.putmask(cutoff_values, valid_indices, cutoff_dates[crop_indices])
+    np.putmask(season_window_values, valid_indices, season_window_lengths[crop_indices])
+
+    del valid_indices, crop_indices
+
+    # Adjust years if dates exceed eos_values
+    beyond_eos = dates > eos_values
+    next_years = years + 1
+
+    # Compute next-year crop indices
+    next_crop_indices = np.array(
+        [
+            crop_season_keys.get((loc, next_year), -1)
+            for loc, next_year in zip(locs, next_years)
+        ]
+    )
+    del next_years
+    valid_next_years = next_crop_indices != -1  # Mask for valid next-year crops
+
+    # Update values for the next season if beyond EOS
+    np.putmask(sos_values, beyond_eos & valid_next_years, sos_dates[next_crop_indices])
+    np.putmask(eos_values, beyond_eos & valid_next_years, eos_dates[next_crop_indices])
+    np.putmask(
+        cutoff_values, beyond_eos & valid_next_years, cutoff_dates[next_crop_indices]
+    )
+    np.putmask(
+        season_window_values,
+        beyond_eos & valid_next_years,
+        season_window_lengths[next_crop_indices],
+    )
+    # Boolean mask for rows where the year should be updated
+    update_year_mask = beyond_eos & valid_next_years
+    years[update_year_mask] += 1  # Modifies the original DataFrame in-place
+
+    del beyond_eos, valid_next_years, update_year_mask
+
+    # Validate date ranges
+    valid_date_ranges = (
+        (dates - sos_values).astype("timedelta64[D]").astype(int) <= 366
+    ) & ((eos_values - dates).astype("timedelta64[D]").astype(int) <= 366)
+
+    # Check season window constraints
+    season_length_valid = (
+        (cutoff_values - dates).astype("timedelta64[D]").astype(int)
+        <= season_window_values
+    ) & ((cutoff_values - dates).astype("timedelta64[D]").astype(int) >= 0)
+
+    keep_mask = valid_date_ranges & season_length_valid  # Initial mask
+
+    return keep_mask, years, season_window_values
+
+
+def align_to_crop_season_window_numpy(
+    locs: np.ndarray,
+    years: np.ndarray,
+    dates: np.ndarray,
+    crop_season_keys: dict,
+    sos_dates: np.ndarray,
+    eos_dates: np.ndarray,
+    cutoff_dates: np.ndarray,
+    season_window_lengths: np.ndarray,
+):
+    """
+    Aligns time series data using NumPy arrays and full vectorization, with optimized memory.
+    """
+    keep_mask, years, season_window_length = process_crop_seasons(
+        locs,
+        years,
+        dates,
+        crop_season_keys,
+        sos_dates,
+        eos_dates,
+        cutoff_dates,
+        season_window_lengths,
+    )
+
+    df_minimal = pd.DataFrame(
+        {
+            KEY_LOC: locs,
+            KEY_YEAR: years,
+            "date": dates,
+            "season_window_length": season_window_length,
+        }
+    )
+    grouped = df_minimal.groupby([KEY_LOC, KEY_YEAR]).agg(
+        {"date": ["min", "max"], "season_window_length": "first"}
+    )
+    grouped.columns = ["date_min", "date_max", "season_window_length"]
+    invalid_seasons = (grouped["date_max"] - grouped["date_min"]).dt.days < grouped[
+        "season_window_length"
+    ]
+    invalid_season_pairs = set(grouped.index[invalid_seasons])
+    if invalid_season_pairs:
+        grouped_indices = df_minimal.groupby([KEY_LOC, KEY_YEAR]).indices
+        invalid_indices = np.concatenate(
+            [grouped_indices[k] for k in invalid_season_pairs if k in grouped_indices]
+        )
+        keep_mask[invalid_indices] = False
+
+    return keep_mask, years
 
 
 def align_to_crop_season_window(df: pd.DataFrame, crop_season_df: pd.DataFrame):
@@ -155,11 +304,11 @@ def align_inputs_and_labels(df_y: pd.DataFrame, dfs_x: dict) -> tuple:
     """Align inputs and labels to have common indices (KEY_LOC, KEY_YEAR).
     NOTE: Input data returned may still contain more (KEY_LOC, KEY_YEAR)
     entries than label data. This is fine because the index of label data is
-    is used to access input data and not the other way round.
+    used to access input data and not the other way round.
 
     Args:
         df_y (pd.DataFrame): target or label data
-        dfs_x (dict): key is input source and and value is pd.DataFrame
+        dfs_x (dict): key is input source and value is pd.DataFrame
 
     Returns:
         the same DataFrame with dates aligned to crop season
@@ -169,6 +318,7 @@ def align_inputs_and_labels(df_y: pd.DataFrame, dfs_x: dict) -> tuple:
 
     # Identify common locations and years
     index_y_selection = set(df_y.index.values)
+
     for df_x in dfs_x.values():
         if len(df_x.index.names) == 1:
             index_y_selection = {

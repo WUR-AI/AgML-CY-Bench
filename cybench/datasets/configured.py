@@ -39,6 +39,9 @@ def _load_and_preprocess_time_series_data(
         the same DataFrame after preprocessing and aligning to crop season
     """
     path_data_cn = os.path.join(PATH_DATA_DIR, crop, country_code)
+    print(
+        f'load {os.path.join(path_data_cn, "_".join([ts_input, crop, country_code]) + ".csv")}'
+    )
     df_ts = pd.read_csv(
         os.path.join(path_data_cn, "_".join([ts_input, crop, country_code]) + ".csv"),
         header=0,
@@ -46,8 +49,27 @@ def _load_and_preprocess_time_series_data(
     df_ts["date"] = pd.to_datetime(df_ts["date"], format="%Y%m%d")
     df_ts[KEY_YEAR] = df_ts["date"].dt.year
     df_ts = df_ts[index_cols + ts_cols]
-    df_ts = align_to_crop_season_window(df_ts, df_crop_cal)
-    df_ts.set_index(index_cols, inplace=True)
+    crop_season_keys = {
+        (loc, year): idx
+        for loc, year, idx in zip(
+            df_crop_cal[KEY_LOC], df_crop_cal[KEY_YEAR], df_crop_cal.index
+        )
+    }
+    df_ts, df_crop_cal = ensure_same_categories_union(df_ts, df_crop_cal)
+
+    keep_mask, years = align_to_crop_season_window_numpy(
+        df_ts[KEY_LOC].values,
+        df_ts[KEY_YEAR].values,
+        df_ts["date"].values,
+        crop_season_keys,
+        df_crop_cal["sos_date"].values,
+        df_crop_cal["eos_date"].values,
+        df_crop_cal["cutoff_date"].values,
+        df_crop_cal["season_window_length"].values,
+    )
+    assert len(keep_mask) == len(df_ts)
+    df_ts[KEY_YEAR] = years
+    df_ts = df_ts.loc[keep_mask]
 
     return df_ts
 
