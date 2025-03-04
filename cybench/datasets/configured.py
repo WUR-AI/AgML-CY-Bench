@@ -72,6 +72,7 @@ def _load_and_preprocess_time_series_data(
     assert len(keep_mask) == len(df_ts)
     df_ts[KEY_YEAR] = years
     df_ts = df_ts.loc[keep_mask]
+    df_ts.set_index(index_cols, inplace=True)
 
     return df_ts
 
