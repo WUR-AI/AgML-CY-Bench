@@ -19,6 +19,8 @@ from cybench.datasets.alignment import (
     compute_crop_season_window,
     align_to_crop_season_window,
     align_inputs_and_labels,
+    align_to_crop_season_window_numpy,
+    ensure_same_categories_union,
 )
 
 
