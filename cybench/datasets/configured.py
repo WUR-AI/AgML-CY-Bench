@@ -33,6 +33,7 @@ def _load_and_preprocess_time_series_data(
     ts_cols,
     df_crop_cal,
     use_memory_optimization=False,
+    verbose=False,
 ):
     """A helper function to load and preprocess time series data.
 
@@ -44,15 +45,17 @@ def _load_and_preprocess_time_series_data(
         ts_cols (list): columns with time series variables
         df_crop_cal (pd.DataFrame): crop calendar data
         use_memory_optimization (bool): use (slower) memory-optimized function for crop season alignment
+        verbose (bool): output detailed processing information.
 
 
     Returns:
         the same DataFrame after preprocessing and aligning to crop season
     """
     path_data_cn = os.path.join(PATH_DATA_DIR, crop, country_code)
-    print(
-        f'load {os.path.join(path_data_cn, "_".join([ts_input, crop, country_code]) + ".csv")}'
-    )
+    if verbose:
+        print(
+            f'load {os.path.join(path_data_cn, "_".join([ts_input, crop, country_code]) + ".csv")}'
+        )
     df_ts = pd.read_csv(
         os.path.join(path_data_cn, "_".join([ts_input, crop, country_code]) + ".csv"),
         header=0,
