@@ -32,7 +32,7 @@ def _load_and_preprocess_time_series_data(
     index_cols,
     ts_cols,
     df_crop_cal,
-    use_memory_optimization=False,
+    use_memory_optimization=True,
     verbose=False,
 ):
     """A helper function to load and preprocess time series data.
@@ -96,7 +96,7 @@ def _load_and_preprocess_time_series_data(
 
 
 def load_dfs(
-    crop: str, country_code: str, use_memory_optimization: bool = False
+    crop: str, country_code: str, use_memory_optimization: bool = True
 ) -> tuple:
     """Load data from CSV files for crop and country.
     Expects CSV files in PATH_DATA_DIR/<crop>/<country_code>/.
