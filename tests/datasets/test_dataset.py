@@ -2,6 +2,7 @@ import os
 import pandas as pd
 
 from cybench.datasets.dataset import Dataset
+from cybench.datasets.configured import load_dfs
 from cybench.config import (
     PATH_DATA_DIR,
     KEY_LOC,
@@ -52,3 +53,14 @@ def test_load():
     ds2 = Dataset.load("maize_ES")
     ds3 = Dataset.load("maize_NL_ES")
     assert len(ds3) == (len(ds1) + len(ds2))
+
+
+def test_memory_optimization():
+    df_y_default, dfs_x_default = load_dfs("maize", "ES", use_memory_optimization=False)
+    df_y_memory_optimized, dfs_x_memory_optimized = load_dfs(
+        "maize", "ES", use_memory_optimization=False
+    )
+    assert df_y_default.equals(df_y_memory_optimized)
+
+    for key in dfs_x_default:
+        assert dfs_x_default[key].equals(dfs_x_memory_optimized[key])
