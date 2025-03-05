@@ -70,11 +70,7 @@ def _load_and_preprocess_time_series_data(
         )
     }
     if use_memory_optimization:
-        df_ts = align_to_crop_season_window(df_ts, df_crop_cal)
-        df_ts.set_index(index_cols, inplace=True)
-    else:
         df_ts, df_crop_cal = ensure_same_categories_union(df_ts, df_crop_cal)
-
         keep_mask, years = align_to_crop_season_window_numpy(
             df_ts[KEY_LOC].values,
             df_ts[KEY_YEAR].values,
@@ -91,7 +87,9 @@ def _load_and_preprocess_time_series_data(
         df_ts = restore_category_to_string(df_ts)
         df_ts.set_index(index_cols, inplace=True)
         df_crop_cal = restore_category_to_string(df_crop_cal)
-
+    else:
+        df_ts = align_to_crop_season_window(df_ts, df_crop_cal)
+        df_ts.set_index(index_cols, inplace=True)
     return df_ts
 
 
