@@ -107,10 +107,10 @@ def ensure_same_categories_union(df_1, df_2, cat_key=KEY_LOC):
 
     # Combine unique values
     if cat_key in df_1.columns and cat_key in df_2.columns:
-        unique_values_df = df_1[cat_key].unique()
-        unique_values_crop = df_2[cat_key].unique()
+        unique_values_df_1 = df_1[cat_key].unique()
+        unique_values_df_2 = df_2[cat_key].unique()
         combined_categories = pd.Index(
-            list(set(unique_values_df) | set(unique_values_crop))
+            list(set(unique_values_df_1) | set(unique_values_df_2))
         )
 
         # Set categories in both DataFrames
@@ -118,6 +118,20 @@ def ensure_same_categories_union(df_1, df_2, cat_key=KEY_LOC):
         df_2[cat_key] = df_2[cat_key].cat.set_categories(combined_categories)
 
     return df_1, df_2
+
+
+def restore_category_to_string(df, cat_key=KEY_LOC, original_order=None):
+    """Converts a categorical column back to string, restoring the original order if available."""
+    if cat_key in df.columns and isinstance(df[cat_key].dtype, pd.CategoricalDtype):
+        df[cat_key] = df[cat_key].astype(str)
+
+        # Restore original order if available
+        if original_order is not None:
+            df[cat_key] = pd.Categorical(
+                df[cat_key], categories=original_order, ordered=True
+            )
+
+    return df
 
 
 def process_crop_seasons(
@@ -231,7 +245,7 @@ def align_to_crop_season_window_numpy(
             "season_window_length": season_window_length,
         }
     )
-    grouped = df_minimal.groupby([KEY_LOC, KEY_YEAR]).agg(
+    grouped = df_minimal.groupby([KEY_LOC, KEY_YEAR], observed=True).agg(
         {"date": ["min", "max"], "season_window_length": "first"}
     )
     grouped.columns = ["date_min", "date_max", "season_window_length"]
@@ -240,7 +254,7 @@ def align_to_crop_season_window_numpy(
     ]
     invalid_season_pairs = set(grouped.index[invalid_seasons])
     if invalid_season_pairs:
-        grouped_indices = df_minimal.groupby([KEY_LOC, KEY_YEAR]).indices
+        grouped_indices = df_minimal.groupby([KEY_LOC, KEY_YEAR], observed=True).indices
         invalid_indices = np.concatenate(
             [grouped_indices[k] for k in invalid_season_pairs if k in grouped_indices]
         )
@@ -324,7 +338,7 @@ def align_inputs_and_labels(df_y: pd.DataFrame, dfs_x: dict) -> tuple:
             index_y_selection = {
                 (loc_id, year)
                 for loc_id, year in index_y_selection
-                if loc_id in df_x.index.values
+                if loc_id in df_x.index
             }
 
         if len(df_x.index.names) == 2:
@@ -400,6 +414,8 @@ def interpolate_time_series_data(
     del df_all_dates
 
     # NOTE: interpolate fills data in forward direction.
+    # TODO: example: cutoff-date: 2018-07-19 last ndvi: 2018-07-12;
+    # it will then interpolate between 2018-07-12 and e.g. 2018-01-01 from a different location
     df_ts = df_ts.sort_index().interpolate(method="linear")
     # fill NAs in the front with 0.0
     df_ts.fillna(0.0, inplace=True)
@@ -463,7 +479,7 @@ def aggregate_time_series_data(df_ts: pd.DataFrame, aggregate_time_series_to: st
     # Primarily to avoid losing the "date" column.
     ts_aggrs["date"] = "min"
     df_ts = (
-        df_ts.groupby([KEY_LOC, KEY_YEAR, aggregate_time_series_to])
+        df_ts.groupby([KEY_LOC, KEY_YEAR, aggregate_time_series_to], observed=True)
         .agg(ts_aggrs)
         .reset_index()
     )

@@ -23,7 +23,7 @@ def get_crop_country_summary(crop, yield_df, adm_id_col, year_col):
         max_year = yield_cn_df[year_col].max()
         num_years = len(yield_cn_df[year_col].unique())
         # average number of regions
-        num_regions = int(yield_cn_df.groupby([year_col]).size().mean())
+        num_regions = int(yield_cn_df.groupby([year_col], observed=True).size().mean())
         data_size = yield_cn_df[year_col].count()
         countries_summary["row" + str(row_idx)] = [
             crop,

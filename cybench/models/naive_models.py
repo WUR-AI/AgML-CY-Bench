@@ -38,7 +38,7 @@ class AverageYieldModel(BaseModel):
             self._group_by
         )
         self._averages = (
-            self._train_df.groupby(self._group_by)
+            self._train_df.groupby(self._group_by, observed=True)
             .agg(GROUP_AVG=(KEY_TARGET, "mean"))
             .reset_index()
         )

@@ -129,7 +129,7 @@ class BaseNNModel(BaseModel, nn.Module):
 
         Args:
           dataset (Dataset): training dataset
-          param_space (dict): hypperparameters to optimize
+          param_space (dict): hyperparameters to optimize
           optim_kwargs (dict): arguments to the optimizer
           device (str): the device to use
           kfolds (int): k for k-fold cv (default: 1)
@@ -196,8 +196,8 @@ class BaseNNModel(BaseModel, nn.Module):
                     cv_losses.append(val_losses[-1])
 
                 val_loss = np.mean(cv_losses)
-
             assert val_loss is not None
+            assert not np.isnan(val_loss)
 
             self._logger.debug(
                 f"For setting {i + 1}/{len(settings)}, average validation loss: {val_loss}"

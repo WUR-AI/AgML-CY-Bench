@@ -43,7 +43,7 @@ class TrendModel(BaseModel):
     def _estimate_trend(self, trend_x: list, trend_y: list, test_x: int):
         """Implements a linear trend.
         From @mmeronijrc: Small sample sizes and the use of quadratic or loess trend
-        an lead to strange results.
+        can lead to strange results.
 
         Args:
           trend_x (list): year in the trend window.

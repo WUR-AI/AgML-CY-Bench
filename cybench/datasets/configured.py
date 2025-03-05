@@ -21,6 +21,7 @@ from cybench.datasets.alignment import (
     align_inputs_and_labels,
     align_to_crop_season_window_numpy,
     ensure_same_categories_union,
+    restore_category_to_string,
 )
 
 
@@ -57,7 +58,7 @@ def _load_and_preprocess_time_series_data(
             df_crop_cal[KEY_LOC], df_crop_cal[KEY_YEAR], df_crop_cal.index
         )
     }
-    # df_ts, df_crop_cal = ensure_same_categories_union(df_ts, df_crop_cal)
+    df_ts, df_crop_cal = ensure_same_categories_union(df_ts, df_crop_cal)
 
     keep_mask, years = align_to_crop_season_window_numpy(
         df_ts[KEY_LOC].values,
@@ -72,8 +73,9 @@ def _load_and_preprocess_time_series_data(
     assert len(keep_mask) == len(df_ts)
     df_ts[KEY_YEAR] = years
     df_ts = df_ts.loc[keep_mask]
+    df_ts = restore_category_to_string(df_ts)
     df_ts.set_index(index_cols, inplace=True)
-
+    df_crop_cal = restore_category_to_string(df_crop_cal)
     return df_ts
 
 

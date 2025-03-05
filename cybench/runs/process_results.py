@@ -91,7 +91,7 @@ def write_results_to_table(output_file: str):
     df_metrics = results_to_metrics()
     default_metrics = get_default_metrics()
     metrics = [m for m in default_metrics if m in df_metrics.columns]
-    df_metrics = df_metrics.groupby(["crop", KEY_COUNTRY, "model"]).agg(
+    df_metrics = df_metrics.groupby(["crop", KEY_COUNTRY, "model"], observed=True).agg(
         {m: "mean" for m in metrics}
     )
     crops = df_metrics.index.get_level_values("crop").unique()

@@ -94,7 +94,7 @@ def _aggregate_by_period(
       pd.DataFrame with features
     """
     groupby_cols = index_cols + [period_col]
-    ft_df = df.groupby(groupby_cols).agg(aggrs).reset_index()
+    ft_df = df.groupby(groupby_cols, observed=True).agg(aggrs).reset_index()
 
     # rename to indicate aggregation
     ft_df = ft_df.rename(columns=ft_cols)
@@ -167,7 +167,11 @@ def _count_threshold(
         threshold_lambda = lambda x: 1 if (x[indicator] < threshold) else 0
 
     df["meet_thresh"] = df.apply(threshold_lambda, axis=1)
-    ft_df = df.groupby(groupby_cols).agg(FEATURE=("meet_thresh", "sum")).reset_index()
+    ft_df = (
+        df.groupby(groupby_cols, observed=True)
+        .agg(FEATURE=("meet_thresh", "sum"))
+        .reset_index()
+    )
     # drop the column we added
     df = df.drop(columns=["meet_thresh"])
 
@@ -278,22 +282,32 @@ def design_features(
     weather_df["gdd"] = (weather_df["tavg"] - GDD_BASE_TEMP[crop]).clip(
         0.0, GDD_UPPER_LIMIT[crop]
     )
-    weather_df["cum_gdd"] = weather_df.groupby(index_cols)["gdd"].cumsum()
+    weather_df["cum_gdd"] = weather_df.groupby(index_cols, observed=True)[
+        "gdd"
+    ].cumsum()
     weather_df["cwb"] = weather_df["cwb"].astype(float)
     weather_df["prec"] = weather_df["prec"].astype(float)
     weather_df = weather_df.sort_values(by=index_cols + ["date"])
-    weather_df["cum_cwb"] = weather_df.groupby(index_cols)["cwb"].cumsum()
-    weather_df["cum_prec"] = weather_df.groupby(index_cols)["prec"].cumsum()
+    weather_df["cum_cwb"] = weather_df.groupby(index_cols, observed=True)[
+        "cwb"
+    ].cumsum()
+    weather_df["cum_prec"] = weather_df.groupby(index_cols, observed=True)[
+        "prec"
+    ].cumsum()
 
     if fpar_df is not None:
         fpar_df = fpar_df.sort_values(by=index_cols + ["date"])
         fpar_df["fpar"] = fpar_df["fpar"].astype(float)
-        fpar_df["cum_fpar"] = fpar_df.groupby(index_cols)["fpar"].cumsum()
+        fpar_df["cum_fpar"] = fpar_df.groupby(index_cols, observed=True)[
+            "fpar"
+        ].cumsum()
 
     if ndvi_df is not None:
         ndvi_df = ndvi_df.sort_values(by=index_cols + ["date"])
         ndvi_df["ndvi"] = ndvi_df["ndvi"].astype(float)
-        ndvi_df["cum_ndvi"] = ndvi_df.groupby(index_cols)["ndvi"].cumsum()
+        ndvi_df["cum_ndvi"] = ndvi_df.groupby(index_cols, observed=True)[
+            "ndvi"
+        ].cumsum()
 
     # Aggregate by period
     avg_weather_cols = ["tmin", "tmax", "tavg", "prec", "rad", "cum_cwb"]
