@@ -289,16 +289,17 @@ class BaseNNModel(BaseModel, nn.Module):
         self._norm_params = train_dataset.get_normalization_params(
             normalization="standard"
         )
-
         train_losses = []
         val_losses = []
 
         # Training loop
-        pbar = tqdm(train_loader, desc=f"{self.__class__.__name__}")
+        total_batches = epochs * len(train_loader)  # Total iterations across all epochs
+        pbar = tqdm(total=total_batches, desc=f"{self.__class__.__name__}")
         for epoch in range(epochs):
             self.train()
             train_loss = self._train_epoch(
                 pbar,
+                train_loader,
                 device,
                 optimizer,
                 loss_fn=loss_fn,
@@ -387,11 +388,13 @@ class BaseNNModel(BaseModel, nn.Module):
         )
 
         train_losses = []
-        pbar = tqdm(train_loader, desc=f"{self.__class__.__name__}")
+        total_batches = epochs * len(train_loader)  # Total iterations across all epochs
+        pbar = tqdm(total=total_batches, desc=f"{self.__class__.__name__}")
         for epoch in range(epochs):
             self.train()
             train_loss = self._train_epoch(
                 pbar,
+                train_loader,
                 device,
                 optimizer,
                 loss_fn=loss_fn,
@@ -404,7 +407,8 @@ class BaseNNModel(BaseModel, nn.Module):
 
     def _train_epoch(
         self,
-        tqdm_loader: tqdm,
+        pbar: tqdm,
+        dataloader: torch.utils.data.DataLoader,
         device: str,
         optimizer: torch.optim.Optimizer,
         loss_fn: callable = torch.nn.functional.mse_loss,
@@ -414,7 +418,8 @@ class BaseNNModel(BaseModel, nn.Module):
         """Run one epoch during training
 
         Args:
-          tqdm_loader (tqdm): data loader with progress bar
+          pbar (tqdm): tqdm progress bar
+          dataloader (dataloader): data loader with progress bar
           device (str): the device to use
           optimizer (torch.optim.Optimizer): the optimizer
           loss_fn (callable): the loss function, default mse_loss
@@ -425,7 +430,7 @@ class BaseNNModel(BaseModel, nn.Module):
           The average of all batch losses
         """
         losses = []
-        for batch in tqdm_loader:
+        for batch in dataloader:
             # Set gradients to zero
             optimizer.zero_grad()
 
@@ -438,7 +443,7 @@ class BaseNNModel(BaseModel, nn.Module):
             optimizer.step()
             if scheduler is not None:
                 scheduler.step()
-
+            pbar.update(1)
             losses.append(loss.item())
 
         return np.mean(losses)
