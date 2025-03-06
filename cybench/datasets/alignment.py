@@ -145,13 +145,12 @@ def process_crop_seasons(
     season_window_lengths,
 ):
     """Processes crop season data efficiently using NumPy."""
-    # assert years.base is not None
-    N = len(locs)
+    n_elements = len(locs)
     # Initialize arrays
-    sos_values = np.full(N, np.datetime64("NaT"), dtype="datetime64[ns]")
-    eos_values = np.full(N, np.datetime64("NaT"), dtype="datetime64[ns]")
-    cutoff_values = np.full(N, np.datetime64("NaT"), dtype="datetime64[ns]")
-    season_window_values = np.zeros(N, dtype=int)
+    sos_values = np.full(n_elements, np.datetime64("NaT"), dtype="datetime64[ns]")
+    eos_values = np.full(n_elements, np.datetime64("NaT"), dtype="datetime64[ns]")
+    cutoff_values = np.full(n_elements, np.datetime64("NaT"), dtype="datetime64[ns]")
+    season_window_values = np.zeros(n_elements, dtype=int)
 
     # Create crop indices based on (loc, year) mapping
     crop_indices = np.array(
