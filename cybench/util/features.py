@@ -247,8 +247,7 @@ def design_features(
         soil_df = pd.concat([soil_df, soil_one_hot], axis=1).drop(
             columns=["drainage_class"]
         )
-    else:
-        soil_features = soil_df
+    soil_features = soil_df
 
     # Feature design for time series
     index_cols = [KEY_LOC, KEY_YEAR]
@@ -272,8 +271,8 @@ def design_features(
         soil_moisture_df = input_dfs["soil_moisture"]
         soil_moisture_df = _add_period(soil_moisture_df, period_length)
 
-    # cumlative sums
-    weather_df = weather_df.sort_values(by=index_cols + ["period"])
+    # cumulative sums
+    weather_df = weather_df.sort_values(by=index_cols + ["date"])
 
     # Daily growing degree days
     # gdd_daily = max(0, tavg - tbase)
@@ -332,10 +331,12 @@ def design_features(
         "tmax": [">", "35"],  # degrees
         "prec": ["<", "1"],  # mm (0 does not make sense, prec is always positive)
     }
-
+    operator_to_bool = {">": True, "<": False}
     # count time steps matching threshold conditions
     for ind, thresh in count_thresh_cols.items():
-        threshold_exceed = thresh[0]
+        threshold_exceed = operator_to_bool.get(thresh[0])
+        # Assert to ensure that the operator is valid
+        assert threshold_exceed is not None, f"Invalid operator {thresh[0]} for {ind}"
         threshold = float(thresh[1])
         if "_" in ind:
             ind = ind.split("_")[0]
