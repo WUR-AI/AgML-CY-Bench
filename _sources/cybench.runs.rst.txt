@@ -1,0 +1,53 @@
+cybench.runs package
+====================
+
+Submodules
+----------
+
+cybench.runs.agml\_workshop module
+----------------------------------
+
+.. automodule:: cybench.runs.agml_workshop
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+cybench.runs.benchmark\_summary module
+--------------------------------------
+
+.. automodule:: cybench.runs.benchmark_summary
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+cybench.runs.process\_results module
+------------------------------------
+
+.. automodule:: cybench.runs.process_results
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+cybench.runs.results\_plots module
+----------------------------------
+
+.. automodule:: cybench.runs.results_plots
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+cybench.runs.run\_benchmark module
+----------------------------------
+
+.. automodule:: cybench.runs.run_benchmark
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Module contents
+---------------
+
+.. automodule:: cybench.runs
+   :members:
+   :undoc-members:
+   :show-inheritance:
