@@ -1,0 +1,61 @@
+cybench.models package
+======================
+
+Submodules
+----------
+
+cybench.models.model module
+---------------------------
+
+.. automodule:: cybench.models.model
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+cybench.models.naive\_models module
+-----------------------------------
+
+.. automodule:: cybench.models.naive_models
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+cybench.models.nn\_models module
+--------------------------------
+
+.. automodule:: cybench.models.nn_models
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+cybench.models.residual\_models module
+--------------------------------------
+
+.. automodule:: cybench.models.residual_models
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+cybench.models.sklearn\_models module
+-------------------------------------
+
+.. automodule:: cybench.models.sklearn_models
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+cybench.models.trend\_models module
+-----------------------------------
+
+.. automodule:: cybench.models.trend_models
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Module contents
+---------------
+
+.. automodule:: cybench.models
+   :members:
+   :undoc-members:
+   :show-inheritance:
