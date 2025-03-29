@@ -1,6 +1,7 @@
 import pandas as pd
 import numpy as np
 
+from cybench.config import KEY_LOC, KEY_YEAR, KEY_TARGET
 
 def data_to_pandas(data_items, data_cols=None):
     """Convert data items as dict to pandas DataFrame
@@ -45,3 +46,13 @@ def trim_time_series_data(sample: dict, num_time_steps: int, time_series_keys: l
             )
 
     return sample
+
+def get_trend_features(df, trend_window):
+    trend_fts = df.sort_values(by=[KEY_LOC, KEY_YEAR])
+    for i in range(trend_window, 0, -1):
+        trend_fts[KEY_TARGET + "-" + str(i)] = trend_fts.groupby([KEY_LOC])[
+            KEY_TARGET
+        ].shift(i)
+
+    trend_fts = trend_fts.dropna(axis=0).drop(columns=[KEY_TARGET])
+    return trend_fts
