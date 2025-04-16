@@ -172,6 +172,16 @@ ALL_INDICATORS = {
         "is_time_series": False,
         "is_categorical": False,
     },
+    "latitude": {
+        "source": "Location",
+        "is_time_series": False,
+        "is_categorical": False,
+    },
+    "longitude": {
+        "source": "Location",
+        "is_time_series": False,
+        "is_categorical": False,
+    },
 }
 
 # used to read .nc files
@@ -1038,7 +1048,7 @@ def process_indicators(crop, region, sel_indicators):
     Process predictors or indicators.
 
     :param crop: crop name
-    :param regoin: region code or 2-letter country code
+    :param region: region code or 2-letter country code
     :param sel_indicators: a list of indicators to process
     """
     geo_df = get_shapes(region=region)

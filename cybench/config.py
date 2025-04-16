@@ -121,6 +121,9 @@ MAX_INPUT_YEAR = 2023
 # Soil properties
 SOIL_PROPERTIES = ["awc", "bulk_density"]  # , "drainage_class"]
 
+# Location properties
+LOCATION_PROPERTIES = ["latitude", "longitude"]
+
 # Static predictors. Add more when available
 STATIC_PREDICTORS = SOIL_PROPERTIES
 
