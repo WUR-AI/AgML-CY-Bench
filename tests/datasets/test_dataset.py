@@ -11,6 +11,7 @@ from cybench.config import (
     KEY_DATES,
     KEY_COMBINED_FEATURES,
     SOIL_PROPERTIES,
+    LOCATION_PROPERTIES,
     METEO_INDICATORS,
     RS_FPAR,
     RS_NDVI,
@@ -25,7 +26,9 @@ dataset = Dataset.load("maize_NL")
 def test_dataset_item():
     assert isinstance(dataset[0], dict)
     expected_indices = [KEY_LOC, KEY_YEAR, KEY_DATES]
-    expected_data = SOIL_PROPERTIES + METEO_INDICATORS + [RS_FPAR, RS_NDVI]
+    expected_data = (
+        SOIL_PROPERTIES + LOCATION_PROPERTIES + METEO_INDICATORS + [RS_FPAR, RS_NDVI]
+    )
     expected_data += SOIL_MOISTURE_INDICATORS + CROP_CALENDAR_DATES + [KEY_TARGET]
     assert len(dataset[0]) == len(expected_indices + expected_data)
     assert set(dataset[0].keys()) == set(expected_indices + expected_data)
