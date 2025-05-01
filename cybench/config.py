@@ -124,6 +124,10 @@ SOIL_PROPERTIES = ["awc", "bulk_density"]  # , "drainage_class"]
 # Static predictors. Add more when available
 STATIC_PREDICTORS = SOIL_PROPERTIES
 
+# Yield trend
+TREND_WINDOW = 5
+YIELD_TREND_FEATURES = [KEY_TARGET + "-" + str(i) for i in range(1, TREND_WINDOW + 1)]
+
 # Weather indicators
 METEO_INDICATORS = ["tmin", "tmax", "tavg", "prec", "cwb", "rad"]
 
@@ -159,7 +163,7 @@ TIME_SERIES_AGGREGATIONS = {
 }
 
 # All predictors. Add more when available
-ALL_PREDICTORS = STATIC_PREDICTORS + TIME_SERIES_PREDICTORS
+ALL_PREDICTORS = STATIC_PREDICTORS + YIELD_TREND_FEATURES + TIME_SERIES_PREDICTORS
 
 # Crop calendar entries: start of season, end of season.
 # doy = day of year (1 to 366).
@@ -183,7 +187,7 @@ GDD_UPPER_LIMIT = {
 # Lead time for forecasting
 # Choices: "middle-of-season", "quarter-of-season",
 # "n-day(s)" where n is an integer
-FORECAST_LEAD_TIME = "middle-of-season"
+FORECAST_LEAD_TIME = "60-days"
 
 # Buffer period before the start of season
 SPINUP_DAYS = 90

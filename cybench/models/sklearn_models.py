@@ -4,6 +4,7 @@ import logging
 from collections.abc import Iterable
 from sklearn.preprocessing import StandardScaler
 from sklearn.linear_model import Ridge, Lasso
+from sklearn.neighbors import KNeighborsRegressor
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.feature_selection import SelectFromModel
 from sklearn.model_selection import GridSearchCV, GroupKFold
@@ -23,6 +24,7 @@ from cybench.config import (
     KEY_TARGET,
     KEY_DATES,
     SOIL_PROPERTIES,
+    YIELD_TREND_FEATURES,
     TIME_SERIES_INPUTS,
 )
 
@@ -212,6 +214,9 @@ class BaseSklearnModel(BaseModel):
             dfs_x[x] = df_ts.reset_index()
 
         features = design_features(crop, dfs_x)
+        trend_features = data_to_pandas(data_items,
+                                        data_cols=[KEY_LOC, KEY_YEAR] + YIELD_TREND_FEATURES)
+        features = features.merge(trend_features, on=[KEY_LOC, KEY_YEAR])
 
         return features
 
@@ -356,6 +361,34 @@ class SklearnRandomForest(BaseSklearnModel):
         fit_params["optimize_hyperparameters"] = True
         fit_params["param_space"] = {
             "estimator__n_estimators": [50, 100, 500],
+        }
+
+        super().fit(train_dataset, **fit_params)
+
+class SklearnKNN(BaseSklearnModel):
+    def __init__(self, feature_cols: list = None):
+        knn = KNeighborsRegressor(weights="distance")
+
+        kwargs = {
+            "feature_cols": feature_cols,
+            "estimator": knn,
+        }
+
+        super().__init__(**kwargs)
+
+    def fit(self, train_dataset: Dataset, **fit_params):
+        """Fit or train the model.
+
+        Args:
+          train_dataset (Dataset): training dataset
+          **fit_params: Additional parameters.
+
+        Returns:
+          A tuple containing the fitted model and a dict with additional information.
+        """
+        fit_params["optimize_hyperparameters"] = True
+        fit_params["param_space"] = {
+            "estimator__n_neighbors": [3, 5, 7, 9],
         }
 
         super().fit(train_dataset, **fit_params)
