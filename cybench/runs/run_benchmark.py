@@ -389,8 +389,11 @@ if __name__ == "__main__":
         )
 
     df_metrics = results["df_metrics"].reset_index()
-    print(
-        df_metrics.groupby("model").agg(
-            {"normalized_rmse": "mean", "mape": "mean", "r2": "mean"}
-        )
-    )
+
+    # Identify index columns dynamically
+    index_cols = df_metrics.columns[:len(df_metrics.index.names)]
+    metric_cols = [c for c in df_metrics.columns if c not in index_cols]
+
+    # Group and average all available metrics
+    agg_df = df_metrics.groupby("model")[metric_cols].mean().round(3)
+    print(agg_df)

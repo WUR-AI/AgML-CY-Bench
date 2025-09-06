@@ -15,28 +15,44 @@ from cybench.config import (
 )
 from cybench.evaluation.eval import get_default_metrics
 
-
-def results_to_metrics():
-    df_all = pd.DataFrame()
+def results_to_metrics(residual: bool = False) -> pd.DataFrame:
+    """
+    Aggregate metrics for all runs in PATH_RESULTS_DIR.
+    Only keeps metrics that exist in each run.
+    Converts MAPE to percentage if it exists.
+    """
+    df_all = []
     run_names = os.listdir(PATH_RESULTS_DIR)
-    default_metrics = list(get_default_metrics())
+    default_metrics = list(get_default_metrics())  # superset of possible metrics
+
     for run_name in run_names:
         crop = run_name.split("_")[0]
-        df_run = compute_metrics(run_name)
+        df_run = compute_metrics(run_name, residual=residual)
         if df_run.empty:
             continue
 
-        metrics = [m for m in default_metrics if m in df_run.columns]
-        df_run.reset_index(inplace=True)
-        df_run["crop"] = crop
-        # NOTE: Mean Absolute Percentage Error (MAPE) is not converted to percentage.
-        # This is because we follow the default from scikit-learn.
-        # TODO: Remove this when MAPE is actually a percentage.
-        df_run["mape"] = df_run["mape"] * 100
-        df_run = df_run[["crop", KEY_COUNTRY, KEY_YEAR, "model"] + metrics]
-        df_all = pd.concat([df_all, df_run], axis=0)
+        df_run = df_run.reset_index()
 
-    return df_all
+        # Dynamically detect which metrics exist in this run
+        metric_cols = [m for m in default_metrics if m in df_run.columns]
+
+        # Convert MAPE to percentage if present
+        if "mape" in df_run.columns:
+            df_run["mape"] = df_run["mape"] * 100
+
+        # Add crop column
+        df_run["crop"] = crop
+
+        # Keep columns in consistent order
+        df_run = df_run[["crop", KEY_COUNTRY, KEY_YEAR, "model"] + metric_cols]
+
+        df_all.append(df_run)
+
+    if df_all:
+        return pd.concat(df_all, ignore_index=True)
+    else:
+        # Empty DataFrame with correct columns
+        return pd.DataFrame(columns=["crop", KEY_COUNTRY, KEY_YEAR, "model"] + default_metrics)
 
 
 def results_to_residuals(model_names):
