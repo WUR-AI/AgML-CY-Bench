@@ -103,9 +103,9 @@ def write_results_to_table(output_file: str):
     df_metrics = results_to_metrics()
     default_metrics = get_default_metrics()
     metrics = [m for m in default_metrics if m in df_metrics.columns]
-    df_metrics = df_metrics.groupby(["crop", KEY_COUNTRY, "model"], observed=True).agg(
-        {m: "mean" for m in metrics}
-    )
+    df_metrics = df_metrics.groupby(
+        ["crop", KEY_COUNTRY, "model"], observed=True
+    ).agg({m: "median" for m in metrics})
     crops = df_metrics.index.get_level_values("crop").unique()
     metrics = df_metrics.columns.unique()
     tables = {}
@@ -116,8 +116,7 @@ def write_results_to_table(output_file: str):
             tables[crop][metric] = crop_df.reset_index().pivot_table(
                 index=["crop", KEY_COUNTRY], columns="model", values=metric
             )
-
-    # Open a file to write Markdown content
+    print(f"write to {os.path.join(PATH_OUTPUT_DIR, output_file)}")
     with open(os.path.join(PATH_OUTPUT_DIR, output_file), "w") as file:
         for crop, metrics in tables.items():
             for metric, values in metrics.items():
@@ -132,12 +131,12 @@ def write_results_to_table(output_file: str):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(
-        prog="process_results.py", description="Output markdown tables with summary of metrics"
+        prog="process_results.py",
+        description="Output markdown tables with summary of metrics",
     )
     parser.add_argument("-o", "--output_file")
     args = parser.parse_args()
     output_file = "output_tables.md"
-    if (args.output_file is not None):
+    if args.output_file is not None:
         output_file = args.output_file
-
     write_results_to_table(output_file=output_file)
