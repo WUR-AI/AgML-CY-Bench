@@ -134,14 +134,17 @@ def load_dfs(
     dfs_x = {"soil": df_x_soil}
 
     # location
-    df_x_location = pd.read_csv(
-        os.path.join(path_data_cn, "_".join(["location", crop, country_code]) + ".csv"),
-        header=0,
-    )
-    df_x_location = df_x_location[[KEY_LOC] + LOCATION_PROPERTIES]
-    df_x_location.set_index([KEY_LOC], inplace=True)
+    if LOCATION_PROPERTIES:
+        df_x_location = pd.read_csv(
+            os.path.join(
+                path_data_cn, "_".join(["location", crop, country_code]) + ".csv"
+            ),
+            header=0,
+        )
+        df_x_location = df_x_location[[KEY_LOC] + LOCATION_PROPERTIES]
+        df_x_location.set_index([KEY_LOC], inplace=True)
 
-    dfs_x["location"] = df_x_location
+        dfs_x["location"] = df_x_location
 
     # crop calendar
     df_crop_cal = pd.read_csv(

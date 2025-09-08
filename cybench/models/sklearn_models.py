@@ -197,12 +197,14 @@ class BaseSklearnModel(BaseModel):
         soil_df = data_to_pandas(data_items, data_cols=[KEY_LOC] + SOIL_PROPERTIES)
         soil_df = soil_df.drop_duplicates()
 
-        location_df = data_to_pandas(
-            data_items, data_cols=[KEY_LOC] + LOCATION_PROPERTIES
-        )
-        location_df = location_df.drop_duplicates()
+        dfs_x = {"soil": soil_df}
 
-        dfs_x = {"soil": soil_df, "location": location_df}
+        if LOCATION_PROPERTIES:
+            location_df = data_to_pandas(
+                data_items, data_cols=[KEY_LOC] + LOCATION_PROPERTIES
+            )
+            location_df = location_df.drop_duplicates()
+            dfs_x["location"] = location_df
 
         for x, ts_cols in TIME_SERIES_INPUTS.items():
             df_ts = data_to_pandas(
