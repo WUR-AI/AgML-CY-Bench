@@ -26,6 +26,10 @@ from cybench.datasets.alignment import (
 )
 
 
+class DatasetVersionError(RuntimeError):
+    pass
+
+
 def _load_and_preprocess_time_series_data(
     crop,
     country_code,
@@ -135,12 +139,18 @@ def load_dfs(
 
     # location
     if LOCATION_PROPERTIES:
-        df_x_location = pd.read_csv(
-            os.path.join(
-                path_data_cn, "_".join(["location", crop, country_code]) + ".csv"
-            ),
-            header=0,
+        location_file = os.path.join(
+            path_data_cn, f"location_{crop}_{country_code}.csv"
         )
+
+        if not os.path.exists(location_file):
+            raise DatasetVersionError(
+                f"{location_file} not found. "
+                "Please use version 1.9 of the dataset that includes location properties, "
+                "or set LOCATION_PROPERTIES to empty list"
+            )
+
+        df_x_location = pd.read_csv(location_file, header=0)
         df_x_location = df_x_location[[KEY_LOC] + LOCATION_PROPERTIES]
         df_x_location.set_index([KEY_LOC], inplace=True)
 
