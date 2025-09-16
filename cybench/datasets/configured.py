@@ -12,6 +12,7 @@ from cybench.config import (
     MIN_INPUT_YEAR,
     MAX_INPUT_YEAR,
     SOIL_PROPERTIES,
+    LOCATION_PROPERTIES,
     TIME_SERIES_INPUTS,
 )
 
@@ -23,6 +24,10 @@ from cybench.datasets.alignment import (
     ensure_same_categories_union,
     restore_category_to_string,
 )
+
+
+class DatasetVersionError(RuntimeError):
+    pass
 
 
 def _load_and_preprocess_time_series_data(
@@ -131,6 +136,25 @@ def load_dfs(
     df_x_soil = df_x_soil[[KEY_LOC] + SOIL_PROPERTIES]
     df_x_soil.set_index([KEY_LOC], inplace=True)
     dfs_x = {"soil": df_x_soil}
+
+    # location
+    if LOCATION_PROPERTIES:
+        location_file = os.path.join(
+            path_data_cn, f"location_{crop}_{country_code}.csv"
+        )
+
+        if not os.path.exists(location_file):
+            raise DatasetVersionError(
+                f"{location_file} not found. "
+                "Please use version 1.9 of the dataset that includes location properties, "
+                "or set LOCATION_PROPERTIES to empty list"
+            )
+
+        df_x_location = pd.read_csv(location_file, header=0)
+        df_x_location = df_x_location[[KEY_LOC] + LOCATION_PROPERTIES]
+        df_x_location.set_index([KEY_LOC], inplace=True)
+
+        dfs_x["location"] = df_x_location
 
     # crop calendar
     df_crop_cal = pd.read_csv(

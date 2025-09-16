@@ -23,6 +23,7 @@ from cybench.config import (
     KEY_TARGET,
     KEY_DATES,
     SOIL_PROPERTIES,
+    LOCATION_PROPERTIES,
     TIME_SERIES_INPUTS,
 )
 
@@ -197,6 +198,14 @@ class BaseSklearnModel(BaseModel):
         soil_df = soil_df.drop_duplicates()
 
         dfs_x = {"soil": soil_df}
+
+        if LOCATION_PROPERTIES:
+            location_df = data_to_pandas(
+                data_items, data_cols=[KEY_LOC] + LOCATION_PROPERTIES
+            )
+            location_df = location_df.drop_duplicates()
+            dfs_x["location"] = location_df
+
         for x, ts_cols in TIME_SERIES_INPUTS.items():
             df_ts = data_to_pandas(
                 data_items, data_cols=[KEY_LOC, KEY_YEAR] + [KEY_DATES] + ts_cols
@@ -233,7 +242,9 @@ class BaseSklearnModel(BaseModel):
                 data_items, data_cols=[KEY_LOC, KEY_YEAR, KEY_TARGET]
             )
             # Check features are the same for training and test data
-            ft_cols = list(test_features.columns)[len([KEY_LOC, KEY_YEAR]) :]
+            ft_cols = [
+                ft for ft in test_features.columns if ft not in [KEY_LOC, KEY_YEAR]
+            ]
             missing_features = [ft for ft in self._feature_cols if ft not in ft_cols]
             for ft in missing_features:
                 test_features[ft] = 0.0
