@@ -1,5 +1,6 @@
 import numpy as np
 from sklearn.metrics import mean_squared_error, mean_absolute_percentage_error, r2_score
+from scipy.stats import pearsonr
 
 from cybench.models.model import BaseModel
 from cybench.datasets.dataset import Dataset
@@ -13,9 +14,14 @@ def metric(func):
     implemented_metrics[func.__name__] = func
     return func
 
+def get_default_metrics(residual: bool = False):
+    if residual:
+        # Only metrics that make sense on residuals
+        return ("r", "r2")
+    else:
+        # Full set
+        return ("mape", "normalized_rmse", "r", "r2")
 
-def get_default_metrics():
-    return ("normalized_rmse", "mape", "r2")
 
 
 def evaluate_model(model: BaseModel, dataset: Dataset, metrics=get_default_metrics()):
@@ -58,7 +64,7 @@ def evaluate_predictions(
         metric_function = implemented_metrics.get(metric_name)
         if metric_function:
             result = metric_function(y_true, y_pred)
-            results[metric_name] = result
+            results[metric_name] = np.round(result, 4)
         else:
             raise ValueError(f"Metric function '{metric_name}' not implemented.")
 
@@ -114,3 +120,21 @@ def r2(y_true: np.ndarray, y_pred: np.ndarray):
     """
 
     return r2_score(y_true, y_pred)
+
+
+@metric
+def r(y_true: np.ndarray, y_pred: np.ndarray):
+    """
+    Calculate Pearson correlation coefficient.
+
+    Args:
+    - y_true (numpy.ndarray): True values.
+    - y_pred (numpy.ndarray): Predicted values.
+
+    Returns:
+    - float: Pearson's R.
+    """
+    try:
+        return pearsonr(y_true, y_pred)[0]
+    except Exception:
+        return float("nan")

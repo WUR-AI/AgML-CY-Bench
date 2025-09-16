@@ -15,28 +15,44 @@ from cybench.config import (
 )
 from cybench.evaluation.eval import get_default_metrics
 
-
-def results_to_metrics():
-    df_all = pd.DataFrame()
+def results_to_metrics(residual: bool = False) -> pd.DataFrame:
+    """
+    Aggregate metrics for all runs in PATH_RESULTS_DIR.
+    Only keeps metrics that exist in each run.
+    Converts MAPE to percentage if it exists.
+    """
+    df_all = []
     run_names = os.listdir(PATH_RESULTS_DIR)
-    default_metrics = list(get_default_metrics())
+    default_metrics = list(get_default_metrics())  # superset of possible metrics
+
     for run_name in run_names:
         crop = run_name.split("_")[0]
-        df_run = compute_metrics(run_name)
+        df_run = compute_metrics(run_name, residual=residual)
         if df_run.empty:
             continue
 
-        metrics = [m for m in default_metrics if m in df_run.columns]
-        df_run.reset_index(inplace=True)
-        df_run["crop"] = crop
-        # NOTE: Mean Absolute Percentage Error (MAPE) is not converted to percentage.
-        # This is because we follow the default from scikit-learn.
-        # TODO: Remove this when MAPE is actually a percentage.
-        df_run["mape"] = df_run["mape"] * 100
-        df_run = df_run[["crop", KEY_COUNTRY, KEY_YEAR, "model"] + metrics]
-        df_all = pd.concat([df_all, df_run], axis=0)
+        df_run = df_run.reset_index()
 
-    return df_all
+        # Dynamically detect which metrics exist in this run
+        metric_cols = [m for m in default_metrics if m in df_run.columns]
+
+        # Convert MAPE to percentage if present
+        if "mape" in df_run.columns:
+            df_run["mape"] = df_run["mape"] * 100
+
+        # Add crop column
+        df_run["crop"] = crop
+
+        # Keep columns in consistent order
+        df_run = df_run[["crop", KEY_COUNTRY, KEY_YEAR, "model"] + metric_cols]
+
+        df_all.append(df_run)
+
+    if df_all:
+        return pd.concat(df_all, ignore_index=True)
+    else:
+        # Empty DataFrame with correct columns
+        return pd.DataFrame(columns=["crop", KEY_COUNTRY, KEY_YEAR, "model"] + default_metrics)
 
 
 def results_to_residuals(model_names):
@@ -103,9 +119,9 @@ def write_results_to_table(output_file: str):
     df_metrics = results_to_metrics()
     default_metrics = get_default_metrics()
     metrics = [m for m in default_metrics if m in df_metrics.columns]
-    df_metrics = df_metrics.groupby(["crop", KEY_COUNTRY, "model"], observed=True).agg(
-        {m: "mean" for m in metrics}
-    )
+    df_metrics = df_metrics.groupby(
+        ["crop", KEY_COUNTRY, "model"], observed=True
+    ).agg({m: "median" for m in metrics})
     crops = df_metrics.index.get_level_values("crop").unique()
     metrics = df_metrics.columns.unique()
     tables = {}
@@ -116,8 +132,7 @@ def write_results_to_table(output_file: str):
             tables[crop][metric] = crop_df.reset_index().pivot_table(
                 index=["crop", KEY_COUNTRY], columns="model", values=metric
             )
-
-    # Open a file to write Markdown content
+    print(f"write to {os.path.join(PATH_OUTPUT_DIR, output_file)}")
     with open(os.path.join(PATH_OUTPUT_DIR, output_file), "w") as file:
         for crop, metrics in tables.items():
             for metric, values in metrics.items():
@@ -132,12 +147,12 @@ def write_results_to_table(output_file: str):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(
-        prog="process_results.py", description="Output markdown tables with summary of metrics"
+        prog="process_results.py",
+        description="Output markdown tables with summary of metrics",
     )
     parser.add_argument("-o", "--output_file")
     args = parser.parse_args()
     output_file = "output_tables.md"
-    if (args.output_file is not None):
+    if args.output_file is not None:
         output_file = args.output_file
-
     write_results_to_table(output_file=output_file)

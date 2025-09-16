@@ -16,7 +16,7 @@ from cybench.config import (
 )
 
 from cybench.datasets.dataset import Dataset
-from cybench.evaluation.eval import evaluate_predictions
+from cybench.evaluation.eval import evaluate_predictions, get_default_metrics
 from cybench.models.naive_models import AverageYieldModel
 from cybench.models.trend_models import TrendModel
 from cybench.models.sklearn_models import SklearnRidge, SklearnRandomForest
@@ -252,18 +252,33 @@ def get_prediction_residuals(run_name: str, model_names: dict) -> pd.DataFrame:
     return df_all
 
 
+def _prepare_targets_preds(df_yr, model_name, y_loc_mean=None, residual=False):
+    """Prepare y_true and y_pred, optionally using residuals."""
+    y_true = df_yr[KEY_TARGET].values
+    y_pred = df_yr[model_name].values
+
+    if residual and y_loc_mean is not None:
+        y_true = y_true - df_yr[KEY_LOC].map(y_loc_mean)
+        y_pred = y_pred - df_yr[KEY_LOC].map(y_loc_mean)
+
+    return y_true, y_pred
+
+
 def compute_metrics(
     run_name: str,
     model_names: list = None,
+    residual: bool = False,
 ) -> pd.DataFrame:
     """
     Compute evaluation metrics on saved predictions.
+
     Args:
-        run_name (str): The name of the run. Will be used to store log files and model results
-        model_names (list) : names of models
+        run_name (str): The name of the run. Will be used to store log files and model results.
+        model_names (list): Names of models to evaluate. If None, all model columns are used.
+        residual (bool): If True, compute metrics on residuals (values adjusted per location).
 
     Returns:
-        a pd.DataFrame containing evaluation metrics
+        pd.DataFrame containing evaluation metrics
     """
     df_all = load_results(run_name)
     if df_all.empty:
@@ -271,36 +286,42 @@ def compute_metrics(
 
     rows = []
     country_codes = df_all[KEY_COUNTRY].unique()
+
     for cn in country_codes:
         df_cn = df_all[df_all[KEY_COUNTRY] == cn]
         all_years = sorted(df_cn[KEY_YEAR].unique())
+
+        # Precompute location means for residuals
+        y_loc_mean = df_cn.groupby(KEY_LOC)[KEY_TARGET].mean() if residual else None
+
         for yr in all_years:
             df_yr = df_cn[df_cn[KEY_YEAR] == yr]
-            y_true = df_yr[KEY_TARGET].values
+
             if model_names is None:
                 model_names = [
-                    c
-                    for c in df_yr.columns
+                    c for c in df_yr.columns
                     if c not in [KEY_COUNTRY, KEY_LOC, KEY_YEAR, KEY_TARGET]
                 ]
 
             for model_name in model_names:
-                metrics = evaluate_predictions(y_true, df_yr[model_name].values)
+                y_true, y_pred = _prepare_targets_preds(df_yr, model_name, y_loc_mean, residual)
+
+                # Select metrics based on residual mode
+                metrics_to_use = get_default_metrics(residual=residual)
+                metrics = evaluate_predictions(y_true, y_pred, metrics=metrics_to_use)
+
                 metrics_row = {
                     KEY_COUNTRY: cn,
                     "model": model_name,
                     KEY_YEAR: yr,
+                    **metrics
                 }
-
-                for metric_name, value in metrics.items():
-                    metrics_row[metric_name] = value
-
                 rows.append(metrics_row)
 
-    df_all = pd.DataFrame(rows)
-    df_all.set_index([KEY_COUNTRY, "model", KEY_YEAR], inplace=True)
+    df_out = pd.DataFrame(rows)
+    df_out.set_index([KEY_COUNTRY, "model", KEY_YEAR], inplace=True)
 
-    return df_all
+    return df_out
 
 
 def run_benchmark_on_all_data():
@@ -368,8 +389,11 @@ if __name__ == "__main__":
         )
 
     df_metrics = results["df_metrics"].reset_index()
-    print(
-        df_metrics.groupby("model").agg(
-            {"normalized_rmse": "mean", "mape": "mean", "r2": "mean"}
-        )
-    )
+
+    # Identify index columns dynamically
+    index_cols = df_metrics.columns[:len(df_metrics.index.names)]
+    metric_cols = [c for c in df_metrics.columns if c not in index_cols]
+
+    # Group and average all available metrics
+    agg_df = df_metrics.groupby("model")[metric_cols].mean().round(3)
+    print(agg_df)
