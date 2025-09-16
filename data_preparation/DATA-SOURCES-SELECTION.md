@@ -1,19 +1,21 @@
 # Data sources selection
 ## Weather variables and moisture indicators
 | Source | Considered variables | Temporal frequency | Spatial resolution | Caveats |
-|--------|----------------------|--------------------|--------------------|---------|
-| **[AgERA5](https://cds.climate.copernicus.eu/cdsapp#!/dataset/sis-agrometeorological-indicators?tab=overview)** | temp\_2m, prec, rad, wspd\_10m, relh\_2m | Daily                       | 0.1°              |                                   |
-| **[FAO-AQUASTAT](https://data.apps.fao.org/static/data/index.html?prefix=static%2Fdata%2Fc3s%2FAGERA5_ET0)**    | et0                                      | Daily                       | 0.1°              | Not bias-corrected                                  |
-|**[GLDAS](https://ldas.gsfc.nasa.gov/gldas/model-output)**                                                       | ssm, rsm                                 | Daily                       | 0.25°             | Latency of 2 to 6 months                            |
-| [ERA5](https://cds.climate.copernicus.eu/cdsapp#!/dataset/reanalysis-era5-single-levels)                        | temp\_2m, prec, rad, wspd\_10m, relh\_2m | Hourly                      | 0.25°             | Not bias-corrected                                  |
-| [ERA5-land](https://cds.climate.copernicus.eu/cdsapp#!/dataset/reanalysis-era5-land?tab=overview)               | temp\_2m, prec, rad, wspd\_10m, relh\_2m | Hourly                      | 0.1°              | Not bias-corrected                                  |
-| [W5E5](https://www.isimip.org/gettingstarted/input-data-bias-adjustment/details/114/)                           | temp\_2m, prec, rad, wspd\_10m, relh\_2m | Daily                       | 0.5°              | Not operational; low spatial resolution             |
-| [CPC](https://psl.noaa.gov/data/gridded/data.cpc.globaltemp.html)                                               | prec, temp                               | Daily                       | 0.5°              | Limited number of variables; low spatial resolution |
-| [GLEAM](https://www.gleam.eu/)                                                                                  | et0, rsm                                 | Daily                       | 0.1°              | Latency of up to 1 year                             |
-| [MSWEP](https://www.gloh2o.org/mswep/)                                                                          | prec                                     | 3-hourly                    | 0.1°              | Single variable product                             |
-| [ESA CCI SM](https://cds.climate.copernicus.eu/portfolio/dataset/satellite-soil-moisture)                       | ssm                                      | Daily                       | 0.25°             | Single variable product                             |   
+|--------|--------------------|------------------|------------------|---------|
+| **[AgERA5](https://cds.climate.copernicus.eu/cdsapp#!/dataset/sis-agrometeorological-indicators?tab=overview)** | temp_2m, prec, rad, wspd_10m, relh_2m, et0, vpd | Daily | 0.1° | — |
+| **[GLDAS](https://ldas.gsfc.nasa.gov/gldas/model-output)** | ssm, rsm | Daily | 0.25° | Latency of 2–6 months |
+| [FAO-AQUASTAT](https://data.apps.fao.org/static/data/index.html?prefix=static%2Fdata%2Fc3s%2FMAPSET%2FAGERA5-ET0-D) | et0 | Daily | 0.1° | Not bias-corrected |
+| [ERA5](https://cds.climate.copernicus.eu/cdsapp#!/dataset/reanalysis-era5-single-levels) | temp_2m, prec, rad, wspd_10m, relh_2m | Hourly | 0.25° | Not bias-corrected |
+| [ERA5-Land](https://cds.climate.copernicus.eu/cdsapp#!/dataset/reanalysis-era5-land?tab=overview) | temp_2m, prec, rad, wspd_10m, relh_2m | Hourly | 0.1° | Not bias-corrected |
+| [W5E5](https://www.isimip.org/gettingstarted/input-data-bias-adjustment/details/114/) | temp_2m, prec, rad, wspd_10m, relh_2m | Daily | 0.5° | Low spatial resolution; not operational |
+| [CPC](https://psl.noaa.gov/data/gridded/data.cpc.globaltemp.html) | prec, temp | Daily | 0.5° | Limited variables; low spatial resolution |
+| [GLEAM](https://www.gleam.eu/) | et0, rsm | Daily | 0.1° | Latency up to 1 year |
+| [MSWEP](https://www.gloh2o.org/mswep/) | prec | 3-hourly | 0.1° | Single-variable product |
+| [ESA CCI SM](https://cds.climate.copernicus.eu/portfolio/dataset/satellite-soil-moisture) | ssm | Daily | 0.25° | Single-variable product |
 
-We selected data from the [AgERA5](https://cds.climate.copernicus.eu/cdsapp#!/dataset/sis-agrometeorological-indicators?tab=overview) project, which provides daily weather variables at a 0.1° spatial resolution, directly relevant to crop yields, including temperature, precipitation, and solar radiation flux. Furthermore, we selected reference evapotranspiration from the FAO dataset, which relies on the FAO Penman - Monteith method and takes input variables from the AgERA5 dataset. AgERA5 offers agrometeorological indicators from 1979 to the present, derived from ERA5 reanalysis and tailored for agricultural studies. Its key advantage is the high-quality, operational input for numerous variables essential for crop yield forecasting, and it is freely available and well-documented on the Copernicus Climate Data Store [CDS](https://cds.climate.copernicus.eu/#!/home). 
+
+
+We selected data from the [AgERA5](https://cds.climate.copernicus.eu/cdsapp#!/dataset/sis-agrometeorological-indicators?tab=overview) project, which provides daily weather variables at a 0.1° spatial resolution, directly relevant to crop yields, including temperature, precipitation, and solar radiation flux. AgERA5 offers agrometeorological indicators from 1979 to the present, derived from ERA5 reanalysis and tailored for agricultural studies. Its key advantage is the high-quality, operational input for numerous variables essential for crop yield forecasting, and it is freely available and well-documented on the Copernicus Climate Data Store [CDS](https://cds.climate.copernicus.eu/#!/home). 
 
 Other datasets have limitations such as fewer variables, lower spatial resolution, or shorter temporal coverage. For instance, [MSWEP](https://www.gloh2o.org/mswep/) is a high-quality dataset but only includes precipitation. [CPC](https://psl.noaa.gov/data/gridded/data.cpc.globaltemp.html) relies on station observations but has coarser spatial resolution. [W5E5](https://www.isimip.org/gettingstarted/input-data-bias-adjustment/details/114/) is bias-adjusted based on ERA5 but lacks real-time temporal coverage. 
 

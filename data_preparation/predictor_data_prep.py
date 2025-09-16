@@ -73,7 +73,7 @@ FEWSNET_ADMIN_ID_KEY = "adm_id"
 # Directory paths
 ##################
 
-AGML_ROOT = r"/path/to/agml"
+AGML_ROOT = r"/lustre/backup/SHARED/AIN/agml"
 DATA_DIR = os.path.join(AGML_ROOT, "predictors")
 OUTPUT_DIR = os.path.join(AGML_ROOT, "python-output")
 
@@ -132,8 +132,13 @@ ALL_INDICATORS = {
         "is_time_series": True,
         "is_categorical": False,
     },
+    "vpd": {
+        "source": "AgERA5",
+        "is_time_series" : True,
+        "is_categorical": False,
+    },
     "et0": {
-        "source": "FAO_AQUASTAT",
+        "source": "AgERA5",
         "is_time_series": True,
         "is_categorical": False,
     },
@@ -191,6 +196,8 @@ AGERA5_VARIABLES = {
     "tavg": "Temperature_Air_2m_Mean_24h",
     "prec": "Precipitation_Flux",
     "rad": "Solar_Radiation_Flux",
+    "et0": "ReferenceET_PenmanMonteith_FAO56",
+    "vpd": "Vapour_Pressure_Deficit_at_Maximum_Temperature",
 }
 
 
@@ -1099,7 +1106,7 @@ def process_indicators(crop, region, sel_indicators):
                     )
                     result_yr = pd.concat(dfs, axis=0)
                     result_final = pd.concat([result_final, result_yr], axis=0)
-
+            result_final = result_final.round(3)
             out_csv = "_".join([indicator, crop, region]) + ".csv"
             result_final.to_csv(os.path.join(output_path, out_csv), index=False)
 
