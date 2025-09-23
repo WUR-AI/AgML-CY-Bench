@@ -388,12 +388,9 @@ if __name__ == "__main__":
             run_name=run_name, dataset_name=dataset_name, sel_years=sel_years
         )
 
+    index_cols = results["df_metrics"].index.names
     df_metrics = results["df_metrics"].reset_index()
-
-    # Identify index columns dynamically
-    index_cols = df_metrics.columns[:len(df_metrics.index.names)]
     metric_cols = [c for c in df_metrics.columns if c not in index_cols]
-
     # Group and average all available metrics
     agg_df = df_metrics.groupby("model")[metric_cols].mean().round(3)
     print(agg_df)
