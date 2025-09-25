@@ -16,7 +16,11 @@ from cybench.config import (
 )
 
 from cybench.datasets.dataset import Dataset
-from cybench.evaluation.eval import evaluate_predictions, get_default_metrics
+from cybench.evaluation.eval import (
+    evaluate_predictions,
+    get_default_metrics,
+    prepare_targets_preds,
+)
 from cybench.models.naive_models import AverageYieldModel
 from cybench.models.trend_models import TrendModel
 from cybench.models.sklearn_models import SklearnRidge, SklearnRandomForest
@@ -252,18 +256,6 @@ def get_prediction_residuals(run_name: str, model_names: dict) -> pd.DataFrame:
     return df_all
 
 
-def _prepare_targets_preds(df_yr, model_name, y_loc_mean=None, residual=False):
-    """Prepare y_true and y_pred, optionally using residuals."""
-    y_true = df_yr[KEY_TARGET].values
-    y_pred = df_yr[model_name].values
-
-    if residual and y_loc_mean is not None:
-        y_true = y_true - df_yr[KEY_LOC].map(y_loc_mean)
-        y_pred = y_pred - df_yr[KEY_LOC].map(y_loc_mean)
-
-    return y_true, y_pred
-
-
 def compute_metrics(
     run_name: str,
     model_names: list = None,
@@ -299,12 +291,15 @@ def compute_metrics(
 
             if model_names is None:
                 model_names = [
-                    c for c in df_yr.columns
+                    c
+                    for c in df_yr.columns
                     if c not in [KEY_COUNTRY, KEY_LOC, KEY_YEAR, KEY_TARGET]
                 ]
 
             for model_name in model_names:
-                y_true, y_pred = _prepare_targets_preds(df_yr, model_name, y_loc_mean, residual)
+                y_true, y_pred = prepare_targets_preds(
+                    df_yr, model_name, y_loc_mean, residual
+                )
 
                 # Select metrics based on residual mode
                 metrics_to_use = get_default_metrics(residual=residual)
@@ -314,7 +309,7 @@ def compute_metrics(
                     KEY_COUNTRY: cn,
                     "model": model_name,
                     KEY_YEAR: yr,
-                    **metrics
+                    **metrics,
                 }
                 rows.append(metrics_row)
 
@@ -390,7 +385,9 @@ if __name__ == "__main__":
 
     index_cols = results["df_metrics"].index.names
     df_metrics = results["df_metrics"].reset_index()
+
     metric_cols = [c for c in df_metrics.columns if c not in index_cols]
+
     # Group and average all available metrics
     agg_df = df_metrics.groupby("model")[metric_cols].mean().round(3)
     print(agg_df)

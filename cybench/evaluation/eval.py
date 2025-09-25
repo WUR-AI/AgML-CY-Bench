@@ -4,6 +4,7 @@ from scipy.stats import pearsonr
 
 from cybench.models.model import BaseModel
 from cybench.datasets.dataset import Dataset
+from cybench.config import KEY_TARGET, KEY_LOC
 
 
 implemented_metrics = {}
@@ -14,6 +15,7 @@ def metric(func):
     implemented_metrics[func.__name__] = func
     return func
 
+
 def get_default_metrics(residual: bool = False):
     if residual:
         # Only metrics that make sense on residuals
@@ -21,7 +23,6 @@ def get_default_metrics(residual: bool = False):
     else:
         # Full set
         return ("mape", "normalized_rmse", "r", "r2")
-
 
 
 def evaluate_model(model: BaseModel, dataset: Dataset, metrics=get_default_metrics()):
@@ -69,6 +70,23 @@ def evaluate_predictions(
             raise ValueError(f"Metric function '{metric_name}' not implemented.")
 
     return results
+
+
+def prepare_targets_preds(df_yr, model_name, y_loc_mean=None, residual=False):
+    """Prepare y_true and y_pred, optionally using residuals, dropping NaNs."""
+    y_true = df_yr[KEY_TARGET].values
+    y_pred = df_yr[model_name].values
+
+    if residual and y_loc_mean is not None:
+        y_true = y_true - df_yr[KEY_LOC].map(y_loc_mean)
+        y_pred = y_pred - df_yr[KEY_LOC].map(y_loc_mean)
+
+    # --- Drop NaNs ---
+    mask = (~np.isnan(y_true)) & (~np.isnan(y_pred))
+    y_true = y_true[mask]
+    y_pred = y_pred[mask]
+
+    return y_true, y_pred
 
 
 @metric

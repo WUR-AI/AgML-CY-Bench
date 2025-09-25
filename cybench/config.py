@@ -7,6 +7,9 @@ from datetime import datetime
 # Project root dir
 CONFIG_DIR = os.path.abspath(os.path.join(__file__, os.pardir))
 
+# Repository root dir
+REPO_DIR = os.path.abspath(os.path.join(__file__, os.pardir, os.pardir))
+
 # Path to folder where data is stored
 PATH_DATA_DIR = os.path.join(CONFIG_DIR, "data")
 os.makedirs(PATH_DATA_DIR, exist_ok=True)
@@ -19,6 +22,7 @@ os.makedirs(PATH_OUTPUT_DIR, exist_ok=True)
 PATH_RESULTS_DIR = os.path.join(PATH_OUTPUT_DIR, "runs")
 os.makedirs(PATH_RESULTS_DIR, exist_ok=True)
 
+PATH_POLYGONS_DIR = os.path.join(REPO_DIR, "cybench", "data", "polygons")
 
 DATASETS = {
     "maize": [
@@ -117,6 +121,14 @@ KEY_COMBINED_FEATURES = "combined_features"
 # Used to add years to crop calendar data.
 MIN_INPUT_YEAR = 2000
 MAX_INPUT_YEAR = 2023
+
+CROP_YIELD_RANGES = {
+    "wheat": {
+        "min": 0,
+        "max": 9,
+    },
+    "maize": {"min": 0, "max": 14},
+}
 
 # Soil properties
 SOIL_PROPERTIES = ["awc", "bulk_density"]  # , "drainage_class"]
