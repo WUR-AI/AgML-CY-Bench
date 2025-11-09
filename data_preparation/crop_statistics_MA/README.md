@@ -16,21 +16,19 @@ Statistics Division (ESS), Food and Agriculture Organization of the United Natio
 Abdelghani Belgaid — Mohammed VI Polytechnic University (UM6P)
 
 ## Dataset overview
-**Crops**: Wheat, Barley, Maize (corn), Green corn (maize), Rice, Soya beans, Sugar cane  
-**Variables [unit]**:  
-- Yield [t/ha]  
-- Production [t]  
-- Harvested area [ha]  
-**Temporal coverage**: 1961 – 2023  
-**Temporal resolution**: Annual  
-**Spatial resolution**: National (adm_id = MA-NAT)  
-**Date Published**: 2025-11-08  
-**Data Modality**: Tabular (CSV)
+- **Crops**: Wheat, Barley, Maize (corn), Green corn (maize), Rice, Soya beans, Sugar cane  
+- **Variables [unit]**:  
+  - Yield [t/ha]  
+  - Production [t]  
+  - Harvested area [ha]  
+- **Temporal coverage**: 1961 – 2023  
+- **Temporal resolution**: Annual  
+- **Spatial resolution**: National (adm_id = MA-NAT)  
+- **Date Published**: 2025-11-08  
+- **Data Modality**: Tabular (CSV)
 
 ### Summary
-The dataset harmonizes FAOSTAT national statistics with the CY-Bench schema:  
-`crop_name, country_code, adm_id, season_name, planting_year, harvest_year, planting_date, harvest_date, yield, production, planted_area, harvest_area`.  
-All yield values are converted to tonnes per hectare (t/ha) when required.  
+The dataset harmonizes FAOSTAT national statistics with the CY-Bench schema: `crop_name, country_code, adm_id, season_name, planting_year, harvest_year, planting_date, harvest_date, yield, production, planted_area, harvest_area`. All yield values are converted to tonnes per hectare (t/ha) when required.  
 
 ### Upcoming tasks
 - Extend coverage to include additional crops available in FAOSTAT at the national level.  
