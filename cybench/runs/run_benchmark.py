@@ -24,7 +24,7 @@ from cybench.evaluation.eval import (
 from cybench.models.naive_models import AverageYieldModel
 from cybench.models.trend_models import TrendModel
 from cybench.models.sklearn_models import SklearnRidge, SklearnRandomForest
-from cybench.models.xgboost_models import XGBoostModel
+from cybench.models.xgboost_model import XGBoostModel
 from cybench.models.nn_models import (
     BaselineLSTM,
     BaselineInceptionTime,
