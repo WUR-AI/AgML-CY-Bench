@@ -51,8 +51,8 @@ class XGBoostModel(BaseSklearnModel):
         """
         fit_params["optimize_hyperparameters"] = True
         fit_params["param_space"] = {
-            "estimator__n_estimators": [100, 500],
-            "estimator__learning_rate": [0.03, 0.1],
+            "estimator__n_estimators": [50, 100, 500],
+            "estimator__learning_rate": [0.01, 0.05, 0.1],
         }
 
-        return super().fit(train_dataset, **fit_params)
+        super().fit(train_dataset, **fit_params)    
