@@ -3,12 +3,15 @@ import numpy as np
 import rasterio
 import rasterio.features
 import pandas as pd
-import geopandas as gpd
 import multiprocessing as mp
 from itertools import repeat
 import logging
 import argparse
 import warnings
+import matplotlib.pyplot as plt
+
+from cybench.util.geo import get_shapes_from_polygons, get_area_km2
+from cybench.config import PATH_DATA_DIR
 
 warnings.filterwarnings("ignore")
 
@@ -16,64 +19,11 @@ warnings.filterwarnings("ignore")
 log = logging.getLogger(__name__)
 
 
-EU_COUNTRY_CODE_KEY = "CNTR_CODE"
-EU_ADMIN_LEVEL_KEY = "LEVL_CODE"
-
-# Country codes to admin level
-# Austria (AT), Belgium (BE), Bulgaria (BG), Czech Republic (CZ), Germany (DE), Denmark (DK),
-# Estonia (EE), Greece (EL), Spain (ES), Finland (FI), France (FR), Croatia (HR), Hungary (HU),
-# Ireland (IE), Italy (IT), Lithuania (LT), Latvia (LV), The Netherlands (NL), Poland (PL),
-# Portugal (PT), Romania (RO), Sweden (SE), Slovakia (SK)
-EU_COUNTRIES = {
-    "AT": 2,
-    "BE": 2,
-    "BG": 2,
-    "CZ": 3,
-    "DE": 3,
-    "DK": 3,
-    "EE": 3,
-    "EL": 3,
-    "ES": 3,
-    "FI": 3,
-    "FR": 3,
-    "HR": 2,
-    "HU": 3,
-    "IE": 2,
-    "IT": 3,
-    "LT": 3,
-    "LV": 3,
-    "NL": 2,
-    "PL": 2,
-    "PT": 2,
-    "RO": 3,
-    "SE": 3,
-    "SK": 3,
-}
-
-# Angola (AO), Burkina Faso (BF), Ethiopia (ET), Lesotho (LS), Madagascar (MG), Malawi (MW),
-# Mozambique (MZ), Niger (NE), Senegal (SN), Chad (TD), South Africa (ZA), Zambia (ZM)
-FEWSNET_COUNTRIES = [
-    "AO",
-    "BF",
-    "ET",
-    "LS",
-    "MG",
-    "MW",
-    "MZ",
-    "NE",
-    "SN",
-    "TD",
-    "ZA",
-    "ZM",
-]
-FEWSNET_ADMIN_ID_KEY = "adm_id"
-
-
 ##################
 # Directory paths
 ##################
 
-AGML_ROOT = r"/lustre/backup/SHARED/AIN/agml"
+AGML_ROOT = r"/path_to_raw_data"
 DATA_DIR = os.path.join(AGML_ROOT, "predictors")
 OUTPUT_DIR = os.path.join(AGML_ROOT, "python-output")
 
@@ -100,93 +50,98 @@ ALL_INDICATORS = {
     "prec": {
         "source": "AgERA5",
         "is_time_series": True,
-        "is_categorical": False,
+        "aggr": "mean",
     },
     "tmax": {
         "source": "AgERA5",
         "is_time_series": True,
-        "is_categorical": False,
+        "aggr": "mean",
     },
     "tmin": {
         "source": "AgERA5",
         "is_time_series": True,
-        "is_categorical": False,
+        "aggr": "mean",
     },
     "tavg": {
         "source": "AgERA5",
         "is_time_series": True,
-        "is_categorical": False,
+        "aggr": "mean",
     },
     "rad": {
         "source": "AgERA5",
         "is_time_series": True,
-        "is_categorical": False,
+        "aggr": "mean",
     },
     "ndvi": {
         "source": "MOD09CMG",
         "is_time_series": True,
-        "is_categorical": False,
+        "aggr": "mean",
     },
     "fpar": {
         "source": "JRC_FPAR500m",
         "is_time_series": True,
-        "is_categorical": False,
+        "aggr": "mean",
     },
     "vpd": {
         "source": "AgERA5",
-        "is_time_series" : True,
-        "is_categorical": False,
+        "is_time_series": True,
+        "aggr": "mean",
     },
     "et0": {
         "source": "AgERA5",
         "is_time_series": True,
-        "is_categorical": False,
+        "aggr": "mean",
     },
     "rsm": {
         "source": "GLDAS",
         "is_time_series": True,
-        "is_categorical": False,
+        "aggr": "mean",
     },
     "ssm": {
         "source": "GLDAS",
         "is_time_series": True,
-        "is_categorical": False,
+        "aggr": "mean",
     },
     "awc": {
         "source": "WISE_Soil",
         "is_time_series": False,
-        "is_categorical": False,
+        "aggr": "mean",
     },
     "bulk_density": {
         "source": "WISE_Soil",
         "is_time_series": False,
-        "is_categorical": False,
+        "aggr": "mean",
     },
     "drainage_class": {
         "source": "WISE_Soil",
         "is_time_series": False,
-        "is_categorical": True,
+        "aggr": "mode",
     },
     "sos": {
         "source": "ESA_WC_Crop_Calendars",
         "is_time_series": False,
-        "is_categorical": False,
+        "aggr": "mean",
     },
     "eos": {
         "source": "ESA_WC_Crop_Calendars",
         "is_time_series": False,
-        "is_categorical": False,
+        "aggr": "mean",
     },
     "latitude": {
         "source": "Location",
         "is_time_series": False,
-        "is_categorical": False,
+        "aggr": "mean",
     },
     "longitude": {
         "source": "Location",
         "is_time_series": False,
-        "is_categorical": False,
+        "aggr": "mean",
     },
+}
+
+CYCLIC_PERIODS = {
+    "sos": 365.0,
+    "eos": 365.0,
 }
 
 # used to read .nc files
@@ -223,7 +178,7 @@ def read_masked(
     use_pixels="CENTER",
     out_mask_path=None,
     *args,
-    **kwargs
+    **kwargs,
 ):
     """
     @author: Joint Research Centre - D5 Food Security - ASAP
@@ -324,7 +279,6 @@ def read_masked(
 
     # mask data arrays
     source = np.ma.array(source, mask=input_geom_mask)
-
     return source
 
 
@@ -724,14 +678,17 @@ def geom_extract(
     elif indicator_name == "ndvi":
         # data cleaning
         indicator_arr.mask |= (indicator_arr > 250) | (indicator_arr < 50)
-    if indicator_name in ["sos", "eos"]:
-        max_value = 365
-        if np.ptp(indicator_arr.compressed()) > max_value / 2:
-            # Adjust values for wrap-around
+
+    if indicator_name in CYCLIC_PERIODS:
+        max_value = CYCLIC_PERIODS[indicator_name]
+        comp = indicator_arr.compressed()
+        if comp.size > 0 and np.ptp(comp) > max_value / 2:
+            # We are straddling the wrap point (e.g. 0/365 or 0/2)
             adjusted_data = np.where(
-                indicator_arr < max_value / 2, indicator_arr + max_value, indicator_arr
+                indicator_arr < max_value / 2,
+                indicator_arr + max_value,
+                indicator_arr,
             )
-            # Convert back to MaskedArray and reapply the original mask
             indicator_arr = np.ma.masked_array(adjusted_data, mask=indicator_arr.mask)
 
     geom_mask = indicator_arr.mask
@@ -800,14 +757,19 @@ def geom_extract(
             raise UnableToExtractStats(e_msg)
 
     # extractions
-    if any(val in ("min", "max", "mean", "sum" "std", "mode") for val in stats_out):
+    if any(
+        val in ("min", "max", "mean", "sum", "std", "mode")
+        for val in stats_out
+    ):
         output["stats"] = arr_stats(indicator_arr, afi_arr if afi else None, stats_out)
         # Apply modulo max_value to all fields in stats
-        if indicator_name in ["sos", "eos"]:
+        if indicator_name in CYCLIC_PERIODS:
+            max_value = CYCLIC_PERIODS[indicator_name]
             output["stats"] = {
                 key: (value % max_value) if isinstance(value, (int, float)) else value
                 for key, value in output["stats"].items()
             }
+
         if indicator_name == "ndvi":
             # rescale ndvi
             # https://github.com/WUR-AI/AgML-CY-Bench/blob/main/data_preparation/global_MOD09CMG/README.md
@@ -855,7 +817,6 @@ def geom_extract(
         )
         classification_out["values"] = [i["val_count"] for i in class_res]
         output["classification"] = classification_out
-
     return output
 
 
@@ -865,7 +826,7 @@ def process_file(
     indicator_name,
     geometries,
     is_time_series,
-    is_categorical,
+    aggr,
 ):
     """
     @author: Guanyuan Shuai
@@ -876,7 +837,7 @@ def process_file(
     :param indicator_name: indicator name
     :param geometry: geometry
     :param is_time_series: flag to indicate whether data is static or time series
-    :param is_categorical: flag to indicator whether data is categorical or continuous
+    :param aggr: aggregation mode
     :return a dataframe with data from given raster file aggregated to admin units
     """
     if crop == "maize":
@@ -890,16 +851,10 @@ def process_file(
 
     basename = os.path.basename(indicator_file)
     fname, ext = os.path.splitext(basename)
-    if ext == ".nc":
+    if ext == ".nc" and indicator_name in AGERA5_VARIABLES:
         indicator_file = "netcdf:{indicator_file}:{variable}".format(
             indicator_file=indicator_file, variable=AGERA5_VARIABLES[indicator_name]
         )
-
-    if is_categorical:
-        aggr = "mode"
-    else:
-        aggr = "mean"
-
     if is_time_series:
         date_str = fname[-8:]
         col_names = ["crop_name", "adm_id", "date", indicator_name]
@@ -931,122 +886,32 @@ def process_file(
 
     return df
 
-
 def get_time_series_files(data_path, year=2000):
     """
-    @author: Dilli R. Paudel
-    Returns a list of raster files for the given year.
+    Returns a list of raster files for the given year
 
-    :param data_path: path to directory containing raster files
-    :param year: year of interest
-    :return: a list of rasters for given year
+    Files must:
+      - end with .tif or .nc
+      - have a date YYYYMMDD as the last 8 chars before extension
     """
     files = []
+
     for f in os.listdir(data_path):
         fname, ext = os.path.splitext(f)
-        if not (ext == ".tif" or ext == ".nc"):
+
+        # Extension filter
+        if ext not in [".tif", ".nc"]:
             continue
 
-        # we expect the last part of filename to be YYYYMMDD
+        # Date filter
         date_str = fname[-8:]
+        if not date_str.isdigit() or len(date_str) != 8:
+            continue
+
         if int(date_str[:4]) == year:
             files.append(f)
 
     return files
-
-
-def get_shapes(region="US"):
-    """
-    @author: Dilli R. Paudel
-    Get admin unit boundaries.
-
-    :param region: region code or 2-letter country code
-    :return: a dataframe with adm_id and boundaries
-    """
-    sel_shapes = pd.DataFrame()
-    if region == "EU":
-        geo_df = gpd.read_file(
-            os.path.join(AGML_ROOT, "shapefiles", "shapefiles_EU.zip")
-        )
-        for cn in EU_COUNTRIES:
-            cn_shapes = geo_df[
-                (geo_df[EU_COUNTRY_CODE_KEY] == cn)
-                & (geo_df[EU_ADMIN_LEVEL_KEY] == EU_COUNTRIES[cn])
-            ]
-            sel_shapes = pd.concat([sel_shapes, cn_shapes], axis=0)
-
-        sel_shapes["adm_id"] = sel_shapes["NUTS_ID"]
-    elif region in EU_COUNTRIES:
-        geo_df = gpd.read_file(
-            os.path.join(AGML_ROOT, "shapefiles", "shapefiles_EU.zip")
-        )
-        sel_shapes = geo_df[
-            (geo_df[EU_COUNTRY_CODE_KEY] == region)
-            & (geo_df[EU_ADMIN_LEVEL_KEY] == EU_COUNTRIES[region])
-        ]
-        sel_shapes["adm_id"] = sel_shapes["NUTS_ID"]
-
-    elif region == "AR":
-        sel_shapes = gpd.read_file(
-            os.path.join(AGML_ROOT, "shapefiles", "shapefiles_AR.zip")
-        )
-        sel_shapes["adm_id"] = sel_shapes["ADM2_PCODE"]
-    elif region == "AU":
-        sel_shapes = gpd.read_file(
-            os.path.join(AGML_ROOT, "shapefiles", "shapefiles_AU.zip")
-        )
-        sel_shapes["adm_id"] = "AU" + "-" + sel_shapes["AAGIS"].astype(str)
-    elif region == "BR":
-        sel_shapes = gpd.read_file(
-            os.path.join(AGML_ROOT, "shapefiles", "shapefiles_BR.zip")
-        )
-        sel_shapes["adm_id"] = sel_shapes["ADM2_PCODE"]
-    elif region == "CN":
-        sel_shapes = gpd.read_file(
-            os.path.join(AGML_ROOT, "shapefiles", "shapefiles_CN.zip")
-        )
-        sel_shapes["adm_id"] = sel_shapes["ADM1_PCODE"]
-    # FEWSNET countries: Already have adm_id
-    elif region == "FEWSNET":
-        sel_shapes = gpd.read_file(
-            os.path.join(AGML_ROOT, "shapefiles", "shapefiles_FEWSNET.zip")
-        )
-    elif region in FEWSNET_COUNTRIES:
-        sel_shapes = gpd.read_file(
-            os.path.join(AGML_ROOT, "shapefiles", "shapefiles_FEWSNET.zip")
-        )
-        sel_shapes = sel_shapes[sel_shapes["adm_id"].str[:2] == region]
-    # IN: Already has adm_id
-    elif region == "IN":
-        sel_shapes = gpd.read_file(
-            os.path.join(AGML_ROOT, "shapefiles", "shapefiles_IN.zip")
-        )
-    # ML: Already has adm_id
-    elif region == "ML":
-        sel_shapes = gpd.read_file(
-            os.path.join(AGML_ROOT, "shapefiles", "shapefiles_ML.zip")
-        )
-    # MX: Already has adm_id
-    elif region == "MX":
-        sel_shapes = gpd.read_file(
-            os.path.join(AGML_ROOT, "shapefiles", "shapefiles_MX.zip")
-        )
-        # adm_id in shapefile has a hyphen. Yield data does not have one.
-        sel_shapes["adm_id"] = sel_shapes["adm_id"].str.replace("-", "")
-    elif region == "US":
-        sel_shapes = gpd.read_file(
-            os.path.join(AGML_ROOT, "shapefiles", "shapefiles_US.zip")
-        )
-        sel_shapes["adm_id"] = (
-            "US" + "-" + sel_shapes["STATEFP"] + "-" + sel_shapes["COUNTYFP"]
-        )
-
-    # Project to EPSG 4326
-    # shapes for BR don't have crs info. See #343.
-    if region not in ["BR"]:
-        sel_shapes = sel_shapes.to_crs(4326)
-
-    return sel_shapes
 
 
 def process_indicators(crop, region, sel_indicators):
@@ -1058,7 +923,7 @@ def process_indicators(crop, region, sel_indicators):
     :param region: region code or 2-letter country code
     :param sel_indicators: a list of indicators to process
     """
-    geo_df = get_shapes(region=region)
+    geo_df = get_shapes_from_polygons(region=region)
     geo_df = geo_df[["adm_id", "geometry"]]
 
     geometries = {
@@ -1071,7 +936,7 @@ def process_indicators(crop, region, sel_indicators):
     for indicator in sel_indicators:
         pred_source = ALL_INDICATORS[indicator]["source"]
         is_time_series = ALL_INDICATORS[indicator]["is_time_series"]
-        is_categorical = ALL_INDICATORS[indicator]["is_categorical"]
+        aggr = ALL_INDICATORS[indicator]["aggr"]
         output_path = os.path.join(OUTPUT_DIR, crop, region, indicator)
         os.makedirs(output_path, exist_ok=True)
 
@@ -1082,11 +947,9 @@ def process_indicators(crop, region, sel_indicators):
             for yr in range(START_YEAR, END_YEAR + 1):
                 print("Start working on", crop, region, indicator, yr)
                 files = get_time_series_files(indicator_dir, year=yr)
-
                 print("There are " + str(len(files)) + " files!")
                 if len(files) == 0:
                     continue
-
                 start_time = time.time()
                 files = sorted([os.path.join(indicator_dir, f) for f in files])
                 with mp.Pool(processes=None) as pool:
@@ -1101,13 +964,14 @@ def process_indicators(crop, region, sel_indicators):
                             repeat(indicator),
                             repeat(geometries),
                             repeat(is_time_series),
-                            repeat(is_categorical),
+                            repeat(aggr),
                         ),
                     )
                     result_yr = pd.concat(dfs, axis=0)
                     result_final = pd.concat([result_final, result_yr], axis=0)
             result_final = result_final.round(3)
             out_csv = "_".join([indicator, crop, region]) + ".csv"
+            print(os.path.join(output_path, out_csv))
             result_final.to_csv(os.path.join(output_path, out_csv), index=False)
 
             m, s = divmod((time.time() - start_time), 60)
@@ -1118,7 +982,7 @@ def process_indicators(crop, region, sel_indicators):
         # Static data
         else:
             indicator_dir = os.path.join(DATA_DIR, pred_source)
-            print("Start working on", crop, region, indicator)
+            print(f"Start working on {crop} {region} {indicator} {indicator_dir}")
             files = os.listdir(indicator_dir)
 
             # for crop calendar, need to filter by crop as well
@@ -1127,8 +991,7 @@ def process_indicators(crop, region, sel_indicators):
             else:
                 files = [f for f in files if (indicator in f)]
 
-            # should be one raster file
-            assert len(files) == 1
+            assert len(files) == 1, f"Got {len(files)} files: {files}"
 
             start_time = time.time()
             df = process_file(
@@ -1137,10 +1000,11 @@ def process_indicators(crop, region, sel_indicators):
                 indicator,
                 geometries,
                 is_time_series,
-                is_categorical,
+                aggr,
             )
 
             out_csv = "_".join([indicator, crop, region]) + ".csv"
+            print(os.path.join(output_path, out_csv))
             df.to_csv(os.path.join(output_path, out_csv), index=False)
 
             m, s = divmod((time.time() - start_time), 60)
@@ -1174,22 +1038,15 @@ if __name__ == "__main__":
 
     for crop in sel_crops:
         if sel_regions is None:
-            sel_regions = []
-            if crop == "maize":
-                sel_regions = [
-                    "AR",
-                    "BR",
-                    "CN",
-                    "EU",
-                    "FEWSNET",
-                    "IN",
-                    "ML",
-                    "MX",
-                    "US",
-                ]
-            elif crop == "wheat":
-                sel_regions = ["AR", "AU", "BR", "CN", "EU", "FEWSNET", "IN", "US"]
+            crop_dir = os.path.join(PATH_DATA_DIR, crop)
+            if not os.path.exists(crop_dir):
+                continue
 
+            sel_regions = [
+                cc
+                for cc in os.listdir(crop_dir)
+                if os.path.isdir(os.path.join(crop_dir, cc))
+            ]
         for cn in sel_regions:
             print("Working on", crop, cn)
             process_indicators(crop, cn, sel_indicators)
