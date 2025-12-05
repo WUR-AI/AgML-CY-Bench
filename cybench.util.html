@@ -1,0 +1,354 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>cybench.util package &mdash; AgML-crop-yield-forecasting  documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+
+  
+    <link rel="shortcut icon" href="_static/favicon.png"/>
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="_static/doctools.js?v=9a2dae69"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            AgML-crop-yield-forecasting
+              <img src="_static/agml-logo.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <!-- Local TOC -->
+              <div class="local-toc"><ul>
+<li><a class="reference internal" href="#">cybench.util package</a><ul>
+<li><a class="reference internal" href="#submodules">Submodules</a></li>
+<li><a class="reference internal" href="#module-cybench.util.data">cybench.util.data module</a><ul>
+<li><a class="reference internal" href="#cybench.util.data.data_to_pandas"><code class="docutils literal notranslate"><span class="pre">data_to_pandas()</span></code></a></li>
+<li><a class="reference internal" href="#cybench.util.data.trim_time_series_data"><code class="docutils literal notranslate"><span class="pre">trim_time_series_data()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-cybench.util.features">cybench.util.features module</a><ul>
+<li><a class="reference internal" href="#cybench.util.features._add_period"><code class="docutils literal notranslate"><span class="pre">_add_period()</span></code></a></li>
+<li><a class="reference internal" href="#cybench.util.features._aggregate_by_period"><code class="docutils literal notranslate"><span class="pre">_aggregate_by_period()</span></code></a></li>
+<li><a class="reference internal" href="#cybench.util.features._count_threshold"><code class="docutils literal notranslate"><span class="pre">_count_threshold()</span></code></a></li>
+<li><a class="reference internal" href="#cybench.util.features.dekad_from_date"><code class="docutils literal notranslate"><span class="pre">dekad_from_date()</span></code></a></li>
+<li><a class="reference internal" href="#cybench.util.features.design_features"><code class="docutils literal notranslate"><span class="pre">design_features()</span></code></a></li>
+<li><a class="reference internal" href="#cybench.util.features.fortnight_from_date"><code class="docutils literal notranslate"><span class="pre">fortnight_from_date()</span></code></a></li>
+<li><a class="reference internal" href="#cybench.util.features.growing_degree_days"><code class="docutils literal notranslate"><span class="pre">growing_degree_days()</span></code></a></li>
+<li><a class="reference internal" href="#cybench.util.features.unpack_time_series"><code class="docutils literal notranslate"><span class="pre">unpack_time_series()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-cybench.util.geo">cybench.util.geo module</a><ul>
+<li><a class="reference internal" href="#cybench.util.geo.get_shapes_from_polygons"><code class="docutils literal notranslate"><span class="pre">get_shapes_from_polygons()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-cybench.util.torch">cybench.util.torch module</a><ul>
+<li><a class="reference internal" href="#cybench.util.torch.batch_tensors"><code class="docutils literal notranslate"><span class="pre">batch_tensors()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-cybench.util">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</div>
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">AgML-crop-yield-forecasting</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">cybench.util package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/cybench.util.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="cybench-util-package">
+<h1>cybench.util package<a class="headerlink" href="#cybench-util-package" title="Link to this heading"></a></h1>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading"></a></h2>
+</section>
+<section id="module-cybench.util.data">
+<span id="cybench-util-data-module"></span><h2>cybench.util.data module<a class="headerlink" href="#module-cybench.util.data" title="Link to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="cybench.util.data.data_to_pandas">
+<span class="sig-prename descclassname"><span class="pre">cybench.util.data.</span></span><span class="sig-name descname"><span class="pre">data_to_pandas</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data_items</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_cols</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cybench.util.data.data_to_pandas" title="Link to this definition"></a></dt>
+<dd><p>Convert data items as dict to pandas DataFrame</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data_items</strong> – list of data items, each of which is a dict</p></li>
+<li><p><strong>data_cols</strong> – list of keys to include as columns</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>pd.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cybench.util.data.trim_time_series_data">
+<span class="sig-prename descclassname"><span class="pre">cybench.util.data.</span></span><span class="sig-name descname"><span class="pre">trim_time_series_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sample</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_time_steps</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time_series_keys</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cybench.util.data.trim_time_series_data" title="Link to this definition"></a></dt>
+<dd><p>Trims time series data to provided number of time steps</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>sample</strong> (<em>dict</em>) – key is name, value is np.ndarray</p></li>
+<li><p><strong>num_time_steps</strong> (<em>int</em>) – number of time steps to keep</p></li>
+<li><p><strong>time_series_keys</strong> (<em>list</em>) – keys for time series data</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>the same sample with modified data</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-cybench.util.features">
+<span id="cybench-util-features-module"></span><h2>cybench.util.features module<a class="headerlink" href="#module-cybench.util.features" title="Link to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="cybench.util.features._add_period">
+<span class="sig-prename descclassname"><span class="pre">cybench.util.features.</span></span><span class="sig-name descname"><span class="pre">_add_period</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">period_length</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cybench.util.features._add_period" title="Link to this definition"></a></dt>
+<dd><p>Add a period column.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>df</strong> – pd.DataFrame</p></li>
+<li><p><strong>period_length</strong> – string, which can be “month”, “fortnight” or “dekad”</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>pd.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cybench.util.features._aggregate_by_period">
+<span class="sig-prename descclassname"><span class="pre">cybench.util.features.</span></span><span class="sig-name descname"><span class="pre">_aggregate_by_period</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">index_cols</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">period_col</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">aggrs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ft_cols</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cybench.util.features._aggregate_by_period" title="Link to this definition"></a></dt>
+<dd><p>Aggregate data into features by period.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>df</strong> – pd.DataFrame</p></li>
+<li><p><strong>index_cols</strong> – list of indices, which are location and year</p></li>
+<li><p><strong>period_col</strong> – string, column added by add_period()</p></li>
+<li><p><strong>aggrs</strong> – dict containing columns to aggregate (keys) and corresponding
+aggregation function (values)</p></li>
+<li><p><strong>ft_cols</strong> – dict for renaming columns to feature columns</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>pd.DataFrame with features</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cybench.util.features._count_threshold">
+<span class="sig-prename descclassname"><span class="pre">cybench.util.features.</span></span><span class="sig-name descname"><span class="pre">_count_threshold</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">index_cols</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">period_col</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">indicator</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">threshold_exceed</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">threshold</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ft_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cybench.util.features._count_threshold" title="Link to this definition"></a></dt>
+<dd><p>Aggregate data into features by period.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>df</strong> – pd.DataFrame</p></li>
+<li><p><strong>index_cols</strong> – list of indices, which are location and year</p></li>
+<li><p><strong>period_col</strong> – string, column added by add_period()</p></li>
+<li><p><strong>indicator</strong> – string, indicator column to aggregate</p></li>
+<li><p><strong>threshold_exceed</strong> – boolean</p></li>
+<li><p><strong>threshold</strong> – float</p></li>
+<li><p><strong>ft_name</strong> – string name for aggregated indicator</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>pd.DataFrame with features</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cybench.util.features.dekad_from_date">
+<span class="sig-prename descclassname"><span class="pre">cybench.util.features.</span></span><span class="sig-name descname"><span class="pre">dekad_from_date</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dt</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">datetime</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cybench.util.features.dekad_from_date" title="Link to this definition"></a></dt>
+<dd><p>Get the dekad number from date.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>dt</strong> – date</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><dl class="simple">
+<dt>Dekad number, e.g. “YYYY0101” to “YYYY0110” -&gt; 1,</dt><dd><p>”YYYY0111” to “YYYY0120” -&gt; 2,
+“YYYY0121” to “YYYY0131” -&gt; 3</p>
+</dd>
+</dl>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cybench.util.features.design_features">
+<span class="sig-prename descclassname"><span class="pre">cybench.util.features.</span></span><span class="sig-name descname"><span class="pre">design_features</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">crop</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">input_dfs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cybench.util.features.design_features" title="Link to this definition"></a></dt>
+<dd><p>Design features based domain expertise.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>crop</strong> (<em>str</em>) – crop name, e.g. maize</p></li>
+<li><p><strong>input_dfs</strong> (<em>dict</em>) – keys are input names, values are pd.DataFrames</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>pd.DataFrame of features</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cybench.util.features.fortnight_from_date">
+<span class="sig-prename descclassname"><span class="pre">cybench.util.features.</span></span><span class="sig-name descname"><span class="pre">fortnight_from_date</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dt</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">datetime</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cybench.util.features.fortnight_from_date" title="Link to this definition"></a></dt>
+<dd><p>Get the fortnight number from date.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>dt</strong> – date</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Fortnight number, “YYYY0101” to “YYYY0115” -&gt; 1.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cybench.util.features.growing_degree_days">
+<span class="sig-prename descclassname"><span class="pre">cybench.util.features.</span></span><span class="sig-name descname"><span class="pre">growing_degree_days</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tbase</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cybench.util.features.growing_degree_days" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cybench.util.features.unpack_time_series">
+<span class="sig-prename descclassname"><span class="pre">cybench.util.features.</span></span><span class="sig-name descname"><span class="pre">unpack_time_series</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">indicators</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cybench.util.features.unpack_time_series" title="Link to this definition"></a></dt>
+<dd><p>Unpack time series data to rows per date.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>df</strong> – pd.DataFrame</p></li>
+<li><p><strong>indicators</strong> – list of indicators to unpack</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>pd.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-cybench.util.geo">
+<span id="cybench-util-geo-module"></span><h2>cybench.util.geo module<a class="headerlink" href="#module-cybench.util.geo" title="Link to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="cybench.util.geo.get_shapes_from_polygons">
+<span class="sig-prename descclassname"><span class="pre">cybench.util.geo.</span></span><span class="sig-name descname"><span class="pre">get_shapes_from_polygons</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">region</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cybench.util.geo.get_shapes_from_polygons" title="Link to this definition"></a></dt>
+<dd><p>Load administrative boundaries from the polygons folder.</p>
+<dl class="simple">
+<dt>Folder structure assumed:</dt><dd><p>POLYGONS_DIR/COUNTRY/COUNTRY.shp</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>region</strong> – 2-letter country code</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>GeoDataFrame with an ‘adm_id’ column</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-cybench.util.torch">
+<span id="cybench-util-torch-module"></span><h2>cybench.util.torch module<a class="headerlink" href="#module-cybench.util.torch" title="Link to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="cybench.util.torch.batch_tensors">
+<span class="sig-prename descclassname"><span class="pre">cybench.util.torch.</span></span><span class="sig-name descname"><span class="pre">batch_tensors</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">ts</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cybench.util.torch.batch_tensors" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</section>
+<section id="module-cybench.util">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-cybench.util" title="Link to this heading"></a></h2>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, Wageningen University and Research.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>  
+
+  <style>
+    /* Sidebar header (and topbar for mobile) */
+    .wy-side-nav-search, .wy-nav-top {
+      background: #28242c; */
+    }
+    /* Sidebar */
+    .wy-nav-side {
+      background: #124400;
+    }
+  </style>
+
+
+</body>
+</html>
