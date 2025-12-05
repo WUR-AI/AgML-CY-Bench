@@ -8,13 +8,20 @@ from itertools import repeat
 import logging
 import argparse
 import warnings
-import matplotlib.pyplot as plt
 
-from cybench.util.geo import get_shapes_from_polygons, get_area_km2
-from cybench.config import PATH_DATA_DIR
+from cybench.util.geo import get_shapes_from_polygons
+from cybench.config import PATH_DATA_DIR, REPO_DIR
 
 warnings.filterwarnings("ignore")
 
+def init_worker_logging():
+    """Disable file logging in worker processes to avoid RotatingFileHandler races."""
+    root = logging.getLogger()
+    # remove all handlers inherited from the parent
+    for h in root.handlers[:]:
+        root.removeHandler(h)
+    # optional: silence workers completely
+    root.addHandler(logging.NullHandler())
 
 log = logging.getLogger(__name__)
 
@@ -23,9 +30,8 @@ log = logging.getLogger(__name__)
 # Directory paths
 ##################
 
-AGML_ROOT = r"/path_to_raw_data"
-DATA_DIR = os.path.join(AGML_ROOT, "predictors")
-OUTPUT_DIR = os.path.join(AGML_ROOT, "python-output")
+DATA_DIR = r"/path_to_raw_data/predictors"
+OUTPUT_DIR = r"/path_to_raw_data/python-output"
 
 #####################
 # Start and end years
@@ -847,7 +853,7 @@ def process_file(
     else:
         crop_mask_file = "crop_mask_generic_asap.tif"
 
-    crop_mask_path = os.path.join(AGML_ROOT, "crop_masks", crop_mask_file)
+    crop_mask_path = os.path.join(REPO_DIR, "data_preparation", "global_crop_AFIs_ESA_WC", crop_mask_file)
 
     basename = os.path.basename(indicator_file)
     fname, ext = os.path.splitext(basename)
@@ -952,7 +958,7 @@ def process_indicators(crop, region, sel_indicators):
                     continue
                 start_time = time.time()
                 files = sorted([os.path.join(indicator_dir, f) for f in files])
-                with mp.Pool(processes=None) as pool:
+                with mp.Pool(processes=None, initializer=init_worker_logging) as pool:
                     # NOTE: multiprocessing using a target function with multiple arguments.
                     # Based on the answer to
                     # https://stackoverflow.com/questions/5442910/how-to-use-multiprocessing-pool-map-with-multiple-arguments
