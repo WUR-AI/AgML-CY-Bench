@@ -361,6 +361,8 @@ if __name__ == "__main__":
         "LinearTrend": "Trend",
         "SklearnRidge": "Ridge",
         "SklearnRF": "RF",
+        "XGBoostModel": "XGB",
+        "XGBoostRes": "XGB-Res",
     }
     # for other models, add name as short name
     for model_name in BASELINE_MODELS:
