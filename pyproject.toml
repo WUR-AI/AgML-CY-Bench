@@ -10,7 +10,6 @@ readme = "README.md"
 python = ">=3.9,<3.13"
 matplotlib = "^3.9.0"
 scikit-learn = "^1.5.0"
-xgboost = "^3.1.1"
 statsmodels = "^0.14.2"
 flake8 = "^7.0.0"
 tqdm = "^4.66.4"
@@ -33,6 +32,8 @@ torch = "^2.2.2"
 urllib3 = "^2.3.0"
 sphinx = "7.4.7"
 fastcore = "1.7.29"
+xgboost = ">=2.1.4"
+
 
 
 [build-system]
