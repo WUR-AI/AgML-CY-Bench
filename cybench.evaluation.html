@@ -1,0 +1,336 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>cybench.evaluation package &mdash; AgML-crop-yield-forecasting  documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+
+  
+    <link rel="shortcut icon" href="_static/favicon.png"/>
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="_static/doctools.js?v=9a2dae69"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            AgML-crop-yield-forecasting
+              <img src="_static/agml-logo.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <!-- Local TOC -->
+              <div class="local-toc"><ul>
+<li><a class="reference internal" href="#">cybench.evaluation package</a><ul>
+<li><a class="reference internal" href="#submodules">Submodules</a></li>
+<li><a class="reference internal" href="#module-cybench.evaluation.eval">cybench.evaluation.eval module</a><ul>
+<li><a class="reference internal" href="#cybench.evaluation.eval.evaluate_model"><code class="docutils literal notranslate"><span class="pre">evaluate_model()</span></code></a></li>
+<li><a class="reference internal" href="#cybench.evaluation.eval.evaluate_predictions"><code class="docutils literal notranslate"><span class="pre">evaluate_predictions()</span></code></a></li>
+<li><a class="reference internal" href="#cybench.evaluation.eval.get_default_metrics"><code class="docutils literal notranslate"><span class="pre">get_default_metrics()</span></code></a></li>
+<li><a class="reference internal" href="#cybench.evaluation.eval.mape"><code class="docutils literal notranslate"><span class="pre">mape()</span></code></a></li>
+<li><a class="reference internal" href="#cybench.evaluation.eval.metric"><code class="docutils literal notranslate"><span class="pre">metric()</span></code></a></li>
+<li><a class="reference internal" href="#cybench.evaluation.eval.normalized_rmse"><code class="docutils literal notranslate"><span class="pre">normalized_rmse()</span></code></a></li>
+<li><a class="reference internal" href="#cybench.evaluation.eval.prepare_targets_preds"><code class="docutils literal notranslate"><span class="pre">prepare_targets_preds()</span></code></a></li>
+<li><a class="reference internal" href="#cybench.evaluation.eval.r"><code class="docutils literal notranslate"><span class="pre">r()</span></code></a></li>
+<li><a class="reference internal" href="#cybench.evaluation.eval.r2"><code class="docutils literal notranslate"><span class="pre">r2()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#cybench-evaluation-example-log-experiment-module">cybench.evaluation.example_log_experiment module</a></li>
+<li><a class="reference internal" href="#module-cybench.evaluation.log_experiments">cybench.evaluation.log_experiments module</a><ul>
+<li><a class="reference internal" href="#cybench.evaluation.log_experiments.comet_wrapper"><code class="docutils literal notranslate"><span class="pre">comet_wrapper()</span></code></a></li>
+<li><a class="reference internal" href="#cybench.evaluation.log_experiments.existing_comet"><code class="docutils literal notranslate"><span class="pre">existing_comet()</span></code></a></li>
+<li><a class="reference internal" href="#cybench.evaluation.log_experiments.get_comet_api_key"><code class="docutils literal notranslate"><span class="pre">get_comet_api_key()</span></code></a></li>
+<li><a class="reference internal" href="#cybench.evaluation.log_experiments.log_benchmark_to_comet"><code class="docutils literal notranslate"><span class="pre">log_benchmark_to_comet()</span></code></a></li>
+<li><a class="reference internal" href="#cybench.evaluation.log_experiments.log_benchmark_to_comet_post_hoc"><code class="docutils literal notranslate"><span class="pre">log_benchmark_to_comet_post_hoc()</span></code></a></li>
+<li><a class="reference internal" href="#cybench.evaluation.log_experiments.log_to_comet_post_hoc"><code class="docutils literal notranslate"><span class="pre">log_to_comet_post_hoc()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-cybench.evaluation">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</div>
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">AgML-crop-yield-forecasting</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">cybench.evaluation package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/cybench.evaluation.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="cybench-evaluation-package">
+<h1>cybench.evaluation package<a class="headerlink" href="#cybench-evaluation-package" title="Link to this heading"></a></h1>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading"></a></h2>
+</section>
+<section id="module-cybench.evaluation.eval">
+<span id="cybench-evaluation-eval-module"></span><h2>cybench.evaluation.eval module<a class="headerlink" href="#module-cybench.evaluation.eval" title="Link to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="cybench.evaluation.eval.evaluate_model">
+<span class="sig-prename descclassname"><span class="pre">cybench.evaluation.eval.</span></span><span class="sig-name descname"><span class="pre">evaluate_model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="cybench.models.html#cybench.models.model.BaseModel" title="cybench.models.model.BaseModel"><span class="pre">BaseModel</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">dataset</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="cybench.datasets.html#cybench.datasets.dataset.Dataset" title="cybench.datasets.dataset.Dataset"><span class="pre">Dataset</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">metrics</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">('mape',</span> <span class="pre">'normalized_rmse',</span> <span class="pre">'r',</span> <span class="pre">'r2')</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cybench.evaluation.eval.evaluate_model" title="Link to this definition"></a></dt>
+<dd><p>Evaluate the performance of a model using specified metrics.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>model</strong> – The trained model to be evaluated.</p></li>
+<li><p><strong>dataset</strong> – Dataset.</p></li>
+<li><p><strong>metrics</strong> – List of metrics to calculate.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A dictionary containing the calculated metrics.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cybench.evaluation.eval.evaluate_predictions">
+<span class="sig-prename descclassname"><span class="pre">cybench.evaluation.eval.</span></span><span class="sig-name descname"><span class="pre">evaluate_predictions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y_true</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_pred</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metrics</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">('mape',</span> <span class="pre">'normalized_rmse',</span> <span class="pre">'r',</span> <span class="pre">'r2')</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cybench.evaluation.eval.evaluate_predictions" title="Link to this definition"></a></dt>
+<dd><p>Evaluate predictions using specified metrics.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>y_true</strong> (<em>numpy.ndarray</em>) – True labels for evaluation.</p></li>
+<li><p><strong>y_pred</strong> (<em>numpy.ndarray</em>) – Predicted values.</p></li>
+<li><p><strong>metrics</strong> – List of metrics to calculate.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A dictionary containing the calculated metrics.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cybench.evaluation.eval.get_default_metrics">
+<span class="sig-prename descclassname"><span class="pre">cybench.evaluation.eval.</span></span><span class="sig-name descname"><span class="pre">get_default_metrics</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">residual</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cybench.evaluation.eval.get_default_metrics" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cybench.evaluation.eval.mape">
+<span class="sig-prename descclassname"><span class="pre">cybench.evaluation.eval.</span></span><span class="sig-name descname"><span class="pre">mape</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y_true</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_pred</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cybench.evaluation.eval.mape" title="Link to this definition"></a></dt>
+<dd><p>Calculate Mean Absolute Percentage Error (MAPE).
+Note that in the provided implementation using scikit-learn, there is an absence of multiplication by 100</p>
+<p>Args:
+- y_true (numpy.ndarray): True values.
+- y_pred (numpy.ndarray): Predicted values.</p>
+<p>Returns:
+- float: Mean Absolute Percentage Error.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cybench.evaluation.eval.metric">
+<span class="sig-prename descclassname"><span class="pre">cybench.evaluation.eval.</span></span><span class="sig-name descname"><span class="pre">metric</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">func</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cybench.evaluation.eval.metric" title="Link to this definition"></a></dt>
+<dd><p>Decorator to mark functions as metrics</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cybench.evaluation.eval.normalized_rmse">
+<span class="sig-prename descclassname"><span class="pre">cybench.evaluation.eval.</span></span><span class="sig-name descname"><span class="pre">normalized_rmse</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y_true</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_pred</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cybench.evaluation.eval.normalized_rmse" title="Link to this definition"></a></dt>
+<dd><p>Calculate the normalized Root Mean Squared Error (RMSE) between true and predicted values.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>y_true</strong> (<em>numpy.ndarray</em>) – True values.</p></li>
+<li><p><strong>y_pred</strong> (<em>numpy.ndarray</em>) – Predicted values.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Normalized RMSE value as a percentage.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cybench.evaluation.eval.prepare_targets_preds">
+<span class="sig-prename descclassname"><span class="pre">cybench.evaluation.eval.</span></span><span class="sig-name descname"><span class="pre">prepare_targets_preds</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df_yr</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_loc_mean</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">residual</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cybench.evaluation.eval.prepare_targets_preds" title="Link to this definition"></a></dt>
+<dd><p>Prepare y_true and y_pred, optionally using residuals, dropping NaNs.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cybench.evaluation.eval.r">
+<span class="sig-prename descclassname"><span class="pre">cybench.evaluation.eval.</span></span><span class="sig-name descname"><span class="pre">r</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y_true</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_pred</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cybench.evaluation.eval.r" title="Link to this definition"></a></dt>
+<dd><p>Calculate Pearson correlation coefficient.</p>
+<p>Args:
+- y_true (numpy.ndarray): True values.
+- y_pred (numpy.ndarray): Predicted values.</p>
+<p>Returns:
+- float: Pearson’s R.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cybench.evaluation.eval.r2">
+<span class="sig-prename descclassname"><span class="pre">cybench.evaluation.eval.</span></span><span class="sig-name descname"><span class="pre">r2</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y_true</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_pred</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cybench.evaluation.eval.r2" title="Link to this definition"></a></dt>
+<dd><p>Calculate coefficient of determination (R2).</p>
+<p>Args:
+- y_true (numpy.ndarray): True values.
+- y_pred (numpy.ndarray): Predicted values.</p>
+<p>Returns:
+- float: r2.</p>
+</dd></dl>
+
+</section>
+<section id="cybench-evaluation-example-log-experiment-module">
+<h2>cybench.evaluation.example_log_experiment module<a class="headerlink" href="#cybench-evaluation-example-log-experiment-module" title="Link to this heading"></a></h2>
+</section>
+<section id="module-cybench.evaluation.log_experiments">
+<span id="cybench-evaluation-log-experiments-module"></span><h2>cybench.evaluation.log_experiments module<a class="headerlink" href="#module-cybench.evaluation.log_experiments" title="Link to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="cybench.evaluation.log_experiments.comet_wrapper">
+<span class="sig-prename descclassname"><span class="pre">cybench.evaluation.log_experiments.</span></span><span class="sig-name descname"><span class="pre">comet_wrapper</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="cybench.models.html#cybench.models.model.BaseModel" title="cybench.models.model.BaseModel"><span class="pre">BaseModel</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">comet_experiment</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Experiment</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">comet_api_key</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Experiment</span></span></span><a class="headerlink" href="#cybench.evaluation.log_experiments.comet_wrapper" title="Link to this definition"></a></dt>
+<dd><p>Wrap model before training with a Comet experiment instance</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Comet_ml experiment instance</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cybench.evaluation.log_experiments.existing_comet">
+<span class="sig-prename descclassname"><span class="pre">cybench.evaluation.log_experiments.</span></span><span class="sig-name descname"><span class="pre">existing_comet</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">comet_experiment</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Experiment</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">comet_api_key</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">project_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">workspace</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Experiment</span></span></span><a class="headerlink" href="#cybench.evaluation.log_experiments.existing_comet" title="Link to this definition"></a></dt>
+<dd><dl class="simple">
+<dt>If api_key is not defined, comet_ml will start in anonymous mode and the logs can be accessed</dt><dd><p>through the URL provided in the console</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>comet Experiment object</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cybench.evaluation.log_experiments.get_comet_api_key">
+<span class="sig-prename descclassname"><span class="pre">cybench.evaluation.log_experiments.</span></span><span class="sig-name descname"><span class="pre">get_comet_api_key</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#cybench.evaluation.log_experiments.get_comet_api_key" title="Link to this definition"></a></dt>
+<dd><p>Function that returns api_key.</p>
+<p>Store the api key under evaluation/api_keys/…</p>
+<dl class="field-list simple">
+<dt class="field-odd">Param<span class="colon">:</span></dt>
+<dd class="field-odd"><p>file: file name that contains one line of the comet api key.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cybench.evaluation.log_experiments.log_benchmark_to_comet">
+<span class="sig-prename descclassname"><span class="pre">cybench.evaluation.log_experiments.</span></span><span class="sig-name descname"><span class="pre">log_benchmark_to_comet</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">results_dict</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">run_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">comet_experiment</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Experiment</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">comet_api_key</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">end</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#cybench.evaluation.log_experiments.log_benchmark_to_comet" title="Link to this definition"></a></dt>
+<dd><p>Function to log benchmark results to comet</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cybench.evaluation.log_experiments.log_benchmark_to_comet_post_hoc">
+<span class="sig-prename descclassname"><span class="pre">cybench.evaluation.log_experiments.</span></span><span class="sig-name descname"><span class="pre">log_benchmark_to_comet_post_hoc</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">run_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">comet_experiment</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Experiment</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">comet_api_key</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">end</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#cybench.evaluation.log_experiments.log_benchmark_to_comet_post_hoc" title="Link to this definition"></a></dt>
+<dd><p>Log benchmark results to comet after the training run from saved files</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cybench.evaluation.log_experiments.log_to_comet_post_hoc">
+<span class="sig-prename descclassname"><span class="pre">cybench.evaluation.log_experiments.</span></span><span class="sig-name descname"><span class="pre">log_to_comet_post_hoc</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">metrics</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">comet_experiment</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Experiment</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">comet_api_key</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="cybench.models.html#cybench.models.model.BaseModel" title="cybench.models.model.BaseModel"><span class="pre">BaseModel</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">asset_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">end</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#cybench.evaluation.log_experiments.log_to_comet_post_hoc" title="Link to this definition"></a></dt>
+<dd><p>Log metrics, params, asset and model to Comet_ml</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>comet_experiment</strong> – comet experiment object</p></li>
+<li><p><strong>metrics</strong> – dict of metrics</p></li>
+<li><p><strong>params</strong> – dict of params/hyperparams</p></li>
+<li><p><strong>model</strong> – name of the saved model</p></li>
+<li><p><strong>name</strong> – name of the comet experiment</p></li>
+<li><p><strong>asset_path</strong> – path to asset. To log a custom asset (e.g., config file etc.) to Comet.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-cybench.evaluation">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-cybench.evaluation" title="Link to this heading"></a></h2>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, Wageningen University and Research.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>  
+
+  <style>
+    /* Sidebar header (and topbar for mobile) */
+    .wy-side-nav-search, .wy-nav-top {
+      background: #28242c; */
+    }
+    /* Sidebar */
+    .wy-nav-side {
+      background: #124400;
+    }
+  </style>
+
+
+</body>
+</html>
