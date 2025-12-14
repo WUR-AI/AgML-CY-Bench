@@ -361,6 +361,8 @@ if __name__ == "__main__":
         "LinearTrend": "Trend",
         "SklearnRidge": "Ridge",
         "SklearnRF": "RF",
+        "SVRModel": "SVR",
+        "SVRRes": "SVR-Res",
         "XGBoostModel": "XGB",
         "XGBoostRes": "XGB-Res",
     }

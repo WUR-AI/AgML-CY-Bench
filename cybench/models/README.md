@@ -10,12 +10,15 @@
 
     d. Random Forest model. Ramdom Forest from scikit-learn acts as a non-linear baseline with expert-designed features. Both `Ridge` and `RandomForestRegressor` can be passed to `SklearnModel` as the sklearn estimator without having to change other code. Hyperparameter optimization is possible by passing the search space to `fit` method and setting the `optimize_hyperparameters` flag to True.
 
-    e. XGBoost model. XGBoost (gradient boosting trees) provides a stronger non-linear baseline using the same expert-designed features and BaseSklearnModel pipeline, with hyperparameters tuned via grouped cross-validation.
+   e. SVR model: Support Vector Regression from scikit-learn acts as another non-linear baseline using the same expert-designed features and `BaseSklearnModel` pipeline, with hyperparameters tuned via grouped cross-validation. Both `SVRModel` and its residual variant `SVRRes` are available.
 
-    f. LSTM. An example LSTM model is included as a deep learning (RNN) or representation learning baseline.
 
-    g. InceptionTime. An example InceptionTime model is included as a deep learning (1D-CNN) or representation learning baseline.
+    f. XGBoost model. XGBoost (gradient boosting trees) provides a stronger non-linear baseline using the same expert-designed features and BaseSklearnModel pipeline, with hyperparameters tuned via grouped cross-validation.
 
-    h. Transformer. An example Transformer model is included as a deep learning (Transformer) or representation learning baseline.
+    g. LSTM. An example LSTM model is included as a deep learning (RNN) or representation learning baseline.
 
-    i. Residual models: All the models c-g have their residual modeling counterparts. Residual models subtract the prediction of a Linear Trend model from b and learn to predict or forecast the residual (i.e. yield - trend). The idea is to remove the location and time dependent component of yields. The seasonal predictors included in CY-Bench are likely to better forecast the year-to-year variability in yields  than yields themselves.
+    h. InceptionTime. An example InceptionTime model is included as a deep learning (1D-CNN) or representation learning baseline.
+
+    i. Transformer. An example Transformer model is included as a deep learning (Transformer) or representation learning baseline.
+
+    j. Residual models: All the models c-g have their residual modeling counterparts. Residual models subtract the prediction of a Linear Trend model from b and learn to predict or forecast the residual (i.e. yield - trend). The idea is to remove the location and time dependent component of yields. The seasonal predictors included in CY-Bench are likely to better forecast the year-to-year variability in yields  than yields themselves.
