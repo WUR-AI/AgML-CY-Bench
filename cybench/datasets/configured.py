@@ -146,7 +146,7 @@ def load_dfs(
         if not os.path.exists(location_file):
             raise DatasetVersionError(
                 f"{location_file} not found. "
-                "Please use version 1.9 of the dataset that includes location properties, "
+                "Please use version > 1.9 of the dataset that includes location properties, "
                 "or set LOCATION_PROPERTIES to empty list"
             )
 

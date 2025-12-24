@@ -137,7 +137,7 @@ SOIL_PROPERTIES = ["awc", "bulk_density"]  # , "drainage_class"]
 LOCATION_PROPERTIES = ["latitude", "longitude"]
 
 # Static predictors. Add more when available
-STATIC_PREDICTORS = SOIL_PROPERTIES
+STATIC_PREDICTORS = SOIL_PROPERTIES + LOCATION_PROPERTIES
 
 # Weather indicators
 METEO_INDICATORS = ["tmin", "tmax", "tavg", "prec", "cwb", "rad"]
