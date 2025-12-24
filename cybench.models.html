@@ -1,0 +1,1405 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>cybench.models package &mdash; AgML-crop-yield-forecasting  documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+
+  
+    <link rel="shortcut icon" href="_static/favicon.png"/>
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="_static/doctools.js?v=9a2dae69"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            AgML-crop-yield-forecasting
+              <img src="_static/agml-logo.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <!-- Local TOC -->
+              <div class="local-toc"><ul>
+<li><a class="reference internal" href="#">cybench.models package</a><ul>
+<li><a class="reference internal" href="#submodules">Submodules</a></li>
+<li><a class="reference internal" href="#module-cybench.models.model">cybench.models.model module</a><ul>
+<li><a class="reference internal" href="#cybench.models.model.BaseModel"><code class="docutils literal notranslate"><span class="pre">BaseModel</span></code></a><ul>
+<li><a class="reference internal" href="#cybench.models.model.BaseModel._abc_impl"><code class="docutils literal notranslate"><span class="pre">BaseModel._abc_impl</span></code></a></li>
+<li><a class="reference internal" href="#cybench.models.model.BaseModel.fit"><code class="docutils literal notranslate"><span class="pre">BaseModel.fit()</span></code></a></li>
+<li><a class="reference internal" href="#cybench.models.model.BaseModel.load"><code class="docutils literal notranslate"><span class="pre">BaseModel.load()</span></code></a></li>
+<li><a class="reference internal" href="#cybench.models.model.BaseModel.predict"><code class="docutils literal notranslate"><span class="pre">BaseModel.predict()</span></code></a></li>
+<li><a class="reference internal" href="#cybench.models.model.BaseModel.predict_items"><code class="docutils literal notranslate"><span class="pre">BaseModel.predict_items()</span></code></a></li>
+<li><a class="reference internal" href="#cybench.models.model.BaseModel.save"><code class="docutils literal notranslate"><span class="pre">BaseModel.save()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-cybench.models.naive_models">cybench.models.naive_models module</a><ul>
+<li><a class="reference internal" href="#cybench.models.naive_models.AverageYieldModel"><code class="docutils literal notranslate"><span class="pre">AverageYieldModel</span></code></a><ul>
+<li><a class="reference internal" href="#cybench.models.naive_models.AverageYieldModel._abc_impl"><code class="docutils literal notranslate"><span class="pre">AverageYieldModel._abc_impl</span></code></a></li>
+<li><a class="reference internal" href="#cybench.models.naive_models.AverageYieldModel.fit"><code class="docutils literal notranslate"><span class="pre">AverageYieldModel.fit()</span></code></a></li>
+<li><a class="reference internal" href="#cybench.models.naive_models.AverageYieldModel.load"><code class="docutils literal notranslate"><span class="pre">AverageYieldModel.load()</span></code></a></li>
+<li><a class="reference internal" href="#cybench.models.naive_models.AverageYieldModel.predict_items"><code class="docutils literal notranslate"><span class="pre">AverageYieldModel.predict_items()</span></code></a></li>
+<li><a class="reference internal" href="#cybench.models.naive_models.AverageYieldModel.save"><code class="docutils literal notranslate"><span class="pre">AverageYieldModel.save()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-cybench.models.nn_models">cybench.models.nn_models module</a><ul>
+<li><a class="reference internal" href="#cybench.models.nn_models.BaseNNModel"><code class="docutils literal notranslate"><span class="pre">BaseNNModel</span></code></a><ul>
+<li><a class="reference internal" href="#cybench.models.nn_models.BaseNNModel._abc_impl"><code class="docutils literal notranslate"><span class="pre">BaseNNModel._abc_impl</span></code></a></li>
+<li><a class="reference internal" href="#cybench.models.nn_models.BaseNNModel._forward_pass"><code class="docutils literal notranslate"><span class="pre">BaseNNModel._forward_pass()</span></code></a></li>
+<li><a class="reference internal" href="#cybench.models.nn_models.BaseNNModel._normalize_inputs"><code class="docutils literal notranslate"><span class="pre">BaseNNModel._normalize_inputs()</span></code></a></li>
+<li><a class="reference internal" href="#cybench.models.nn_models.BaseNNModel._optimize_hyperparameters"><code class="docutils literal notranslate"><span class="pre">BaseNNModel._optimize_hyperparameters()</span></code></a></li>
+<li><a class="reference internal" href="#cybench.models.nn_models.BaseNNModel._train_and_validate"><code class="docutils literal notranslate"><span class="pre">BaseNNModel._train_and_validate()</span></code></a></li>
+<li><a class="reference internal" href="#cybench.models.nn_models.BaseNNModel._train_epoch"><code class="docutils literal notranslate"><span class="pre">BaseNNModel._train_epoch()</span></code></a></li>
+<li><a class="reference internal" href="#cybench.models.nn_models.BaseNNModel._train_final_model"><code class="docutils literal notranslate"><span class="pre">BaseNNModel._train_final_model()</span></code></a></li>
+<li><a class="reference internal" href="#cybench.models.nn_models.BaseNNModel.fit"><code class="docutils literal notranslate"><span class="pre">BaseNNModel.fit()</span></code></a></li>
+<li><a class="reference internal" href="#cybench.models.nn_models.BaseNNModel.load"><code class="docutils literal notranslate"><span class="pre">BaseNNModel.load()</span></code></a></li>
+<li><a class="reference internal" href="#cybench.models.nn_models.BaseNNModel.predict"><code class="docutils literal notranslate"><span class="pre">BaseNNModel.predict()</span></code></a></li>
+<li><a class="reference internal" href="#cybench.models.nn_models.BaseNNModel.predict_items"><code class="docutils literal notranslate"><span class="pre">BaseNNModel.predict_items()</span></code></a></li>
+<li><a class="reference internal" href="#cybench.models.nn_models.BaseNNModel.save"><code class="docutils literal notranslate"><span class="pre">BaseNNModel.save()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#cybench.models.nn_models.BaselineInceptionTime"><code class="docutils literal notranslate"><span class="pre">BaselineInceptionTime</span></code></a><ul>
+<li><a class="reference internal" href="#cybench.models.nn_models.BaselineInceptionTime._abc_impl"><code class="docutils literal notranslate"><span class="pre">BaselineInceptionTime._abc_impl</span></code></a></li>
+<li><a class="reference internal" href="#cybench.models.nn_models.BaselineInceptionTime.fit"><code class="docutils literal notranslate"><span class="pre">BaselineInceptionTime.fit()</span></code></a></li>
+<li><a class="reference internal" href="#cybench.models.nn_models.BaselineInceptionTime.forward"><code class="docutils literal notranslate"><span class="pre">BaselineInceptionTime.forward()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#cybench.models.nn_models.BaselineLSTM"><code class="docutils literal notranslate"><span class="pre">BaselineLSTM</span></code></a><ul>
+<li><a class="reference internal" href="#cybench.models.nn_models.BaselineLSTM._abc_impl"><code class="docutils literal notranslate"><span class="pre">BaselineLSTM._abc_impl</span></code></a></li>
+<li><a class="reference internal" href="#cybench.models.nn_models.BaselineLSTM.fit"><code class="docutils literal notranslate"><span class="pre">BaselineLSTM.fit()</span></code></a></li>
+<li><a class="reference internal" href="#cybench.models.nn_models.BaselineLSTM.forward"><code class="docutils literal notranslate"><span class="pre">BaselineLSTM.forward()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#cybench.models.nn_models.BaselineTransformer"><code class="docutils literal notranslate"><span class="pre">BaselineTransformer</span></code></a><ul>
+<li><a class="reference internal" href="#cybench.models.nn_models.BaselineTransformer._abc_impl"><code class="docutils literal notranslate"><span class="pre">BaselineTransformer._abc_impl</span></code></a></li>
+<li><a class="reference internal" href="#cybench.models.nn_models.BaselineTransformer.fit"><code class="docutils literal notranslate"><span class="pre">BaselineTransformer.fit()</span></code></a></li>
+<li><a class="reference internal" href="#cybench.models.nn_models.BaselineTransformer.forward"><code class="docutils literal notranslate"><span class="pre">BaselineTransformer.forward()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#cybench.models.nn_models.separate_ts_static_inputs"><code class="docutils literal notranslate"><span class="pre">separate_ts_static_inputs()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-cybench.models.residual_models">cybench.models.residual_models module</a><ul>
+<li><a class="reference internal" href="#cybench.models.residual_models.InceptionTimeRes"><code class="docutils literal notranslate"><span class="pre">InceptionTimeRes</span></code></a><ul>
+<li><a class="reference internal" href="#cybench.models.residual_models.InceptionTimeRes._abc_impl"><code class="docutils literal notranslate"><span class="pre">InceptionTimeRes._abc_impl</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#cybench.models.residual_models.LSTMRes"><code class="docutils literal notranslate"><span class="pre">LSTMRes</span></code></a><ul>
+<li><a class="reference internal" href="#cybench.models.residual_models.LSTMRes._abc_impl"><code class="docutils literal notranslate"><span class="pre">LSTMRes._abc_impl</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#cybench.models.residual_models.RandomForestRes"><code class="docutils literal notranslate"><span class="pre">RandomForestRes</span></code></a><ul>
+<li><a class="reference internal" href="#cybench.models.residual_models.RandomForestRes._abc_impl"><code class="docutils literal notranslate"><span class="pre">RandomForestRes._abc_impl</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#cybench.models.residual_models.ResidualModel"><code class="docutils literal notranslate"><span class="pre">ResidualModel</span></code></a><ul>
+<li><a class="reference internal" href="#cybench.models.residual_models.ResidualModel._abc_impl"><code class="docutils literal notranslate"><span class="pre">ResidualModel._abc_impl</span></code></a></li>
+<li><a class="reference internal" href="#cybench.models.residual_models.ResidualModel.fit"><code class="docutils literal notranslate"><span class="pre">ResidualModel.fit()</span></code></a></li>
+<li><a class="reference internal" href="#cybench.models.residual_models.ResidualModel.load"><code class="docutils literal notranslate"><span class="pre">ResidualModel.load()</span></code></a></li>
+<li><a class="reference internal" href="#cybench.models.residual_models.ResidualModel.predict"><code class="docutils literal notranslate"><span class="pre">ResidualModel.predict()</span></code></a></li>
+<li><a class="reference internal" href="#cybench.models.residual_models.ResidualModel.predict_items"><code class="docutils literal notranslate"><span class="pre">ResidualModel.predict_items()</span></code></a></li>
+<li><a class="reference internal" href="#cybench.models.residual_models.ResidualModel.save"><code class="docutils literal notranslate"><span class="pre">ResidualModel.save()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#cybench.models.residual_models.RidgeRes"><code class="docutils literal notranslate"><span class="pre">RidgeRes</span></code></a><ul>
+<li><a class="reference internal" href="#cybench.models.residual_models.RidgeRes._abc_impl"><code class="docutils literal notranslate"><span class="pre">RidgeRes._abc_impl</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#cybench.models.residual_models.TransformerRes"><code class="docutils literal notranslate"><span class="pre">TransformerRes</span></code></a><ul>
+<li><a class="reference internal" href="#cybench.models.residual_models.TransformerRes._abc_impl"><code class="docutils literal notranslate"><span class="pre">TransformerRes._abc_impl</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#cybench.models.residual_models.XGBoostRes"><code class="docutils literal notranslate"><span class="pre">XGBoostRes</span></code></a><ul>
+<li><a class="reference internal" href="#cybench.models.residual_models.XGBoostRes._abc_impl"><code class="docutils literal notranslate"><span class="pre">XGBoostRes._abc_impl</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-cybench.models.sklearn_models">cybench.models.sklearn_models module</a><ul>
+<li><a class="reference internal" href="#cybench.models.sklearn_models.BaseSklearnModel"><code class="docutils literal notranslate"><span class="pre">BaseSklearnModel</span></code></a><ul>
+<li><a class="reference internal" href="#cybench.models.sklearn_models.BaseSklearnModel._abc_impl"><code class="docutils literal notranslate"><span class="pre">BaseSklearnModel._abc_impl</span></code></a></li>
+<li><a class="reference internal" href="#cybench.models.sklearn_models.BaseSklearnModel._design_features"><code class="docutils literal notranslate"><span class="pre">BaseSklearnModel._design_features()</span></code></a></li>
+<li><a class="reference internal" href="#cybench.models.sklearn_models.BaseSklearnModel._optimize_hyperparameters"><code class="docutils literal notranslate"><span class="pre">BaseSklearnModel._optimize_hyperparameters()</span></code></a></li>
+<li><a class="reference internal" href="#cybench.models.sklearn_models.BaseSklearnModel._predict"><code class="docutils literal notranslate"><span class="pre">BaseSklearnModel._predict()</span></code></a></li>
+<li><a class="reference internal" href="#cybench.models.sklearn_models.BaseSklearnModel.fit"><code class="docutils literal notranslate"><span class="pre">BaseSklearnModel.fit()</span></code></a></li>
+<li><a class="reference internal" href="#cybench.models.sklearn_models.BaseSklearnModel.load"><code class="docutils literal notranslate"><span class="pre">BaseSklearnModel.load()</span></code></a></li>
+<li><a class="reference internal" href="#cybench.models.sklearn_models.BaseSklearnModel.predict"><code class="docutils literal notranslate"><span class="pre">BaseSklearnModel.predict()</span></code></a></li>
+<li><a class="reference internal" href="#cybench.models.sklearn_models.BaseSklearnModel.predict_items"><code class="docutils literal notranslate"><span class="pre">BaseSklearnModel.predict_items()</span></code></a></li>
+<li><a class="reference internal" href="#cybench.models.sklearn_models.BaseSklearnModel.save"><code class="docutils literal notranslate"><span class="pre">BaseSklearnModel.save()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#cybench.models.sklearn_models.SklearnRandomForest"><code class="docutils literal notranslate"><span class="pre">SklearnRandomForest</span></code></a><ul>
+<li><a class="reference internal" href="#cybench.models.sklearn_models.SklearnRandomForest._abc_impl"><code class="docutils literal notranslate"><span class="pre">SklearnRandomForest._abc_impl</span></code></a></li>
+<li><a class="reference internal" href="#cybench.models.sklearn_models.SklearnRandomForest.fit"><code class="docutils literal notranslate"><span class="pre">SklearnRandomForest.fit()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#cybench.models.sklearn_models.SklearnRidge"><code class="docutils literal notranslate"><span class="pre">SklearnRidge</span></code></a><ul>
+<li><a class="reference internal" href="#cybench.models.sklearn_models.SklearnRidge._abc_impl"><code class="docutils literal notranslate"><span class="pre">SklearnRidge._abc_impl</span></code></a></li>
+<li><a class="reference internal" href="#cybench.models.sklearn_models.SklearnRidge.fit"><code class="docutils literal notranslate"><span class="pre">SklearnRidge.fit()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-cybench.models.trend_models">cybench.models.trend_models module</a><ul>
+<li><a class="reference internal" href="#cybench.models.trend_models.TrendModel"><code class="docutils literal notranslate"><span class="pre">TrendModel</span></code></a><ul>
+<li><a class="reference internal" href="#cybench.models.trend_models.TrendModel.MAX_TREND_WINDOW_SIZE"><code class="docutils literal notranslate"><span class="pre">TrendModel.MAX_TREND_WINDOW_SIZE</span></code></a></li>
+<li><a class="reference internal" href="#cybench.models.trend_models.TrendModel.MIN_TREND_WINDOW_SIZE"><code class="docutils literal notranslate"><span class="pre">TrendModel.MIN_TREND_WINDOW_SIZE</span></code></a></li>
+<li><a class="reference internal" href="#cybench.models.trend_models.TrendModel._abc_impl"><code class="docutils literal notranslate"><span class="pre">TrendModel._abc_impl</span></code></a></li>
+<li><a class="reference internal" href="#cybench.models.trend_models.TrendModel._estimate_trend"><code class="docutils literal notranslate"><span class="pre">TrendModel._estimate_trend()</span></code></a></li>
+<li><a class="reference internal" href="#cybench.models.trend_models.TrendModel._find_optimal_trend_window"><code class="docutils literal notranslate"><span class="pre">TrendModel._find_optimal_trend_window()</span></code></a></li>
+<li><a class="reference internal" href="#cybench.models.trend_models.TrendModel._predict_trend"><code class="docutils literal notranslate"><span class="pre">TrendModel._predict_trend()</span></code></a></li>
+<li><a class="reference internal" href="#cybench.models.trend_models.TrendModel.fit"><code class="docutils literal notranslate"><span class="pre">TrendModel.fit()</span></code></a></li>
+<li><a class="reference internal" href="#cybench.models.trend_models.TrendModel.load"><code class="docutils literal notranslate"><span class="pre">TrendModel.load()</span></code></a></li>
+<li><a class="reference internal" href="#cybench.models.trend_models.TrendModel.predict"><code class="docutils literal notranslate"><span class="pre">TrendModel.predict()</span></code></a></li>
+<li><a class="reference internal" href="#cybench.models.trend_models.TrendModel.predict_items"><code class="docutils literal notranslate"><span class="pre">TrendModel.predict_items()</span></code></a></li>
+<li><a class="reference internal" href="#cybench.models.trend_models.TrendModel.save"><code class="docutils literal notranslate"><span class="pre">TrendModel.save()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-cybench.models.xgboost_model">cybench.models.xgboost_model module</a><ul>
+<li><a class="reference internal" href="#cybench.models.xgboost_model.XGBoostModel"><code class="docutils literal notranslate"><span class="pre">XGBoostModel</span></code></a><ul>
+<li><a class="reference internal" href="#cybench.models.xgboost_model.XGBoostModel._abc_impl"><code class="docutils literal notranslate"><span class="pre">XGBoostModel._abc_impl</span></code></a></li>
+<li><a class="reference internal" href="#cybench.models.xgboost_model.XGBoostModel.fit"><code class="docutils literal notranslate"><span class="pre">XGBoostModel.fit()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-cybench.models">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</div>
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">AgML-crop-yield-forecasting</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">cybench.models package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/cybench.models.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="cybench-models-package">
+<h1>cybench.models package<a class="headerlink" href="#cybench-models-package" title="Link to this heading"></a></h1>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading"></a></h2>
+</section>
+<section id="module-cybench.models.model">
+<span id="cybench-models-model-module"></span><h2>cybench.models.model module<a class="headerlink" href="#module-cybench.models.model" title="Link to this heading"></a></h2>
+<p>Model base class</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="cybench.models.model.BaseModel">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">cybench.models.model.</span></span><span class="sig-name descname"><span class="pre">BaseModel</span></span><a class="headerlink" href="#cybench.models.model.BaseModel" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ABC</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cybench.models.model.BaseModel._abc_impl">
+<span class="sig-name descname"><span class="pre">_abc_impl</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;_abc._abc_data</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#cybench.models.model.BaseModel._abc_impl" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cybench.models.model.BaseModel.fit">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="cybench.datasets.html#cybench.datasets.dataset.Dataset" title="cybench.datasets.dataset.Dataset"><span class="pre">Dataset</span></a></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">fit_params</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span></span></span><a class="headerlink" href="#cybench.models.model.BaseModel.fit" title="Link to this definition"></a></dt>
+<dd><p>Fit or train the model.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>dataset</strong> – Dataset</p></li>
+<li><p><strong>**fit_params</strong> – Additional parameters.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A tuple containing the fitted model and a dict with additional information.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cybench.models.model.BaseModel.load">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">load</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model_name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cybench.models.model.BaseModel.load" title="Link to this definition"></a></dt>
+<dd><p>Deserialize a saved model.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>model_name</strong> – Filename that was used to save the model.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The deserialized model.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cybench.models.model.BaseModel.predict">
+<span class="sig-name descname"><span class="pre">predict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="cybench.datasets.html#cybench.datasets.dataset.Dataset" title="cybench.datasets.dataset.Dataset"><span class="pre">Dataset</span></a></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">predict_params</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span></span></span><a class="headerlink" href="#cybench.models.model.BaseModel.predict" title="Link to this definition"></a></dt>
+<dd><p>Run fitted model on data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>dataset</strong> – Dataset</p></li>
+<li><p><strong>**predict_params</strong> – Additional parameters.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A tuple containing a np.ndarray and a dict with additional information.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cybench.models.model.BaseModel.predict_items">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">predict_items</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">predict_params</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cybench.models.model.BaseModel.predict_items" title="Link to this definition"></a></dt>
+<dd><p>Run fitted model on a list of data items.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>X</strong> – a list of data items, each of which is a dict</p></li>
+<li><p><strong>**predict_params</strong> – Additional parameters.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A tuple containing a np.ndarray and a dict with additional information.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cybench.models.model.BaseModel.save">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">save</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model_name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cybench.models.model.BaseModel.save" title="Link to this definition"></a></dt>
+<dd><p>Save model, e.g. using pickle.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>model_name</strong> – Filename that will be used to save the model.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-cybench.models.naive_models">
+<span id="cybench-models-naive-models-module"></span><h2>cybench.models.naive_models module<a class="headerlink" href="#module-cybench.models.naive_models" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="cybench.models.naive_models.AverageYieldModel">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">cybench.models.naive_models.</span></span><span class="sig-name descname"><span class="pre">AverageYieldModel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">group_by</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">['adm_id']</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cybench.models.naive_models.AverageYieldModel" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#cybench.models.model.BaseModel" title="cybench.models.model.BaseModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseModel</span></code></a></p>
+<p>A naive yield prediction model.</p>
+<p>Predicts the average of the training set by location.
+If the location is not in the training data, then predicts the global average.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cybench.models.naive_models.AverageYieldModel._abc_impl">
+<span class="sig-name descname"><span class="pre">_abc_impl</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;_abc._abc_data</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#cybench.models.naive_models.AverageYieldModel._abc_impl" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cybench.models.naive_models.AverageYieldModel.fit">
+<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="cybench.datasets.html#cybench.datasets.dataset.Dataset" title="cybench.datasets.dataset.Dataset"><span class="pre">Dataset</span></a></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">fit_params</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span></span></span><a class="headerlink" href="#cybench.models.naive_models.AverageYieldModel.fit" title="Link to this definition"></a></dt>
+<dd><p>Fit or train the model.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>dataset</strong> – Dataset</p></li>
+<li><p><strong>**fit_params</strong> – Additional parameters.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A tuple containing the fitted model and a dict with additional information.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cybench.models.naive_models.AverageYieldModel.load">
+<span class="sig-name descname"><span class="pre">load</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model_name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cybench.models.naive_models.AverageYieldModel.load" title="Link to this definition"></a></dt>
+<dd><p>Deserialize a saved model.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>model_name</strong> – Filename that was used to save the model.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The deserialized model.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cybench.models.naive_models.AverageYieldModel.predict_items">
+<span class="sig-name descname"><span class="pre">predict_items</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cybench.models.naive_models.AverageYieldModel.predict_items" title="Link to this definition"></a></dt>
+<dd><p>Run fitted model on a list of data items.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>X</strong> – a list of data items, each of which is a dict</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A tuple containing a np.ndarray and a dict with additional information.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cybench.models.naive_models.AverageYieldModel.save">
+<span class="sig-name descname"><span class="pre">save</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model_name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cybench.models.naive_models.AverageYieldModel.save" title="Link to this definition"></a></dt>
+<dd><p>Save model, e.g. using pickle.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>model_name</strong> – Filename that will be used to save the model.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-cybench.models.nn_models">
+<span id="cybench-models-nn-models-module"></span><h2>cybench.models.nn_models module<a class="headerlink" href="#module-cybench.models.nn_models" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="cybench.models.nn_models.BaseNNModel">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">cybench.models.nn_models.</span></span><span class="sig-name descname"><span class="pre">BaseNNModel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cybench.models.nn_models.BaseNNModel" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#cybench.models.model.BaseModel" title="cybench.models.model.BaseModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseModel</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cybench.models.nn_models.BaseNNModel._abc_impl">
+<span class="sig-name descname"><span class="pre">_abc_impl</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;_abc._abc_data</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#cybench.models.nn_models.BaseNNModel._abc_impl" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cybench.models.nn_models.BaseNNModel._forward_pass">
+<span class="sig-name descname"><span class="pre">_forward_pass</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">batch</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cybench.models.nn_models.BaseNNModel._forward_pass" title="Link to this definition"></a></dt>
+<dd><p>A forward pass for batched data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>batch</strong> (<em>dict</em>) – batched inputs</p></li>
+<li><p><strong>device</strong> (<em>str</em>) – the device to use</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>An np.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cybench.models.nn_models.BaseNNModel._normalize_inputs">
+<span class="sig-name descname"><span class="pre">_normalize_inputs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">inputs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cybench.models.nn_models.BaseNNModel._normalize_inputs" title="Link to this definition"></a></dt>
+<dd><p>Normalize inputs using saved normalization parameters.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>inputs</strong> (<em>dict</em>) – unnormalized inputs</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The same dict after normalizing the entries</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cybench.models.nn_models.BaseNNModel._optimize_hyperparameters">
+<span class="sig-name descname"><span class="pre">_optimize_hyperparameters</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="cybench.datasets.html#cybench.datasets.dataset.Dataset" title="cybench.datasets.dataset.Dataset"><span class="pre">Dataset</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">param_space</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">optim_kwargs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'cpu'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kfolds</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">epochs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">fit_params</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span></span></span><a class="headerlink" href="#cybench.models.nn_models.BaseNNModel._optimize_hyperparameters" title="Link to this definition"></a></dt>
+<dd><p>Optimize hyperparameters</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>dataset</strong> (<a class="reference internal" href="cybench.datasets.html#cybench.datasets.dataset.Dataset" title="cybench.datasets.dataset.Dataset"><em>Dataset</em></a>) – training dataset</p></li>
+<li><p><strong>param_space</strong> (<em>dict</em>) – hyperparameters to optimize</p></li>
+<li><p><strong>optim_kwargs</strong> (<em>dict</em>) – arguments to the optimizer</p></li>
+<li><p><strong>device</strong> (<em>str</em>) – the device to use</p></li>
+<li><p><strong>kfolds</strong> (<em>int</em>) – k for k-fold cv (default: 1)</p></li>
+<li><p><strong>epochs</strong> (<em>int</em>) – Number of epochs to train (default: 10)</p></li>
+<li><p><strong>**fit_params</strong> – Additional parameters.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A dict of optimal hyperparameter setting</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cybench.models.nn_models.BaseNNModel._train_and_validate">
+<span class="sig-name descname"><span class="pre">_train_and_validate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset:</span> <span class="pre">~cybench.datasets.dataset.Dataset</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">train_years:</span> <span class="pre">list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">val_years:</span> <span class="pre">list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">validation_interval:</span> <span class="pre">int</span> <span class="pre">=</span> <span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">epochs:</span> <span class="pre">int</span> <span class="pre">=</span> <span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_size:</span> <span class="pre">int</span> <span class="pre">=</span> <span class="pre">16</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">optimizer_fn:</span> <span class="pre">callable</span> <span class="pre">=</span> <span class="pre">&lt;class</span> <span class="pre">'torch.optim.adam.Adam'&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">optim_kwargs:</span> <span class="pre">dict</span> <span class="pre">=</span> <span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">loss_fn:</span> <span class="pre">callable</span> <span class="pre">=</span> <span class="pre">&lt;function</span> <span class="pre">mse_loss&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">loss_kwargs:</span> <span class="pre">dict</span> <span class="pre">=</span> <span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scheduler_fn:</span> <span class="pre">callable</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sched_kwargs:</span> <span class="pre">dict</span> <span class="pre">=</span> <span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device:</span> <span class="pre">str</span> <span class="pre">=</span> <span class="pre">'cpu'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">**kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cybench.models.nn_models.BaseNNModel._train_and_validate" title="Link to this definition"></a></dt>
+<dd><p>Fit or train the model and evaluate on validation data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>dataset</strong> (<a class="reference internal" href="cybench.datasets.html#cybench.datasets.dataset.Dataset" title="cybench.datasets.dataset.Dataset"><em>Dataset</em></a>) – training dataset</p></li>
+<li><p><strong>train_years</strong> (<em>list</em>) – training years</p></li>
+<li><p><strong>val_years</strong> (<em>list</em>) – validation years</p></li>
+<li><p><strong>validation_interval</strong> (<em>int</em>) – validation frequency (default: 5)</p></li>
+<li><p><strong>epochs</strong> (<em>int</em>) – the number of epochs to train the model (default: 10)</p></li>
+<li><p><strong>batch_size</strong> (<em>int</em>) – the batch size (default: 16)</p></li>
+<li><p><strong>optim_fn</strong> (<em>callable</em>) – the optimizer function (default: Adam)</p></li>
+<li><p><strong>optim_kwargs</strong> (<em>dict</em>) – arguments to the optimizer function</p></li>
+<li><p><strong>loss_fn</strong> (<em>callable</em>) – the loss function (default: mse_loss)</p></li>
+<li><p><strong>loss_kwargs</strong> (<em>dict</em>) – arguments to the loss function</p></li>
+<li><p><strong>scheduler_fn</strong> (<em>callable</em>) – the scheduler function (default: None)</p></li>
+<li><p><strong>sched_kwargs</strong> (<em>dict</em>) – arguments to the scheduler function</p></li>
+<li><p><strong>device</strong> (<em>str</em>) – the device to use</p></li>
+<li><p><strong>**kwargs</strong> – Additional parameters.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A tuple training losses, validation losses and maximum epochs to train.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cybench.models.nn_models.BaseNNModel._train_epoch">
+<span class="sig-name descname"><span class="pre">_train_epoch</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pbar:</span> <span class="pre">~tqdm.std.tqdm</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dataloader:</span> <span class="pre">~torch.utils.data.dataloader.DataLoader</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device:</span> <span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">optimizer:</span> <span class="pre">~torch.optim.optimizer.Optimizer</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">loss_fn:</span> <span class="pre">callable</span> <span class="pre">=</span> <span class="pre">&lt;function</span> <span class="pre">mse_loss&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">loss_kwargs:</span> <span class="pre">dict</span> <span class="pre">=</span> <span class="pre">{'reduction':</span> <span class="pre">'mean'}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scheduler:</span> <span class="pre">~torch.optim.lr_scheduler.LRScheduler</span> <span class="pre">=</span> <span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cybench.models.nn_models.BaseNNModel._train_epoch" title="Link to this definition"></a></dt>
+<dd><p>Run one epoch during training</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>pbar</strong> (<em>tqdm</em>) – tqdm progress bar</p></li>
+<li><p><strong>dataloader</strong> (<em>dataloader</em>) – data loader with progress bar</p></li>
+<li><p><strong>device</strong> (<em>str</em>) – the device to use</p></li>
+<li><p><strong>optimizer</strong> (<em>torch.optim.Optimizer</em>) – the optimizer</p></li>
+<li><p><strong>loss_fn</strong> (<em>callable</em>) – the loss function, default mse_loss</p></li>
+<li><p><strong>loss_kwargs</strong> (<em>dict</em>) – the arguments to loss_fn</p></li>
+<li><p><strong>scheduler</strong> (<em>torch.optim.lr_scheduler.LRScheduler</em>) – scheduler for learning rate of optimizer</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The average of all batch losses</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cybench.models.nn_models.BaseNNModel._train_final_model">
+<span class="sig-name descname"><span class="pre">_train_final_model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset:</span> <span class="pre">~cybench.datasets.dataset.Dataset</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">epochs:</span> <span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">optimizer_fn:</span> <span class="pre">callable</span> <span class="pre">=</span> <span class="pre">&lt;class</span> <span class="pre">'torch.optim.adam.Adam'&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">optim_kwargs:</span> <span class="pre">dict</span> <span class="pre">=</span> <span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">loss_fn:</span> <span class="pre">callable</span> <span class="pre">=</span> <span class="pre">&lt;function</span> <span class="pre">mse_loss&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">loss_kwargs:</span> <span class="pre">dict</span> <span class="pre">=</span> <span class="pre">{'reduction':</span> <span class="pre">'mean'}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scheduler_fn:</span> <span class="pre">callable</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sched_kwargs:</span> <span class="pre">dict</span> <span class="pre">=</span> <span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device:</span> <span class="pre">str</span> <span class="pre">=</span> <span class="pre">'cpu'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_size:</span> <span class="pre">int</span> <span class="pre">=</span> <span class="pre">16</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">**kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cybench.models.nn_models.BaseNNModel._train_final_model" title="Link to this definition"></a></dt>
+<dd><p>Fit or train the model on the entire training set.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>dataset</strong> (<a class="reference internal" href="cybench.datasets.html#cybench.datasets.dataset.Dataset" title="cybench.datasets.dataset.Dataset"><em>Dataset</em></a>) – training dataset,</p></li>
+<li><p><strong>epochs</strong> (<em>int</em>) – number of epochs to train</p></li>
+<li><p><strong>optimizer_fn</strong> (<em>callable</em>) – the optimizer function (default: Adam)</p></li>
+<li><p><strong>optim_kwargs</strong> (<em>dict</em>) – arguments to the optimizer function</p></li>
+<li><p><strong>loss_fn</strong> (<em>callable</em>) – the loss function (default: mse_loss)</p></li>
+<li><p><strong>loss_kwargs</strong> (<em>dict</em>) – arguments to the loss function</p></li>
+<li><p><strong>scheduler_fn</strong> (<em>callable</em>) – the scheduler function (default: None)</p></li>
+<li><p><strong>sched_kwargs</strong> (<em>dict</em>) – arguments to the scheduler function</p></li>
+<li><p><strong>device</strong> (<em>str</em>) – the device to use</p></li>
+<li><p><strong>batch_size</strong> (<em>int</em>) – default is 16</p></li>
+<li><p><strong>**kwargs</strong> – Additional parameters.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A list of training losses (one value per epoch).</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cybench.models.nn_models.BaseNNModel.fit">
+<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="cybench.datasets.html#cybench.datasets.dataset.Dataset" title="cybench.datasets.dataset.Dataset"><span class="pre">Dataset</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">optimize_hyperparameters</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">param_space</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">optim_kwargs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'cpu'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">42</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">fit_params</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cybench.models.nn_models.BaseNNModel.fit" title="Link to this definition"></a></dt>
+<dd><p>Fit or train the model.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>dataset</strong> (<a class="reference internal" href="cybench.datasets.html#cybench.datasets.dataset.Dataset" title="cybench.datasets.dataset.Dataset"><em>Dataset</em></a>) – training dataset.</p></li>
+<li><p><strong>optimize_hyperparameters</strong> (<em>bool</em>) – whether to tune hyperparameters</p></li>
+<li><p><strong>param_space</strong> (<em>dict</em>) – each entry is a hyperparameter name and list or range of values</p></li>
+<li><p><strong>optim_kwargs</strong> (<em>dict</em>) – arguments to the optimizer</p></li>
+<li><p><strong>device</strong> (<em>str</em>) – the device to use.</p></li>
+<li><p><strong>seed</strong> (<em>float</em>) – seed for random number generator</p></li>
+<li><p><strong>**fit_params</strong> – Additional parameters.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A tuple containing the fitted model and a dict with additional information.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cybench.models.nn_models.BaseNNModel.load">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">load</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model_name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cybench.models.nn_models.BaseNNModel.load" title="Link to this definition"></a></dt>
+<dd><p>Load model using torch.load.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>model_name</strong> (<em>str</em>) – Filename that was used to save the model.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The loaded model.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cybench.models.nn_models.BaseNNModel.predict">
+<span class="sig-name descname"><span class="pre">predict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="cybench.datasets.html#cybench.datasets.dataset.Dataset" title="cybench.datasets.dataset.Dataset"><span class="pre">Dataset</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'cpu'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">16</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">predict_params</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cybench.models.nn_models.BaseNNModel.predict" title="Link to this definition"></a></dt>
+<dd><p>Run fitted model on batched data items.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>dataset</strong> (<a class="reference internal" href="cybench.datasets.html#cybench.datasets.dataset.Dataset" title="cybench.datasets.dataset.Dataset"><em>Dataset</em></a>) – validation dataset</p></li>
+<li><p><strong>device</strong> (<em>str</em>) – the device to use</p></li>
+<li><p><strong>**predict_params</strong> – Additional parameters</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A tuple containing a np.ndarray and a dict with additional information.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cybench.models.nn_models.BaseNNModel.predict_items">
+<span class="sig-name descname"><span class="pre">predict_items</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'cpu'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">predict_params</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cybench.models.nn_models.BaseNNModel.predict_items" title="Link to this definition"></a></dt>
+<dd><p>Run fitted model on a list of data items.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>X</strong> (<em>list</em>) – a list of data items, each of which is a dict</p></li>
+<li><p><strong>device</strong> (<em>str</em>) – str, the device to use</p></li>
+<li><p><strong>**predict_params</strong> – Additional parameters</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A tuple containing a np.ndarray and a dict with additional information.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cybench.models.nn_models.BaseNNModel.save">
+<span class="sig-name descname"><span class="pre">save</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model_name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cybench.models.nn_models.BaseNNModel.save" title="Link to this definition"></a></dt>
+<dd><p>Save model using torch.save.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>model_name</strong> (<em>str</em>) – Filename that will be used to save the model.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="cybench.models.nn_models.BaselineInceptionTime">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">cybench.models.nn_models.</span></span><span class="sig-name descname"><span class="pre">BaselineInceptionTime</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">time_series_have_same_length</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hidden_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">64</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_layers</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">6</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_features</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">32</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cybench.models.nn_models.BaselineInceptionTime" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#cybench.models.nn_models.BaseNNModel" title="cybench.models.nn_models.BaseNNModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseNNModel</span></code></a></p>
+<p>InceptionTime model.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>time_series_have_same_length</strong> (<em>bool</em>) – whether time series have the same length</p></li>
+<li><p><strong>hidden_size</strong> (<em>int</em>) – The number of features InceptionTime outputs</p></li>
+<li><p><strong>num_layers</strong> (<em>int</em>) – The number of InceptionBlocks. Defaults to 6.</p></li>
+<li><p><strong>num_features</strong> (<em>int</em>) – The number of features within the InceptionBlocks. Defaults to 32.</p></li>
+<li><p><strong>output_size</strong> (<em>int</em>) – The number of output classes. Defaults to 1.</p></li>
+<li><p><strong>**kwargs</strong> – Additional keyword arguments passed to the base class.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cybench.models.nn_models.BaselineInceptionTime._abc_impl">
+<span class="sig-name descname"><span class="pre">_abc_impl</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;_abc._abc_data</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#cybench.models.nn_models.BaselineInceptionTime._abc_impl" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cybench.models.nn_models.BaselineInceptionTime.fit">
+<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="cybench.datasets.html#cybench.datasets.dataset.Dataset" title="cybench.datasets.dataset.Dataset"><span class="pre">Dataset</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">optimize_hyperparameters</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">param_space</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kfolds</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">epochs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'cpu'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">42</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">fit_params</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cybench.models.nn_models.BaselineInceptionTime.fit" title="Link to this definition"></a></dt>
+<dd><p>Fit or train the model.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>dataset</strong> (<a class="reference internal" href="cybench.datasets.html#cybench.datasets.dataset.Dataset" title="cybench.datasets.dataset.Dataset"><em>Dataset</em></a>) – Training dataset.</p></li>
+<li><p><strong>optimize_hyperparameters</strong> (<em>bool</em>) – Flag to tune hyperparameters.</p></li>
+<li><p><strong>param_space</strong> (<em>dict</em>) – Each entry is a hyperparameter name and list or range of values.</p></li>
+<li><p><strong>kfolds</strong> (<em>int</em>) – k in k-fold cv.</p></li>
+<li><p><strong>epochs</strong> (<em>int</em>) – Number of epochs to train.</p></li>
+<li><p><strong>seed</strong> (<em>float</em>) – seed for random number generator.</p></li>
+<li><p><strong>**fit_params</strong> – Additional parameters.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A tuple containing the fitted model and a dict with additional information.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cybench.models.nn_models.BaselineInceptionTime.forward">
+<span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cybench.models.nn_models.BaselineInceptionTime.forward" title="Link to this definition"></a></dt>
+<dd><p>Define the computation performed at every call.</p>
+<p>Should be overridden by all subclasses.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Although the recipe for forward pass needs to be defined within
+this function, one should call the <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code> instance afterwards
+instead of this since the former takes care of running the
+registered hooks while the latter silently ignores them.</p>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="cybench.models.nn_models.BaselineLSTM">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">cybench.models.nn_models.</span></span><span class="sig-name descname"><span class="pre">BaselineLSTM</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">time_series_have_same_length</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hidden_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">64</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_layers</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cybench.models.nn_models.BaselineLSTM" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#cybench.models.nn_models.BaseNNModel" title="cybench.models.nn_models.BaseNNModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseNNModel</span></code></a></p>
+<p>LSTM model.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>time_series_have_same_length</strong> (<em>bool</em>) – whether time series have the same length</p></li>
+<li><p><strong>hidden_size</strong> (<em>int</em>) – The number of features InceptionTime outputs</p></li>
+<li><p><strong>num_layers</strong> (<em>int</em>) – The number of InceptionBlocks. Defaults to 6.</p></li>
+<li><p><strong>output_size</strong> (<em>int</em>) – The number of output classes. Defaults to 1.</p></li>
+<li><p><strong>**kwargs</strong> – Additional keyword arguments passed to the base class.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cybench.models.nn_models.BaselineLSTM._abc_impl">
+<span class="sig-name descname"><span class="pre">_abc_impl</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;_abc._abc_data</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#cybench.models.nn_models.BaselineLSTM._abc_impl" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cybench.models.nn_models.BaselineLSTM.fit">
+<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="cybench.datasets.html#cybench.datasets.dataset.Dataset" title="cybench.datasets.dataset.Dataset"><span class="pre">Dataset</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">optimize_hyperparameters</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">param_space</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kfolds</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">epochs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'cpu'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">42</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">fit_params</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cybench.models.nn_models.BaselineLSTM.fit" title="Link to this definition"></a></dt>
+<dd><p>Fit or train the model.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>dataset</strong> (<a class="reference internal" href="cybench.datasets.html#cybench.datasets.dataset.Dataset" title="cybench.datasets.dataset.Dataset"><em>Dataset</em></a>) – Training dataset.</p></li>
+<li><p><strong>optimize_hyperparameters</strong> (<em>bool</em>) – Flag to tune hyperparameters.</p></li>
+<li><p><strong>param_space</strong> (<em>dict</em>) – Each entry is a hyperparameter name and list or range of values.</p></li>
+<li><p><strong>kfolds</strong> (<em>int</em>) – k in k-fold cv.</p></li>
+<li><p><strong>epochs</strong> (<em>int</em>) – Number of epochs to train.</p></li>
+<li><p><strong>seed</strong> (<em>float</em>) – seed for random number generator.</p></li>
+<li><p><strong>**fit_params</strong> – Additional parameters.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A tuple containing the fitted model and a dict with additional information.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cybench.models.nn_models.BaselineLSTM.forward">
+<span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cybench.models.nn_models.BaselineLSTM.forward" title="Link to this definition"></a></dt>
+<dd><p>Define the computation performed at every call.</p>
+<p>Should be overridden by all subclasses.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Although the recipe for forward pass needs to be defined within
+this function, one should call the <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code> instance afterwards
+instead of this since the former takes care of running the
+registered hooks while the latter silently ignores them.</p>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="cybench.models.nn_models.BaselineTransformer">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">cybench.models.nn_models.</span></span><span class="sig-name descname"><span class="pre">BaselineTransformer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">seq_len</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time_series_have_same_length</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hidden_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">64</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">d_model</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">64</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_head</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">d_ff</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">256</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_layers</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">3</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cybench.models.nn_models.BaselineTransformer" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#cybench.models.nn_models.BaseNNModel" title="cybench.models.nn_models.BaseNNModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseNNModel</span></code></a></p>
+<p>Transformer model.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>seq_len</strong> (<em>int</em>) – length of time series sequence (in days)</p></li>
+<li><p><strong>time_series_have_same_length</strong> (<em>bool</em>) – whether time series have the same length</p></li>
+<li><p><strong>hidden_size</strong> (<em>int</em>) – The number of resulting timeseries features.</p></li>
+<li><p><strong>d_moodel</strong> (<em>int</em>) – Total dimension of the model.</p></li>
+<li><p><strong>n_head</strong> (<em>int</em>) – Parallel attention heads.</p></li>
+<li><p><strong>d_ffn</strong> (<em>int</em>) – The dimension of the feedforward network model.</p></li>
+<li><p><strong>output_size</strong> (<em>int</em>) – The number of output classes. Defaults to 1.</p></li>
+<li><p><strong>num_layers</strong> (<em>1</em>) – The number of sub-encoder-layers in the encoder.</p></li>
+<li><p><strong>**kwargs</strong> – Additional keyword arguments passed to the base class.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cybench.models.nn_models.BaselineTransformer._abc_impl">
+<span class="sig-name descname"><span class="pre">_abc_impl</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;_abc._abc_data</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#cybench.models.nn_models.BaselineTransformer._abc_impl" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cybench.models.nn_models.BaselineTransformer.fit">
+<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="cybench.datasets.html#cybench.datasets.dataset.Dataset" title="cybench.datasets.dataset.Dataset"><span class="pre">Dataset</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">optimize_hyperparameters</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">param_space</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kfolds</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">epochs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'cpu'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">42</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">fit_params</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cybench.models.nn_models.BaselineTransformer.fit" title="Link to this definition"></a></dt>
+<dd><p>Fit or train the model.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>dataset</strong> (<a class="reference internal" href="cybench.datasets.html#cybench.datasets.dataset.Dataset" title="cybench.datasets.dataset.Dataset"><em>Dataset</em></a>) – Training dataset.</p></li>
+<li><p><strong>optimize_hyperparameters</strong> (<em>bool</em>) – Flag to tune hyperparameters.</p></li>
+<li><p><strong>param_space</strong> (<em>dict</em>) – Each entry is a hyperparameter name and list or range of values.</p></li>
+<li><p><strong>kfolds</strong> (<em>int</em>) – k in k-fold cv.</p></li>
+<li><p><strong>epochs</strong> (<em>int</em>) – Number of epochs to train.</p></li>
+<li><p><strong>seed</strong> (<em>float</em>) – seed for random number generator.</p></li>
+<li><p><strong>**fit_params</strong> – Additional parameters.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A tuple containing the fitted model and a dict with additional information.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cybench.models.nn_models.BaselineTransformer.forward">
+<span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cybench.models.nn_models.BaselineTransformer.forward" title="Link to this definition"></a></dt>
+<dd><p>Define the computation performed at every call.</p>
+<p>Should be overridden by all subclasses.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Although the recipe for forward pass needs to be defined within
+this function, one should call the <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code> instance afterwards
+instead of this since the former takes care of running the
+registered hooks while the latter silently ignores them.</p>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cybench.models.nn_models.separate_ts_static_inputs">
+<span class="sig-prename descclassname"><span class="pre">cybench.models.nn_models.</span></span><span class="sig-name descname"><span class="pre">separate_ts_static_inputs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">batch</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span></span></span><a class="headerlink" href="#cybench.models.nn_models.separate_ts_static_inputs" title="Link to this definition"></a></dt>
+<dd><p>Stack time series and static inputs separately.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>batch</strong> (<em>dict</em>) – batched inputs</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A tuple of torch tensors for time series and static inputs</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-cybench.models.residual_models">
+<span id="cybench-models-residual-models-module"></span><h2>cybench.models.residual_models module<a class="headerlink" href="#module-cybench.models.residual_models" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="cybench.models.residual_models.InceptionTimeRes">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">cybench.models.residual_models.</span></span><span class="sig-name descname"><span class="pre">InceptionTimeRes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cybench.models.residual_models.InceptionTimeRes" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#cybench.models.residual_models.ResidualModel" title="cybench.models.residual_models.ResidualModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">ResidualModel</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cybench.models.residual_models.InceptionTimeRes._abc_impl">
+<span class="sig-name descname"><span class="pre">_abc_impl</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;_abc._abc_data</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#cybench.models.residual_models.InceptionTimeRes._abc_impl" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="cybench.models.residual_models.LSTMRes">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">cybench.models.residual_models.</span></span><span class="sig-name descname"><span class="pre">LSTMRes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cybench.models.residual_models.LSTMRes" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#cybench.models.residual_models.ResidualModel" title="cybench.models.residual_models.ResidualModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">ResidualModel</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cybench.models.residual_models.LSTMRes._abc_impl">
+<span class="sig-name descname"><span class="pre">_abc_impl</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;_abc._abc_data</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#cybench.models.residual_models.LSTMRes._abc_impl" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="cybench.models.residual_models.RandomForestRes">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">cybench.models.residual_models.</span></span><span class="sig-name descname"><span class="pre">RandomForestRes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">feature_cols</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cybench.models.residual_models.RandomForestRes" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#cybench.models.residual_models.ResidualModel" title="cybench.models.residual_models.ResidualModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">ResidualModel</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cybench.models.residual_models.RandomForestRes._abc_impl">
+<span class="sig-name descname"><span class="pre">_abc_impl</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;_abc._abc_data</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#cybench.models.residual_models.RandomForestRes._abc_impl" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="cybench.models.residual_models.ResidualModel">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">cybench.models.residual_models.</span></span><span class="sig-name descname"><span class="pre">ResidualModel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">baseline_model</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#cybench.models.model.BaseModel" title="cybench.models.model.BaseModel"><span class="pre">BaseModel</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cybench.models.residual_models.ResidualModel" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#cybench.models.model.BaseModel" title="cybench.models.model.BaseModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseModel</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cybench.models.residual_models.ResidualModel._abc_impl">
+<span class="sig-name descname"><span class="pre">_abc_impl</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;_abc._abc_data</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#cybench.models.residual_models.ResidualModel._abc_impl" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cybench.models.residual_models.ResidualModel.fit">
+<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="cybench.datasets.html#cybench.datasets.dataset.Dataset" title="cybench.datasets.dataset.Dataset"><span class="pre">Dataset</span></a></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">fit_params</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cybench.models.residual_models.ResidualModel.fit" title="Link to this definition"></a></dt>
+<dd><p>Fit or train the model.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>train_dataset</strong> (<a class="reference internal" href="cybench.datasets.html#cybench.datasets.dataset.Dataset" title="cybench.datasets.dataset.Dataset"><em>Dataset</em></a>) – training dataset</p></li>
+<li><p><strong>**fit_params</strong> – Additional parameters.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A tuple containing the fitted model and a dict with additional information.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cybench.models.residual_models.ResidualModel.load">
+<span class="sig-name descname"><span class="pre">load</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cybench.models.residual_models.ResidualModel.load" title="Link to this definition"></a></dt>
+<dd><p>Deserialize a saved model.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>model_name</strong> (<em>str</em>) – Filename that was used to save the model.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The deserialized model.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cybench.models.residual_models.ResidualModel.predict">
+<span class="sig-name descname"><span class="pre">predict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="cybench.datasets.html#cybench.datasets.dataset.Dataset" title="cybench.datasets.dataset.Dataset"><span class="pre">Dataset</span></a></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">predict_params</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cybench.models.residual_models.ResidualModel.predict" title="Link to this definition"></a></dt>
+<dd><p>Run fitted model on batched data items.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>dataset</strong> (<a class="reference internal" href="cybench.datasets.html#cybench.datasets.dataset.Dataset" title="cybench.datasets.dataset.Dataset"><em>Dataset</em></a>) – test dataset</p></li>
+<li><p><strong>**predict_params</strong> – Additional parameters.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A tuple containing a np.ndarray and a dict with additional information.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cybench.models.residual_models.ResidualModel.predict_items">
+<span class="sig-name descname"><span class="pre">predict_items</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">crop</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">predict_params</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cybench.models.residual_models.ResidualModel.predict_items" title="Link to this definition"></a></dt>
+<dd><p>Run fitted model on a list of data items.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>X</strong> (<em>list</em>) – a list of data items, each of which is a dict</p></li>
+<li><p><strong>crop</strong> (<em>str</em>) – crop name</p></li>
+<li><p><strong>**predict_params</strong> – Additional parameters.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A tuple containing a np.ndarray and a dict with additional information.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cybench.models.residual_models.ResidualModel.save">
+<span class="sig-name descname"><span class="pre">save</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cybench.models.residual_models.ResidualModel.save" title="Link to this definition"></a></dt>
+<dd><p>Save model, e.g. using pickle.
+Check here for options to save and load scikit-learn models:
+<a class="reference external" href="https://scikit-learn.org/stable/model_persistence.html">https://scikit-learn.org/stable/model_persistence.html</a></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>model_name</strong> (<em>str</em>) – Filename that will be used to save the model.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="cybench.models.residual_models.RidgeRes">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">cybench.models.residual_models.</span></span><span class="sig-name descname"><span class="pre">RidgeRes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">feature_cols</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cybench.models.residual_models.RidgeRes" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#cybench.models.residual_models.ResidualModel" title="cybench.models.residual_models.ResidualModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">ResidualModel</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cybench.models.residual_models.RidgeRes._abc_impl">
+<span class="sig-name descname"><span class="pre">_abc_impl</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;_abc._abc_data</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#cybench.models.residual_models.RidgeRes._abc_impl" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="cybench.models.residual_models.TransformerRes">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">cybench.models.residual_models.</span></span><span class="sig-name descname"><span class="pre">TransformerRes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cybench.models.residual_models.TransformerRes" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#cybench.models.residual_models.ResidualModel" title="cybench.models.residual_models.ResidualModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">ResidualModel</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cybench.models.residual_models.TransformerRes._abc_impl">
+<span class="sig-name descname"><span class="pre">_abc_impl</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;_abc._abc_data</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#cybench.models.residual_models.TransformerRes._abc_impl" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="cybench.models.residual_models.XGBoostRes">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">cybench.models.residual_models.</span></span><span class="sig-name descname"><span class="pre">XGBoostRes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cybench.models.residual_models.XGBoostRes" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#cybench.models.residual_models.ResidualModel" title="cybench.models.residual_models.ResidualModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">ResidualModel</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cybench.models.residual_models.XGBoostRes._abc_impl">
+<span class="sig-name descname"><span class="pre">_abc_impl</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;_abc._abc_data</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#cybench.models.residual_models.XGBoostRes._abc_impl" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-cybench.models.sklearn_models">
+<span id="cybench-models-sklearn-models-module"></span><h2>cybench.models.sklearn_models module<a class="headerlink" href="#module-cybench.models.sklearn_models" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="cybench.models.sklearn_models.BaseSklearnModel">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">cybench.models.sklearn_models.</span></span><span class="sig-name descname"><span class="pre">BaseSklearnModel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cybench.models.sklearn_models.BaseSklearnModel" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#cybench.models.model.BaseModel" title="cybench.models.model.BaseModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseModel</span></code></a></p>
+<p>Base class for wrappers around scikit learn estimators.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cybench.models.sklearn_models.BaseSklearnModel._abc_impl">
+<span class="sig-name descname"><span class="pre">_abc_impl</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;_abc._abc_data</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#cybench.models.sklearn_models.BaseSklearnModel._abc_impl" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cybench.models.sklearn_models.BaseSklearnModel._design_features">
+<span class="sig-name descname"><span class="pre">_design_features</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">crop</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_items</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Iterable</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cybench.models.sklearn_models.BaseSklearnModel._design_features" title="Link to this definition"></a></dt>
+<dd><p>Design features using data samples.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>crop</strong> (<em>str</em>) – crop name</p></li>
+<li><p><strong>data_items</strong> (<em>Iterable</em>) – a Dataset or list of data items.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A pandas dataframe with KEY_LOC, KEY_YEAR and features.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cybench.models.sklearn_models.BaseSklearnModel._optimize_hyperparameters">
+<span class="sig-name descname"><span class="pre">_optimize_hyperparameters</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">param_space</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">groups</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kfolds</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cybench.models.sklearn_models.BaseSklearnModel._optimize_hyperparameters" title="Link to this definition"></a></dt>
+<dd><p>Optimize hyperparameters</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>X</strong> (<em>np.ndarray</em>) – training features</p></li>
+<li><p><strong>y</strong> (<em>np.ndarray</em>) – training labels</p></li>
+<li><p><strong>param_space</strong> (<em>dict</em>) – hyperparameters to optimize</p></li>
+<li><p><strong>groups</strong> (<em>np.ndarray</em>) – group values (e.g year values) for each row in X and y</p></li>
+<li><p><strong>kfolds</strong> (<em>int</em>) – number of splits in cross validation</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A sklearn pipeline refitted with the optimal hyperparameters.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cybench.models.sklearn_models.BaseSklearnModel._predict">
+<span class="sig-name descname"><span class="pre">_predict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">crop</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_items</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Iterable</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cybench.models.sklearn_models.BaseSklearnModel._predict" title="Link to this definition"></a></dt>
+<dd><p>Utility method called by both <cite>predict_items</cite> and <cite>predict</cite>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>crop</strong> (<em>str</em>) – crop name</p></li>
+<li><p><strong>data_items</strong> (<em>Iterable</em>) – a Dataset or a list of data items</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A tuple containing a np.ndarray and a dict with additional information.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cybench.models.sklearn_models.BaseSklearnModel.fit">
+<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="cybench.datasets.html#cybench.datasets.dataset.Dataset" title="cybench.datasets.dataset.Dataset"><span class="pre">Dataset</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">optimize_hyperparameters</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">select_features</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">fit_params</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span></span></span><a class="headerlink" href="#cybench.models.sklearn_models.BaseSklearnModel.fit" title="Link to this definition"></a></dt>
+<dd><p>Fit or train the model.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>dataset</strong> (<a class="reference internal" href="cybench.datasets.html#cybench.datasets.dataset.Dataset" title="cybench.datasets.dataset.Dataset"><em>Dataset</em></a>) – training dataset</p></li>
+<li><p><strong>optimize_hyperparameters</strong> (<em>bool</em>) – flag to optimize hyperparameters</p></li>
+<li><p><strong>select_features</strong> (<em>bool</em>) – flat to select features</p></li>
+<li><p><strong>**fit_params</strong> – Additional parameters.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A tuple containing the fitted model and a dict with additional information.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cybench.models.sklearn_models.BaseSklearnModel.load">
+<span class="sig-name descname"><span class="pre">load</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cybench.models.sklearn_models.BaseSklearnModel.load" title="Link to this definition"></a></dt>
+<dd><p>Deserialize a saved model.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>model_name</strong> (<em>str</em>) – Filename that was used to save the model.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The deserialized model.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cybench.models.sklearn_models.BaseSklearnModel.predict">
+<span class="sig-name descname"><span class="pre">predict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="cybench.datasets.html#cybench.datasets.dataset.Dataset" title="cybench.datasets.dataset.Dataset"><span class="pre">Dataset</span></a></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">predict_params</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cybench.models.sklearn_models.BaseSklearnModel.predict" title="Link to this definition"></a></dt>
+<dd><p>Run fitted model on batched data items.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>dataset</strong> (<a class="reference internal" href="cybench.datasets.html#cybench.datasets.dataset.Dataset" title="cybench.datasets.dataset.Dataset"><em>Dataset</em></a>) – test dataset</p></li>
+<li><p><strong>**predict_params</strong> – Additional parameters.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A tuple containing a np.ndarray and a dict with additional information.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cybench.models.sklearn_models.BaseSklearnModel.predict_items">
+<span class="sig-name descname"><span class="pre">predict_items</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">crop</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">predict_params</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cybench.models.sklearn_models.BaseSklearnModel.predict_items" title="Link to this definition"></a></dt>
+<dd><p>Run fitted model on a list of data items.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>X</strong> (<em>list</em>) – a list of data items, each of which is a dict</p></li>
+<li><p><strong>crop</strong> (<em>str</em>) – crop name</p></li>
+<li><p><strong>**predict_params</strong> – Additional parameters.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A tuple containing a np.ndarray and a dict with additional information.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cybench.models.sklearn_models.BaseSklearnModel.save">
+<span class="sig-name descname"><span class="pre">save</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cybench.models.sklearn_models.BaseSklearnModel.save" title="Link to this definition"></a></dt>
+<dd><p>Save model, e.g. using pickle.
+Check here for options to save and load scikit-learn models:
+<a class="reference external" href="https://scikit-learn.org/stable/model_persistence.html">https://scikit-learn.org/stable/model_persistence.html</a></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>model_name</strong> (<em>str</em>) – Filename that will be used to save the model.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="cybench.models.sklearn_models.SklearnRandomForest">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">cybench.models.sklearn_models.</span></span><span class="sig-name descname"><span class="pre">SklearnRandomForest</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">feature_cols</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cybench.models.sklearn_models.SklearnRandomForest" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#cybench.models.sklearn_models.BaseSklearnModel" title="cybench.models.sklearn_models.BaseSklearnModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseSklearnModel</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cybench.models.sklearn_models.SklearnRandomForest._abc_impl">
+<span class="sig-name descname"><span class="pre">_abc_impl</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;_abc._abc_data</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#cybench.models.sklearn_models.SklearnRandomForest._abc_impl" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cybench.models.sklearn_models.SklearnRandomForest.fit">
+<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">train_dataset</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="cybench.datasets.html#cybench.datasets.dataset.Dataset" title="cybench.datasets.dataset.Dataset"><span class="pre">Dataset</span></a></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">fit_params</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cybench.models.sklearn_models.SklearnRandomForest.fit" title="Link to this definition"></a></dt>
+<dd><p>Fit or train the model.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>train_dataset</strong> (<a class="reference internal" href="cybench.datasets.html#cybench.datasets.dataset.Dataset" title="cybench.datasets.dataset.Dataset"><em>Dataset</em></a>) – training dataset</p></li>
+<li><p><strong>**fit_params</strong> – Additional parameters.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A tuple containing the fitted model and a dict with additional information.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="cybench.models.sklearn_models.SklearnRidge">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">cybench.models.sklearn_models.</span></span><span class="sig-name descname"><span class="pre">SklearnRidge</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">feature_cols</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cybench.models.sklearn_models.SklearnRidge" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#cybench.models.sklearn_models.BaseSklearnModel" title="cybench.models.sklearn_models.BaseSklearnModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseSklearnModel</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cybench.models.sklearn_models.SklearnRidge._abc_impl">
+<span class="sig-name descname"><span class="pre">_abc_impl</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;_abc._abc_data</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#cybench.models.sklearn_models.SklearnRidge._abc_impl" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cybench.models.sklearn_models.SklearnRidge.fit">
+<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">train_dataset</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="cybench.datasets.html#cybench.datasets.dataset.Dataset" title="cybench.datasets.dataset.Dataset"><span class="pre">Dataset</span></a></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">fit_params</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cybench.models.sklearn_models.SklearnRidge.fit" title="Link to this definition"></a></dt>
+<dd><p>Fit or train the model.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>train_dataset</strong> (<a class="reference internal" href="cybench.datasets.html#cybench.datasets.dataset.Dataset" title="cybench.datasets.dataset.Dataset"><em>Dataset</em></a>) – training dataset</p></li>
+<li><p><strong>**fit_params</strong> – Additional parameters.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A tuple containing the fitted model and a dict with additional information.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-cybench.models.trend_models">
+<span id="cybench-models-trend-models-module"></span><h2>cybench.models.trend_models module<a class="headerlink" href="#module-cybench.models.trend_models" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="cybench.models.trend_models.TrendModel">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">cybench.models.trend_models.</span></span><span class="sig-name descname"><span class="pre">TrendModel</span></span><a class="headerlink" href="#cybench.models.trend_models.TrendModel" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#cybench.models.model.BaseModel" title="cybench.models.model.BaseModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseModel</span></code></a></p>
+<p>Default trend estimator.</p>
+<p>Trend is estimated using years as features.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cybench.models.trend_models.TrendModel.MAX_TREND_WINDOW_SIZE">
+<span class="sig-name descname"><span class="pre">MAX_TREND_WINDOW_SIZE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">10</span></em><a class="headerlink" href="#cybench.models.trend_models.TrendModel.MAX_TREND_WINDOW_SIZE" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cybench.models.trend_models.TrendModel.MIN_TREND_WINDOW_SIZE">
+<span class="sig-name descname"><span class="pre">MIN_TREND_WINDOW_SIZE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">5</span></em><a class="headerlink" href="#cybench.models.trend_models.TrendModel.MIN_TREND_WINDOW_SIZE" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cybench.models.trend_models.TrendModel._abc_impl">
+<span class="sig-name descname"><span class="pre">_abc_impl</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;_abc._abc_data</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#cybench.models.trend_models.TrendModel._abc_impl" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cybench.models.trend_models.TrendModel._estimate_trend">
+<span class="sig-name descname"><span class="pre">_estimate_trend</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">trend_x</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">trend_y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">test_x</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cybench.models.trend_models.TrendModel._estimate_trend" title="Link to this definition"></a></dt>
+<dd><p>Implements a linear trend.
+From &#64;mmeronijrc: Small sample sizes and the use of quadratic or loess trend
+can lead to strange results.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>trend_x</strong> (<em>list</em>) – year in the trend window.</p></li>
+<li><p><strong>trend_y</strong> (<em>list</em>) – values (e.g. yields) in the trend window</p></li>
+<li><p><strong>test_x</strong> (<em>int</em>) – test year</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>estimated trend (float)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cybench.models.trend_models.TrendModel._find_optimal_trend_window">
+<span class="sig-name descname"><span class="pre">_find_optimal_trend_window</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">train_labels</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">window_years</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">extend_forward</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cybench.models.trend_models.TrendModel._find_optimal_trend_window" title="Link to this definition"></a></dt>
+<dd><p>Find the optimal trend window based on pymannkendall statistical test.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>train_labels</strong> (<em>np.ndarray</em>) – years and values for a specific location.</p></li>
+<li><p><strong>window_years</strong> (<em>list</em>) – years to consider in a window</p></li>
+<li><p><strong>extend_forward</strong> (<em>bool</em>) – if true, extend trend window forward, else backward</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>a list of years representing the optimal trend window</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cybench.models.trend_models.TrendModel._predict_trend">
+<span class="sig-name descname"><span class="pre">_predict_trend</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">test_data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Iterable</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cybench.models.trend_models.TrendModel._predict_trend" title="Link to this definition"></a></dt>
+<dd><p>Predict the trend for each data item in test data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>test_data</strong> (<em>Iterable</em>) – Dataset or a list of data items</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>np.ndarray of predictions</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cybench.models.trend_models.TrendModel.fit">
+<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="cybench.datasets.html#cybench.datasets.dataset.Dataset" title="cybench.datasets.dataset.Dataset"><span class="pre">Dataset</span></a></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">fit_params</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span></span></span><a class="headerlink" href="#cybench.models.trend_models.TrendModel.fit" title="Link to this definition"></a></dt>
+<dd><p>Fit or train the model.
+:param dataset: Dataset
+:param **fit_params: Additional parameters.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>A tuple containing the fitted model and a dict with additional information.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cybench.models.trend_models.TrendModel.load">
+<span class="sig-name descname"><span class="pre">load</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model_name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cybench.models.trend_models.TrendModel.load" title="Link to this definition"></a></dt>
+<dd><p>Deserialize a saved model.
+:param model_name: Filename that was used to save the model.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The deserialized model.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cybench.models.trend_models.TrendModel.predict">
+<span class="sig-name descname"><span class="pre">predict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="cybench.datasets.html#cybench.datasets.dataset.Dataset" title="cybench.datasets.dataset.Dataset"><span class="pre">Dataset</span></a></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">predict_params</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cybench.models.trend_models.TrendModel.predict" title="Link to this definition"></a></dt>
+<dd><p>Run fitted model on a test dataset.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>dataset</strong> – Dataset</p></li>
+<li><p><strong>**predict_params</strong> – Additional parameters</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A tuple containing a np.ndarray and a dict with additional information.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cybench.models.trend_models.TrendModel.predict_items">
+<span class="sig-name descname"><span class="pre">predict_items</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">predict_params</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cybench.models.trend_models.TrendModel.predict_items" title="Link to this definition"></a></dt>
+<dd><p>Run fitted model on a list of data items.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>X</strong> – a list of data items, each of which is a dict</p></li>
+<li><p><strong>**predict_params</strong> – Additional parameters</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A tuple containing a np.ndarray and a dict with additional information.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cybench.models.trend_models.TrendModel.save">
+<span class="sig-name descname"><span class="pre">save</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model_name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cybench.models.trend_models.TrendModel.save" title="Link to this definition"></a></dt>
+<dd><p>Save model, e.g. using pickle.
+:param model_name: Filename that will be used to save the model.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-cybench.models.xgboost_model">
+<span id="cybench-models-xgboost-model-module"></span><h2>cybench.models.xgboost_model module<a class="headerlink" href="#module-cybench.models.xgboost_model" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="cybench.models.xgboost_model.XGBoostModel">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">cybench.models.xgboost_model.</span></span><span class="sig-name descname"><span class="pre">XGBoostModel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">feature_cols</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cybench.models.xgboost_model.XGBoostModel" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#cybench.models.sklearn_models.BaseSklearnModel" title="cybench.models.sklearn_models.BaseSklearnModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseSklearnModel</span></code></a></p>
+<p>XGBoost baseline using the BaseSklearnModel feature pipeline.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cybench.models.xgboost_model.XGBoostModel._abc_impl">
+<span class="sig-name descname"><span class="pre">_abc_impl</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;_abc._abc_data</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#cybench.models.xgboost_model.XGBoostModel._abc_impl" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cybench.models.xgboost_model.XGBoostModel.fit">
+<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">train_dataset</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="cybench.datasets.html#cybench.datasets.dataset.Dataset" title="cybench.datasets.dataset.Dataset"><span class="pre">Dataset</span></a></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">fit_params</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span></span></span><a class="headerlink" href="#cybench.models.xgboost_model.XGBoostModel.fit" title="Link to this definition"></a></dt>
+<dd><p>Fit the XGBoost model with a simple hyperparameter search.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>train_dataset</strong> (<a class="reference internal" href="cybench.datasets.html#cybench.datasets.dataset.Dataset" title="cybench.datasets.dataset.Dataset"><em>Dataset</em></a>) – training dataset</p></li>
+<li><p><strong>**fit_params</strong> – Additional parameters passed to BaseSklearnModel.fit.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>(fitted model, info dict)</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>tuple</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-cybench.models">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-cybench.models" title="Link to this heading"></a></h2>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, Wageningen University and Research.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>  
+
+  <style>
+    /* Sidebar header (and topbar for mobile) */
+    .wy-side-nav-search, .wy-nav-top {
+      background: #28242c; */
+    }
+    /* Sidebar */
+    .wy-nav-side {
+      background: #124400;
+    }
+  </style>
+
+
+</body>
+</html>

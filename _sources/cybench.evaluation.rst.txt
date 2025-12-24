@@ -1,0 +1,37 @@
+cybench.evaluation package
+==========================
+
+Submodules
+----------
+
+cybench.evaluation.eval module
+------------------------------
+
+.. automodule:: cybench.evaluation.eval
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+cybench.evaluation.example\_log\_experiment module
+--------------------------------------------------
+
+.. automodule:: cybench.evaluation.example_log_experiment
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+cybench.evaluation.log\_experiments module
+------------------------------------------
+
+.. automodule:: cybench.evaluation.log_experiments
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Module contents
+---------------
+
+.. automodule:: cybench.evaluation
+   :members:
+   :undoc-members:
+   :show-inheritance:

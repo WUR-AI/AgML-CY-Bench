@@ -1,0 +1,578 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>cybench.runs package &mdash; AgML-crop-yield-forecasting  documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+
+  
+    <link rel="shortcut icon" href="_static/favicon.png"/>
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="_static/doctools.js?v=9a2dae69"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            AgML-crop-yield-forecasting
+              <img src="_static/agml-logo.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <!-- Local TOC -->
+              <div class="local-toc"><ul>
+<li><a class="reference internal" href="#">cybench.runs package</a><ul>
+<li><a class="reference internal" href="#submodules">Submodules</a></li>
+<li><a class="reference internal" href="#module-cybench.runs.agml_workshop">cybench.runs.agml_workshop module</a><ul>
+<li><a class="reference internal" href="#cybench.runs.agml_workshop.LSTMModel"><code class="docutils literal notranslate"><span class="pre">LSTMModel</span></code></a><ul>
+<li><a class="reference internal" href="#cybench.runs.agml_workshop.LSTMModel._abc_impl"><code class="docutils literal notranslate"><span class="pre">LSTMModel._abc_impl</span></code></a></li>
+<li><a class="reference internal" href="#cybench.runs.agml_workshop.LSTMModel._get_validation_splits"><code class="docutils literal notranslate"><span class="pre">LSTMModel._get_validation_splits()</span></code></a></li>
+<li><a class="reference internal" href="#cybench.runs.agml_workshop.LSTMModel._optimize_hyperparameters"><code class="docutils literal notranslate"><span class="pre">LSTMModel._optimize_hyperparameters()</span></code></a></li>
+<li><a class="reference internal" href="#cybench.runs.agml_workshop.LSTMModel._train_epoch"><code class="docutils literal notranslate"><span class="pre">LSTMModel._train_epoch()</span></code></a></li>
+<li><a class="reference internal" href="#cybench.runs.agml_workshop.LSTMModel.fit"><code class="docutils literal notranslate"><span class="pre">LSTMModel.fit()</span></code></a></li>
+<li><a class="reference internal" href="#cybench.runs.agml_workshop.LSTMModel.forward"><code class="docutils literal notranslate"><span class="pre">LSTMModel.forward()</span></code></a></li>
+<li><a class="reference internal" href="#cybench.runs.agml_workshop.LSTMModel.load"><code class="docutils literal notranslate"><span class="pre">LSTMModel.load()</span></code></a></li>
+<li><a class="reference internal" href="#cybench.runs.agml_workshop.LSTMModel.predict"><code class="docutils literal notranslate"><span class="pre">LSTMModel.predict()</span></code></a></li>
+<li><a class="reference internal" href="#cybench.runs.agml_workshop.LSTMModel.predict_items"><code class="docutils literal notranslate"><span class="pre">LSTMModel.predict_items()</span></code></a></li>
+<li><a class="reference internal" href="#cybench.runs.agml_workshop.LSTMModel.save"><code class="docutils literal notranslate"><span class="pre">LSTMModel.save()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#cybench.runs.agml_workshop.date_from_dekad"><code class="docutils literal notranslate"><span class="pre">date_from_dekad()</span></code></a></li>
+<li><a class="reference internal" href="#cybench.runs.agml_workshop.get_cybench_data"><code class="docutils literal notranslate"><span class="pre">get_cybench_data()</span></code></a></li>
+<li><a class="reference internal" href="#cybench.runs.agml_workshop.get_cybench_data_aligned_to_crop_season"><code class="docutils literal notranslate"><span class="pre">get_cybench_data_aligned_to_crop_season()</span></code></a></li>
+<li><a class="reference internal" href="#cybench.runs.agml_workshop.get_workshop_data"><code class="docutils literal notranslate"><span class="pre">get_workshop_data()</span></code></a></li>
+<li><a class="reference internal" href="#cybench.runs.agml_workshop.validate_agml_workshop_results"><code class="docutils literal notranslate"><span class="pre">validate_agml_workshop_results()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-cybench.runs.benchmark_summary">cybench.runs.benchmark_summary module</a><ul>
+<li><a class="reference internal" href="#cybench.runs.benchmark_summary.dataset_summary"><code class="docutils literal notranslate"><span class="pre">dataset_summary()</span></code></a></li>
+<li><a class="reference internal" href="#cybench.runs.benchmark_summary.run_benchmark_summary"><code class="docutils literal notranslate"><span class="pre">run_benchmark_summary()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-cybench.runs.process_results">cybench.runs.process_results module</a><ul>
+<li><a class="reference internal" href="#cybench.runs.process_results.df_to_markdown"><code class="docutils literal notranslate"><span class="pre">df_to_markdown()</span></code></a></li>
+<li><a class="reference internal" href="#cybench.runs.process_results.format_row"><code class="docutils literal notranslate"><span class="pre">format_row()</span></code></a></li>
+<li><a class="reference internal" href="#cybench.runs.process_results.results_to_metrics"><code class="docutils literal notranslate"><span class="pre">results_to_metrics()</span></code></a></li>
+<li><a class="reference internal" href="#cybench.runs.process_results.results_to_residuals"><code class="docutils literal notranslate"><span class="pre">results_to_residuals()</span></code></a></li>
+<li><a class="reference internal" href="#cybench.runs.process_results.write_results_to_table"><code class="docutils literal notranslate"><span class="pre">write_results_to_table()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-cybench.runs.results_plots">cybench.runs.results_plots module</a><ul>
+<li><a class="reference internal" href="#cybench.runs.results_plots.box_plots_metrics"><code class="docutils literal notranslate"><span class="pre">box_plots_metrics()</span></code></a></li>
+<li><a class="reference internal" href="#cybench.runs.results_plots.box_plots_residuals"><code class="docutils literal notranslate"><span class="pre">box_plots_residuals()</span></code></a></li>
+<li><a class="reference internal" href="#cybench.runs.results_plots.plot_bars"><code class="docutils literal notranslate"><span class="pre">plot_bars()</span></code></a></li>
+<li><a class="reference internal" href="#cybench.runs.results_plots.plot_graph"><code class="docutils literal notranslate"><span class="pre">plot_graph()</span></code></a></li>
+<li><a class="reference internal" href="#cybench.runs.results_plots.plot_metrics"><code class="docutils literal notranslate"><span class="pre">plot_metrics()</span></code></a></li>
+<li><a class="reference internal" href="#cybench.runs.results_plots.plot_yearly_metrics"><code class="docutils literal notranslate"><span class="pre">plot_yearly_metrics()</span></code></a></li>
+<li><a class="reference internal" href="#cybench.runs.results_plots.plot_yearly_residuals"><code class="docutils literal notranslate"><span class="pre">plot_yearly_residuals()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-cybench.runs.run_benchmark">cybench.runs.run_benchmark module</a><ul>
+<li><a class="reference internal" href="#cybench.runs.run_benchmark.compute_metrics"><code class="docutils literal notranslate"><span class="pre">compute_metrics()</span></code></a></li>
+<li><a class="reference internal" href="#cybench.runs.run_benchmark.get_prediction_residuals"><code class="docutils literal notranslate"><span class="pre">get_prediction_residuals()</span></code></a></li>
+<li><a class="reference internal" href="#cybench.runs.run_benchmark.load_results"><code class="docutils literal notranslate"><span class="pre">load_results()</span></code></a></li>
+<li><a class="reference internal" href="#cybench.runs.run_benchmark.run_benchmark"><code class="docutils literal notranslate"><span class="pre">run_benchmark()</span></code></a></li>
+<li><a class="reference internal" href="#cybench.runs.run_benchmark.run_benchmark_on_all_data"><code class="docutils literal notranslate"><span class="pre">run_benchmark_on_all_data()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-cybench.runs.visualize_results">cybench.runs.visualize_results module</a><ul>
+<li><a class="reference internal" href="#cybench.runs.visualize_results.deduce_crop_country_from_filename"><code class="docutils literal notranslate"><span class="pre">deduce_crop_country_from_filename()</span></code></a></li>
+<li><a class="reference internal" href="#cybench.runs.visualize_results.plot_results_summary"><code class="docutils literal notranslate"><span class="pre">plot_results_summary()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-cybench.runs">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</div>
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">AgML-crop-yield-forecasting</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">cybench.runs package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/cybench.runs.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="cybench-runs-package">
+<h1>cybench.runs package<a class="headerlink" href="#cybench-runs-package" title="Link to this heading"></a></h1>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading"></a></h2>
+</section>
+<section id="module-cybench.runs.agml_workshop">
+<span id="cybench-runs-agml-workshop-module"></span><h2>cybench.runs.agml_workshop module<a class="headerlink" href="#module-cybench.runs.agml_workshop" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="cybench.runs.agml_workshop.LSTMModel">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">cybench.runs.agml_workshop.</span></span><span class="sig-name descname"><span class="pre">LSTMModel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">time_series_have_same_length</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_rnn_layers</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rnn_hidden_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">64</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_outputs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cybench.runs.agml_workshop.LSTMModel" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="cybench.models.html#cybench.models.model.BaseModel" title="cybench.models.model.BaseModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseModel</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cybench.runs.agml_workshop.LSTMModel._abc_impl">
+<span class="sig-name descname"><span class="pre">_abc_impl</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;_abc._abc_data</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#cybench.runs.agml_workshop.LSTMModel._abc_impl" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cybench.runs.agml_workshop.LSTMModel._get_validation_splits">
+<span class="sig-name descname"><span class="pre">_get_validation_splits</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">all_years</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_folds</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_valid_years</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cybench.runs.agml_workshop.LSTMModel._get_validation_splits" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cybench.runs.agml_workshop.LSTMModel._optimize_hyperparameters">
+<span class="sig-name descname"><span class="pre">_optimize_hyperparameters</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">train_dataset</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">param_space</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">loss</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_size</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">epochs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_model_path</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cybench.runs.agml_workshop.LSTMModel._optimize_hyperparameters" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cybench.runs.agml_workshop.LSTMModel._train_epoch">
+<span class="sig-name descname"><span class="pre">_train_epoch</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">train_loader</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">loss</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">optimizer</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cybench.runs.agml_workshop.LSTMModel._train_epoch" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cybench.runs.agml_workshop.LSTMModel.fit">
+<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">train_dataset</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">optimize_hyperparameters</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">epochs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">fit_params</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cybench.runs.agml_workshop.LSTMModel.fit" title="Link to this definition"></a></dt>
+<dd><p>Fit or train the model.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>dataset</strong> – Dataset</p></li>
+<li><p><strong>**fit_params</strong> – Additional parameters.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A tuple containing the fitted model and a dict with additional information.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cybench.runs.agml_workshop.LSTMModel.forward">
+<span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X_ts</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">X_rest</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cybench.runs.agml_workshop.LSTMModel.forward" title="Link to this definition"></a></dt>
+<dd><p>Define the computation performed at every call.</p>
+<p>Should be overridden by all subclasses.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Although the recipe for forward pass needs to be defined within
+this function, one should call the <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code> instance afterwards
+instead of this since the former takes care of running the
+registered hooks while the latter silently ignores them.</p>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cybench.runs.agml_workshop.LSTMModel.load">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">load</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model_name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cybench.runs.agml_workshop.LSTMModel.load" title="Link to this definition"></a></dt>
+<dd><p>Deserialize a saved model.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>model_name</strong> – Filename that was used to save the model.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The deserialized model.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cybench.runs.agml_workshop.LSTMModel.predict">
+<span class="sig-name descname"><span class="pre">predict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">test_dataset</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cybench.runs.agml_workshop.LSTMModel.predict" title="Link to this definition"></a></dt>
+<dd><p>Run fitted model on data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>dataset</strong> – Dataset</p></li>
+<li><p><strong>**predict_params</strong> – Additional parameters.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A tuple containing a np.ndarray and a dict with additional information.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cybench.runs.agml_workshop.LSTMModel.predict_items">
+<span class="sig-name descname"><span class="pre">predict_items</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'cpu'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">predict_params</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cybench.runs.agml_workshop.LSTMModel.predict_items" title="Link to this definition"></a></dt>
+<dd><p>Run fitted model on a list of data items.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>X</strong> (<em>list</em>) – a list of data items, each of which is a dict</p></li>
+<li><p><strong>NOTE</strong> – All items in X are expected have time series with the same length.</p></li>
+<li><p><strong>device</strong> (<em>str</em>) – str, the device to use</p></li>
+<li><p><strong>**predict_params</strong> – Additional parameters</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A tuple containing a np.ndarray and a dict with additional information.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cybench.runs.agml_workshop.LSTMModel.save">
+<span class="sig-name descname"><span class="pre">save</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model_name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cybench.runs.agml_workshop.LSTMModel.save" title="Link to this definition"></a></dt>
+<dd><p>Save model, e.g. using pickle.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>model_name</strong> – Filename that will be used to save the model.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cybench.runs.agml_workshop.date_from_dekad">
+<span class="sig-prename descclassname"><span class="pre">cybench.runs.agml_workshop.</span></span><span class="sig-name descname"><span class="pre">date_from_dekad</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dekad</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">year</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cybench.runs.agml_workshop.date_from_dekad" title="Link to this definition"></a></dt>
+<dd><p>Reconstruct date string from dekad and year.
+NOTE: Don’t use this with CY-Bench data aligned to crop season.
+For aligned data, KEY_YEAR and year in “date” can be different.
+So it’s incorrect to infer data based on dekad and year.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>dekad</strong> (<em>int</em>) – a number from 1-36 indicating ~10-day periods</p></li>
+<li><p><strong>year</strong> (<em>int</em>) – year in YYYY format</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>datetime in YYYYmmdd format</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cybench.runs.agml_workshop.get_cybench_data">
+<span class="sig-prename descclassname"><span class="pre">cybench.runs.agml_workshop.</span></span><span class="sig-name descname"><span class="pre">get_cybench_data</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#cybench.runs.agml_workshop.get_cybench_data" title="Link to this definition"></a></dt>
+<dd><p>Reproduce results from AgML 2024 for LSTM models using CY-Bench data.
+Compare the workshop LSTM implementation and benchmark LSTM implementation
+to validate their performance on the same data. NRMSE must be around 25%.
+These results were produced with</p>
+<blockquote>
+<div><dl class="simple">
+<dt>inputs:</dt><dd><p>static: [“awc”]
+time series: [“tmin”, “tmax”, “tavg”, “prec”, “cwb”, “rad”] + [“fpar”]</p>
+</dd>
+<dt>NOTE: These should match the definitions of STATIC_PREDICTORS</dt><dd><p>and TIME_SERIES_PREDICTORS.</p>
+</dd>
+<dt>NOTE: All time series inputs are at the same (dekadal) resolution.</dt><dd><p>This means <cite>BaselineLSTM</cite> does not need to aggregate time series data.</p>
+</dd>
+</dl>
+<p>epochs=10
+lr=0.0001
+weight_decay=0.0001. Since <cite>BaselineLSTM</cite> uses weight_decay=0.00001, the same value
+is now used for the workshop <cite>LSTMModel</cite> implementation above.</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cybench.runs.agml_workshop.get_cybench_data_aligned_to_crop_season">
+<span class="sig-prename descclassname"><span class="pre">cybench.runs.agml_workshop.</span></span><span class="sig-name descname"><span class="pre">get_cybench_data_aligned_to_crop_season</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#cybench.runs.agml_workshop.get_cybench_data_aligned_to_crop_season" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cybench.runs.agml_workshop.get_workshop_data">
+<span class="sig-prename descclassname"><span class="pre">cybench.runs.agml_workshop.</span></span><span class="sig-name descname"><span class="pre">get_workshop_data</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#cybench.runs.agml_workshop.get_workshop_data" title="Link to this definition"></a></dt>
+<dd><p>Reproduce results from AgML 2024 for LSTM models.
+Compare the workshop LSTM implementation and benchmark LSTM implementation
+to validate their performance on the same data. NRMSE must be around 25%.
+These results were produced with</p>
+<blockquote>
+<div><dl class="simple">
+<dt>inputs:</dt><dd><p>static: [“awc”]
+time series: [“tmin”, “tmax”, “tavg”, “prec”, “cwb”, “rad”] + [“fpar”]</p>
+</dd>
+<dt>NOTE: These should match the definitions of STATIC_PREDICTORS</dt><dd><p>and TIME_SERIES_PREDICTORS.</p>
+</dd>
+<dt>NOTE: All time series inputs are at the same (dekadal) resolution.</dt><dd><p>This means <cite>BaselineLSTM</cite> does not need to aggregate time series data.</p>
+</dd>
+</dl>
+<p>epochs=10
+lr=0.0001
+weight_decay=0.0001. Since <cite>BaselineLSTM</cite> uses weight_decay=0.00001, the same value
+is now used for the workshop <cite>LSTMModel</cite> implementation above.</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cybench.runs.agml_workshop.validate_agml_workshop_results">
+<span class="sig-prename descclassname"><span class="pre">cybench.runs.agml_workshop.</span></span><span class="sig-name descname"><span class="pre">validate_agml_workshop_results</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df_y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dfs_x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time_series_have_same_length</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cybench.runs.agml_workshop.validate_agml_workshop_results" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</section>
+<section id="module-cybench.runs.benchmark_summary">
+<span id="cybench-runs-benchmark-summary-module"></span><h2>cybench.runs.benchmark_summary module<a class="headerlink" href="#module-cybench.runs.benchmark_summary" title="Link to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="cybench.runs.benchmark_summary.dataset_summary">
+<span class="sig-prename descclassname"><span class="pre">cybench.runs.benchmark_summary.</span></span><span class="sig-name descname"><span class="pre">dataset_summary</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'maize_NL'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_year</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">2003</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_year</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">2024</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span></span></span><a class="headerlink" href="#cybench.runs.benchmark_summary.dataset_summary" title="Link to this definition"></a></dt>
+<dd><p>Output a summary of dataset.
+:param dataset_name: The name of the dataset to load
+:type dataset_name: str
+:param min_year: minimum year (soil moisture data starts from 2003)
+:type min_year: int
+:param max_year: maximum year (some regions in AR have data points for 2024)
+:type max_year: int</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pd.DataFrame with a summary for given dataset</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cybench.runs.benchmark_summary.run_benchmark_summary">
+<span class="sig-prename descclassname"><span class="pre">cybench.runs.benchmark_summary.</span></span><span class="sig-name descname"><span class="pre">run_benchmark_summary</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">output_file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cybench.runs.benchmark_summary.run_benchmark_summary" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</section>
+<section id="module-cybench.runs.process_results">
+<span id="cybench-runs-process-results-module"></span><h2>cybench.runs.process_results module<a class="headerlink" href="#module-cybench.runs.process_results" title="Link to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="cybench.runs.process_results.df_to_markdown">
+<span class="sig-prename descclassname"><span class="pre">cybench.runs.process_results.</span></span><span class="sig-name descname"><span class="pre">df_to_markdown</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">formatted_df</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cybench.runs.process_results.df_to_markdown" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cybench.runs.process_results.format_row">
+<span class="sig-prename descclassname"><span class="pre">cybench.runs.process_results.</span></span><span class="sig-name descname"><span class="pre">format_row</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">row</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metric</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cybench.runs.process_results.format_row" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cybench.runs.process_results.results_to_metrics">
+<span class="sig-prename descclassname"><span class="pre">cybench.runs.process_results.</span></span><span class="sig-name descname"><span class="pre">results_to_metrics</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">residual</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataFrame</span></span></span><a class="headerlink" href="#cybench.runs.process_results.results_to_metrics" title="Link to this definition"></a></dt>
+<dd><p>Aggregate metrics for all runs in PATH_RESULTS_DIR.
+Only keeps metrics that exist in each run.
+Converts MAPE to percentage if it exists.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cybench.runs.process_results.results_to_residuals">
+<span class="sig-prename descclassname"><span class="pre">cybench.runs.process_results.</span></span><span class="sig-name descname"><span class="pre">results_to_residuals</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model_names</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cybench.runs.process_results.results_to_residuals" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cybench.runs.process_results.write_results_to_table">
+<span class="sig-prename descclassname"><span class="pre">cybench.runs.process_results.</span></span><span class="sig-name descname"><span class="pre">write_results_to_table</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">output_file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cybench.runs.process_results.write_results_to_table" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</section>
+<section id="module-cybench.runs.results_plots">
+<span id="cybench-runs-results-plots-module"></span><h2>cybench.runs.results_plots module<a class="headerlink" href="#module-cybench.runs.results_plots" title="Link to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="cybench.runs.results_plots.box_plots_metrics">
+<span class="sig-prename descclassname"><span class="pre">cybench.runs.results_plots.</span></span><span class="sig-name descname"><span class="pre">box_plots_metrics</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">crop</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">countries</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metric</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metric_label</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">subplots_per_row</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">4</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cybench.runs.results_plots.box_plots_metrics" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cybench.runs.results_plots.box_plots_residuals">
+<span class="sig-prename descclassname"><span class="pre">cybench.runs.results_plots.</span></span><span class="sig-name descname"><span class="pre">box_plots_residuals</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">crop</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">countries</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">residual_cols</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">residual_labels</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ymin</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ymax</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">subplots_per_row</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">4</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cybench.runs.results_plots.box_plots_residuals" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cybench.runs.results_plots.plot_bars">
+<span class="sig-prename descclassname"><span class="pre">cybench.runs.results_plots.</span></span><span class="sig-name descname"><span class="pre">plot_bars</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metric</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metric_label</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title_label</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">file_name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cybench.runs.results_plots.plot_bars" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cybench.runs.results_plots.plot_graph">
+<span class="sig-prename descclassname"><span class="pre">cybench.runs.results_plots.</span></span><span class="sig-name descname"><span class="pre">plot_graph</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x_col</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hue_col</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x_label</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metric</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metric_label</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">file_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rotation</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">45</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cybench.runs.results_plots.plot_graph" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cybench.runs.results_plots.plot_metrics">
+<span class="sig-prename descclassname"><span class="pre">cybench.runs.results_plots.</span></span><span class="sig-name descname"><span class="pre">plot_metrics</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metric</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cybench.runs.results_plots.plot_metrics" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cybench.runs.results_plots.plot_yearly_metrics">
+<span class="sig-prename descclassname"><span class="pre">cybench.runs.results_plots.</span></span><span class="sig-name descname"><span class="pre">plot_yearly_metrics</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">crop</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">country</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metric</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metric_label</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cybench.runs.results_plots.plot_yearly_metrics" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cybench.runs.results_plots.plot_yearly_residuals">
+<span class="sig-prename descclassname"><span class="pre">cybench.runs.results_plots.</span></span><span class="sig-name descname"><span class="pre">plot_yearly_residuals</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">crop</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">country</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">residual_cols</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">residual_labels</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cybench.runs.results_plots.plot_yearly_residuals" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</section>
+<section id="module-cybench.runs.run_benchmark">
+<span id="cybench-runs-run-benchmark-module"></span><h2>cybench.runs.run_benchmark module<a class="headerlink" href="#module-cybench.runs.run_benchmark" title="Link to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="cybench.runs.run_benchmark.compute_metrics">
+<span class="sig-prename descclassname"><span class="pre">cybench.runs.run_benchmark.</span></span><span class="sig-name descname"><span class="pre">compute_metrics</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">run_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model_names</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">residual</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataFrame</span></span></span><a class="headerlink" href="#cybench.runs.run_benchmark.compute_metrics" title="Link to this definition"></a></dt>
+<dd><p>Compute evaluation metrics on saved predictions.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>run_name</strong> (<em>str</em>) – The name of the run. Will be used to store log files and model results.</p></li>
+<li><p><strong>model_names</strong> (<em>list</em>) – Names of models to evaluate. If None, all model columns are used.</p></li>
+<li><p><strong>residual</strong> (<em>bool</em>) – If True, compute metrics on residuals (values adjusted per location).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>pd.DataFrame containing evaluation metrics</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cybench.runs.run_benchmark.get_prediction_residuals">
+<span class="sig-prename descclassname"><span class="pre">cybench.runs.run_benchmark.</span></span><span class="sig-name descname"><span class="pre">get_prediction_residuals</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">run_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model_names</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataFrame</span></span></span><a class="headerlink" href="#cybench.runs.run_benchmark.get_prediction_residuals" title="Link to this definition"></a></dt>
+<dd><p>Get prediction residuals (i.e., model predictions - labels).
+:param run_name: The name of the run. Will be used to store log files and model results
+:type run_name: str
+:param model_names: A mapping of model name (key) to a shorter name (value)
+:type model_names: dict</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>a pd.DataFrame containing prediction residuals</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cybench.runs.run_benchmark.load_results">
+<span class="sig-prename descclassname"><span class="pre">cybench.runs.run_benchmark.</span></span><span class="sig-name descname"><span class="pre">load_results</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">run_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataFrame</span></span></span><a class="headerlink" href="#cybench.runs.run_benchmark.load_results" title="Link to this definition"></a></dt>
+<dd><p>Load saved results for analysis or visualization.
+:param run_name: The name of the run. Will be used to store log files and model results
+:type run_name: str</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>a pd.DataFrame containing the predictions of benchmark models</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cybench.runs.run_benchmark.run_benchmark">
+<span class="sig-prename descclassname"><span class="pre">cybench.runs.run_benchmark.</span></span><span class="sig-name descname"><span class="pre">run_benchmark</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">run_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model_constructor</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">callable</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model_init_kwargs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model_fit_kwargs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">baseline_models</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dataset_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'maize_NL'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sel_years</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nn_models_epochs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span></span></span><a class="headerlink" href="#cybench.runs.run_benchmark.run_benchmark" title="Link to this definition"></a></dt>
+<dd><p>Run CY-Bench.
+:param run_name: The name of the run. Will be used to store log files and model results
+:type run_name: str
+:param model_name: The name of the model. Will be used to store log files and model results
+:type model_name: str
+:param model_constructor: The constructor of the model. Will be used to construct the model
+:type model_constructor: Callable
+:param model_init_kwargs: The kwargs used when constructing the model.
+:type model_init_kwargs: dict
+:param model_fit_kwargs: The kwargs used to fit the model.
+:type model_fit_kwargs: dict
+:param baseline_models: A list of names of baseline models to run next to the provided model.</p>
+<blockquote>
+<div><p>If unspecified, a default list of baseline models will be used.</p>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>dataset_name</strong> (<em>str</em>) – The name of the dataset to load</p></li>
+<li><p><strong>sel_years</strong> (<em>list</em>) – a list of years to run leave one year out (for tests)</p></li>
+<li><p><strong>nn_models_epochs</strong> (<em>int</em>) – Number of epochs to run for nn-models (for tests)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>a dictionary containing the results of the benchmark</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cybench.runs.run_benchmark.run_benchmark_on_all_data">
+<span class="sig-prename descclassname"><span class="pre">cybench.runs.run_benchmark.</span></span><span class="sig-name descname"><span class="pre">run_benchmark_on_all_data</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#cybench.runs.run_benchmark.run_benchmark_on_all_data" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</section>
+<section id="module-cybench.runs.visualize_results">
+<span id="cybench-runs-visualize-results-module"></span><h2>cybench.runs.visualize_results module<a class="headerlink" href="#module-cybench.runs.visualize_results" title="Link to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="cybench.runs.visualize_results.deduce_crop_country_from_filename">
+<span class="sig-prename descclassname"><span class="pre">cybench.runs.visualize_results.</span></span><span class="sig-name descname"><span class="pre">deduce_crop_country_from_filename</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filepath</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cybench.runs.visualize_results.deduce_crop_country_from_filename" title="Link to this definition"></a></dt>
+<dd><p>Extract crop and country code from filename, e.g. maize_US_year_2018.csv</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cybench.runs.visualize_results.plot_results_summary">
+<span class="sig-prename descclassname"><span class="pre">cybench.runs.visualize_results.</span></span><span class="sig-name descname"><span class="pre">plot_results_summary</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">result_files</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">models</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_regions</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cybench.runs.visualize_results.plot_results_summary" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</section>
+<section id="module-cybench.runs">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-cybench.runs" title="Link to this heading"></a></h2>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, Wageningen University and Research.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>  
+
+  <style>
+    /* Sidebar header (and topbar for mobile) */
+    .wy-side-nav-search, .wy-nav-top {
+      background: #28242c; */
+    }
+    /* Sidebar */
+    .wy-nav-side {
+      background: #124400;
+    }
+  </style>
+
+
+</body>
+</html>
