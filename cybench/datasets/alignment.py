@@ -271,7 +271,7 @@ def align_to_crop_season_window_numpy(
     valid_start = np.zeros_like(valid_mask, dtype=bool)
     valid_end = np.zeros_like(valid_mask, dtype=bool)
 
-    tolerance = np.timedelta64(10, "D")  # indicators may not come in daily timesteps
+    tolerance = np.timedelta64(15, "D")  # indicators may not come in daily timesteps
     valid_start[valid_mask] = date_min[valid_mask] - tolerance < (
         cutoff_dates[crop_indices[valid_mask]]
         - season_window_lengths[crop_indices[valid_mask]].astype("timedelta64[D]")

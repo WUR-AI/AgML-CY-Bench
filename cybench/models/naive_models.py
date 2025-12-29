@@ -100,3 +100,65 @@ class AverageYieldModel(BaseModel):
             saved_model = pickle.load(f)
 
         return saved_model
+
+
+class MaxPredictorModel(BaseModel):
+    """A naive model that predicts the max value of a predefined feature column
+    for each test item. No training; prediction uses only test data.
+    """
+
+    def __init__(self, feature_column):
+        self.feature_column = feature_column
+        self._logger = logging.getLogger(__name__)
+
+    def fit(self, dataset, **fit_params):
+        """No training needed; return self."""
+        self._logger.info("MaxFromItemModel: nothing to fit.")
+        return self, {}
+
+    def predict_items(self, X: list):
+        """Predict the max value contained in each test item.
+
+        Assumes each item is a dict where item[self.feature_column]
+        is a list, array, or iterable of numeric values.
+        """
+        predictions = np.zeros(len(X))
+        for i, item in enumerate(X):
+            values = item.get(self.feature_column, None)
+
+            if values is None:
+                raise ValueError(
+                    f"Item {i} does not contain the feature column '{self.feature_column}'."
+                )
+
+            try:
+                max_val = (
+                    0.001 * np.nanmax(values) if np.any(~np.isnan(values)) else np.NAN
+                )
+                predictions[i] = max_val
+            except Exception as e:
+                raise ValueError(f"Could not compute max for item {i}: {e}")
+        return predictions, {}
+
+    def save(self, model_name):
+        """Save model, e.g. using pickle.
+
+        Args:
+          model_name: Filename that will be used to save the model.
+        """
+        with open(model_name, "wb") as f:
+            pickle.dump(self, f)
+
+    def load(cls, model_name):
+        """Deserialize a saved model.
+
+        Args:
+          model_name: Filename that was used to save the model.
+
+        Returns:
+          The deserialized model.
+        """
+        with open(model_name, "rb") as f:
+            saved_model = pickle.load(f)
+
+        return saved_model
