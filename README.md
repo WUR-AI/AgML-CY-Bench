@@ -80,6 +80,7 @@ The terms used to reference different varieties or seasons of maize/wheat have b
 | [India](data_preparation/crop_statistics_IN/README.md)               | Maize             | Wheat                                 |
 | [Mali](data_preparation/crop_statistics_ML/README.md)                | Maize             | N/A                                   |
 | [Mexico](data_preparation/crop_statistics_MX/README.md)              | White/Yellow Corn | N/A                                   |
+| [Morocco](data_preparation/crop_statistics_MA/README.md)             | Grain Maize       | Wheat                                 |
 | [USA](data_preparation/crop_statistics_US/README.md)                 | Grain Corn        | Winter Wheat                          |
 
 #### Targets
