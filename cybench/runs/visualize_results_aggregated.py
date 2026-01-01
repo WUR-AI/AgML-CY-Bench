@@ -21,6 +21,7 @@ from cybench.config import KEY_LOC, KEY_TARGET, REPO_DIR
 # Configuration
 # -----------------------------
 CORE_FRACTION = 0.75
+YEAR_COVERAGE_THRESHOLD = 0.50  # Skip years where < 50% of regions have valid data
 BASELINE_MODEL = "AverageYieldModel"
 NON_MODEL_COLS = {KEY_LOC, "year", KEY_TARGET, "country_code", "crop"}
 MIN_REGIONS_THRESHOLD = 10  # Rows with fewer regions will be greyed out in the table
@@ -63,8 +64,10 @@ def load_and_clean_data(
     csv_files: List[str], target_model_to_plot: str, min_years: int
 ) -> Tuple[Optional[pd.DataFrame], str]:
     """
-    Loads CSVs and filters rows to ensure fairness.
-    A row is kept ONLY if the Target AND ALL detected model columns (inc. Baseline) are valid.
+    Loads CSVs and applies strict filtering:
+    1. Enforce numeric types for Target and ALL Models.
+    2. Skip YEARS where < 50% of the dataset's regions have valid data (for all columns).
+    3. Drop remaining individual rows with missing data.
     """
     try:
         df = pd.concat([pd.read_csv(f) for f in csv_files], ignore_index=True)
@@ -93,7 +96,37 @@ def load_and_clean_data(
     for c in cols_to_check:
         df[c] = pd.to_numeric(df[c], errors="coerce")
 
-    # 4. Strict Filtering (Intersection of Validity)
+    # ---------------------------------------------------------
+    # 4. Filter Years based on Spatial Coverage
+    # ---------------------------------------------------------
+
+    # Calculate mask of valid rows (finite in ALL relevant cols)
+    valid_mask = df[cols_to_check].notna().all(axis=1)
+
+    # If a region is entirely NaN for all years, it shouldn't count towards the "total" we expect.
+    valid_locations_universe = df.loc[valid_mask, KEY_LOC].unique()
+    total_regions = len(valid_locations_universe)
+
+    if total_regions > 0:
+        # Count unique regions having valid data per year
+        regions_per_year = df[valid_mask].groupby("year")[KEY_LOC].nunique()
+
+        # Determine valid years
+        min_required = np.ceil(YEAR_COVERAGE_THRESHOLD * total_regions)
+        valid_years = regions_per_year[regions_per_year >= min_required].index
+
+        # Filter the DataFrame to keep only valid years
+        df = df[df["year"].isin(valid_years)].copy()
+    else:
+        # If no valid regions exist at all, return empty early
+        return None, "no_valid_regions_found"
+
+    # ---------------------------------------------------------
+    # 5. Strict Row Filtering (Intersection of Validity)
+    # ---------------------------------------------------------
+    # Now that we only have "good" years, we still drop any
+    # specific rows that might be missing data (e.g. a single region in a good year).
+
     n_before = len(df)
     df = df.dropna(subset=cols_to_check)
     n_after = len(df)
@@ -497,6 +530,7 @@ def main():
         table_path = os.path.join(args.results_dir, "summary_table.md")
         with open(table_path, "w") as f:
             f.write(md_table)
+
         print(f"\n[DONE] Table saved to: {table_path}")
     else:
         print("\n[WARN] No stats collected. No table generated.")
