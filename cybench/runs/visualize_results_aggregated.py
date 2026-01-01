@@ -23,6 +23,7 @@ from cybench.config import KEY_LOC, KEY_TARGET, REPO_DIR
 CORE_FRACTION = 0.75
 BASELINE_MODEL = "AverageYieldModel"
 NON_MODEL_COLS = {KEY_LOC, "year", KEY_TARGET, "country_code", "crop"}
+MIN_REGIONS_THRESHOLD = 10  # Rows with fewer regions will be greyed out in the table
 
 WORLD_SHP_PATH = os.path.join(
     REPO_DIR,
@@ -138,6 +139,65 @@ def get_metrics_dict(df, target_col, model_col):
 
 
 # -----------------------------
+# Reporting
+# -----------------------------
+def generate_markdown_table(stats_list: List[dict]) -> str:
+    """Generates a Markdown table comparing Model vs Baseline, with grey text for small datasets."""
+
+    # Header
+    md = "| Dataset | N | r (Mod / Base) | R² (Mod / Base) | r_res (Mod / Base) | R²_res (Mod / Base) | r_time (Mod / Base) |\n"
+    md += "| :--- | :---: | :---: | :---: | :---: | :---: | :---: |\n"
+
+    for s in stats_list:
+        d_name = s["dataset"]
+        n_reg = s["n_regions"]
+        mod = s["metrics_model"]
+        base = s["metrics_baseline"]
+
+        # Check threshold
+        is_faint = n_reg < MIN_REGIONS_THRESHOLD
+
+        # Format helpers
+        def fmt(val):
+            return f"{val:.2f}" if pd.notnull(val) else "-"
+
+        def pair(v_mod, v_base):
+            return f"{fmt(v_mod)} / {fmt(v_base)}"
+
+        def style(text):
+            # Apply grey color if below threshold
+            if is_faint:
+                return f'<span style="color:gray">{text}</span>'
+            return text
+
+        if base:
+            # Full comparison
+            row = (
+                f"| {style(d_name)} "
+                f"| {style(str(n_reg))} "
+                f"| {style(pair(mod['r'], base['r']))} "
+                f"| {style(pair(mod['r2'], base['r2']))} "
+                f"| {style(pair(mod['r_res'], base['r_res']))} "
+                f"| {style(pair(mod['r2_res'], base['r2_res']))} "
+                f"| {style(pair(s['r_time_model'], s['r_time_base']))} |"
+            )
+        else:
+            # Model only
+            row = (
+                f"| {style(d_name)} "
+                f"| {style(str(n_reg))} "
+                f"| {style(fmt(mod['r']))} "
+                f"| {style(fmt(mod['r2']))} "
+                f"| {style(fmt(mod['r_res']))} "
+                f"| {style(fmt(mod['r2_res']))} "
+                f"| {style(fmt(s['r_time_model']))} |"
+            )
+        md += row + "\n"
+
+    return md
+
+
+# -----------------------------
 # Plotting
 # -----------------------------
 def process_dataset(
@@ -226,6 +286,8 @@ def process_dataset(
     stats = {
         "dataset": dataset_key,
         "n_samples": n_samples,
+        "n_regions": n_regions,
+        "n_years": n_years,
         "metrics_model": metrics_model,
         "metrics_baseline": metrics_base,
         "r_time_model": r_time_model,
@@ -344,7 +406,7 @@ def main():
     parser.add_argument(
         "-m",
         "--model",
-        default="LocationBiasCorrected",
+        default="LocationBiasCorrectedMaxPredictorModel",
         help="Model column name to PLOT.",
     )
     parser.add_argument(
@@ -386,6 +448,9 @@ def main():
     print(f"[INFO] Processing {len(datasets_to_run)} dataset(s). Output: {pdf_path}")
     os.makedirs(os.path.dirname(os.path.abspath(pdf_path)), exist_ok=True)
 
+    # Accumulator for final table
+    all_stats_list = []
+
     with PdfPages(pdf_path) as pdf:
         for key in sorted(datasets_to_run.keys()):
             files = datasets_to_run[key]
@@ -401,6 +466,9 @@ def main():
             try:
                 fig, stats = process_dataset(key, df, args.model, world)
                 pdf.savefig(fig)
+
+                # Append stats for table generation
+                all_stats_list.append(stats)
 
                 if args.save_individual:
                     fig.savefig(
@@ -421,6 +489,17 @@ def main():
                 import traceback
 
                 traceback.print_exc()
+
+    # 4. Generate and Print Markdown Table
+    if all_stats_list:
+        md_table = generate_markdown_table(all_stats_list)
+
+        table_path = os.path.join(args.results_dir, "summary_table.md")
+        with open(table_path, "w") as f:
+            f.write(md_table)
+        print(f"\n[DONE] Table saved to: {table_path}")
+    else:
+        print("\n[WARN] No stats collected. No table generated.")
 
     print("\n[DONE]")
 
