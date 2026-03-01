@@ -20,23 +20,23 @@ Brazilian Institute of Geography and Statistics (IBGE)
 Maximilian Zachow
 
 ## Dataset overview
-The process of obtaining an exemplary wheat dataset (including yield, planted area, harvested area and production) is outlined below. Here, the last four years are selected as an example. 
+The process of obtaining an exemplary wheat dataset (including yield, planted area, harvested area and production) is outlined below. Here, the last four years are selected as an example.
 
 A translation is given in italic. Basic preprocessing of the downloaded csv files for yield, production, harvested and planted area is given in the notebook `read_and_preprocess_data.ipynb`.
 
-### Selection process via interface on platform 
+### Selection process via interface on platform
 First, make sure that you adjust the outline at the very top of the page to match the following structure. You can simply drag and drop elements to their correct position:
 
-![test](images%5CIBGE_layout.png)
+![test](images/IBGE_layout.png)
 
 
- **Variável** (*variable*): 
+ **Variável** (*variable*):
  - Rendimento médio da produção (Quilogramas por Hectare) - *yield (kg/ha)*
  - Área plantada (Hectares [1988 a 2022]) - *planted area (ha)*
- - Área colhida (Hectares) - *harvested area (ha)* 
+ - Área colhida (Hectares) - *harvested area (ha)*
  - Quantidade produzida (Toneladas) - *production (t)*
 
-**Produto das lavouras temporárias** (*crop selection*): 
+**Produto das lavouras temporárias** (*crop selection*):
  - Trigo (em grão) - *wheat (grains)*
 
 Other relevant crops and their English translation:
@@ -47,18 +47,18 @@ Other relevant crops and their English translation:
  **Ano** (*year*):
   - 2022, 2021, 2020, 2019, ... (select as many you want)
 
-**Unidade Territorial** *(territorial unit)*: 
+**Unidade Territorial** *(territorial unit)*:
  - Município - *municipality*
 
-Click download and a dialogue opens. Note that the immediate download is only available for up to 200,000 values. On the top of the download window, you will see how many values your current request contains (e.g. * 22.252 valores na seleção - *22,252 values selected*). Instructions on how to obtain requests exceeding 200,000 values are given further below. For now continue with the next steps. Select formato *(format)* CSV (US) and check two boxes "Exibier códigos de territórios *(display territory codes)* and Exibir nomes de territórios *(Display territory names)*. 
+Click download and a dialogue opens. Note that the immediate download is only available for up to 200,000 values. On the top of the download window, you will see how many values your current request contains (e.g. * 22.252 valores na seleção - *22,252 values selected*). Instructions on how to obtain requests exceeding 200,000 values are given further below. For now continue with the next steps. Select formato *(format)* CSV (US) and check two boxes "Exibier códigos de territórios *(display territory codes)* and Exibir nomes de territórios *(Display territory names)*.
 
 **Less than 200,000 values**: Select "Imediato (até 200.000 valores)" *(immediate download)* and click download again. A new tab opens and after ~7 min the download starts.
 
-**More than 200,000 values**: If you selected all available years, e.g. 1974-2022 for wheat, you will end up with ~ 1 Mio. values (too much for the immediate download). In the download dialogue, you can then select A Posteriori (até 3.000.000 valores) *(A Posteriori (up to 3,000,000 values))*. After prodviding a mail-address and clicking download you will receive a message "Gravação a posteriori, A solicitação foi incluída na fila e em breve estará disponível!", indicating that the file will be sent to you via e-mail. In my test case with four variables for wheat and all available years it took around 1.5h until I received the email. In order to download the data from the link in the mail, you need to have a SIDRA account that you can create in less than a minute [here](https://sidra.ibge.gov.br/perfil/usuario/cadastro).  
+**More than 200,000 values**: If you selected all available years, e.g. 1974-2022 for wheat, you will end up with ~ 1 Mio. values (too much for the immediate download). In the download dialogue, you can then select A Posteriori (até 3.000.000 valores) *(A Posteriori (up to 3,000,000 values))*. After prodviding a mail-address and clicking download you will receive a message "Gravação a posteriori, A solicitação foi incluída na fila e em breve estará disponível!", indicating that the file will be sent to you via e-mail. In my test case with four variables for wheat and all available years it took around 1.5h until I received the email. In order to download the data from the link in the mail, you need to have a SIDRA account that you can create in less than a minute [here](https://sidra.ibge.gov.br/perfil/usuario/cadastro).
 
 Regardless of your download methods, save the dataset and proceed to the notebook `read_and_preprocess_data.ipynb` for the preprocessing steps.
 
-## Provenance 
+## Provenance
 
 Weekly updates.
 
