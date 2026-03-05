@@ -150,11 +150,14 @@ RS_NDVI = "ndvi"
 # Soil moisture indicators: surface moisture, root zone moisture
 SOIL_MOISTURE_INDICATORS = ["ssm"]  # , "rsm"]
 
+PRODUCTIVITY_INDICATORS = ["twso"]
+
 TIME_SERIES_INPUTS = {
-    "meteo": METEO_INDICATORS,
-    "fpar": [RS_FPAR],
-    "ndvi": [RS_NDVI],
-    "soil_moisture": SOIL_MOISTURE_INDICATORS,
+    # "meteo": METEO_INDICATORS,
+    # "fpar": [RS_FPAR],
+    # "ndvi": [RS_NDVI],
+    # "soil_moisture": SOIL_MOISTURE_INDICATORS,
+    "twso": PRODUCTIVITY_INDICATORS,
 }
 
 # Time series predictors
@@ -171,6 +174,7 @@ TIME_SERIES_AGGREGATIONS = {
     RS_FPAR: "mean",
     RS_NDVI: "mean",
     "ssm": "mean",
+    "twso": "max",
 }
 
 # All predictors. Add more when available
@@ -198,10 +202,11 @@ GDD_UPPER_LIMIT = {
 # Lead time for forecasting
 # Choices: "middle-of-season", "quarter-of-season",
 # "n-day(s)" where n is an integer
-FORECAST_LEAD_TIME = "middle-of-season"
+# FORECAST_LEAD_TIME = "middle-of-season"
+FORECAST_LEAD_TIME = "0-days"
 
 # Buffer period before the start of season
-SPINUP_DAYS = 90
+SPINUP_DAYS = 0
 
 # Logging
 PATH_LOGS_DIR = os.path.join(PATH_OUTPUT_DIR, "logs")

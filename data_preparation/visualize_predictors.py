@@ -12,7 +12,12 @@ from cybench.config import KEY_LOC, CROP_YIELD_RANGES, REPO_DIR
 
 
 def visualize_yield_timeseries(
-    dataset, timeseries, years=None, n_regions=5, output_dir="frames"
+    dataset,
+    timeseries,
+    years=None,
+    n_regions=5,
+    output_dir="frames",
+    results=None,  # NEW: optional result files for MaxTWSO
 ):
     # --- Determine crop and country from dataset ---
     try:
@@ -74,6 +79,40 @@ def visualize_yield_timeseries(
         else:
             print(f"Warning: {ts_file} not found, skipping")
 
+    # --- Optionally: load MaxTWSO from result files ---
+    has_maxtwso = False
+    df_maxtwso = None
+    maxtwso_limits = None
+    if results:
+        all_res = [pd.read_csv(f) for f in results]
+        df_res = pd.concat(all_res, ignore_index=True)
+
+        # Align year column name with yield ('harvest_year')
+        if "harvest_year" not in df_res.columns and "year" in df_res.columns:
+            df_res = df_res.rename(columns={"year": "harvest_year"})
+
+        if "MaxTWSO" not in df_res.columns:
+            print(
+                "Warning: MaxTWSO column not found in result files, skipping MaxTWSO map row."
+            )
+        else:
+            # Keep only years we are using
+            df_maxtwso = df_res[df_res["harvest_year"].isin(years_sorted)].copy()
+            # Only admin_ids we have in yield
+            df_maxtwso = df_maxtwso[df_maxtwso[KEY_LOC].isin(adm_ids_in_data)]
+            if not df_maxtwso.empty:
+                has_maxtwso = True
+                maxtwso_limits = (
+                    df_maxtwso["MaxTWSO"].min(),
+                    df_maxtwso["MaxTWSO"].max(),
+                )
+                # Attach geometry for plotting
+                df_maxtwso = geo_df.merge(df_maxtwso, on=KEY_LOC, how="left")
+            else:
+                print(
+                    "Warning: MaxTWSO result data is empty after filtering, skipping MaxTWSO row."
+                )
+
     # --- Select regions ---
     # Keep only regions that appear in ALL selected years
     regions_per_year = [
@@ -81,6 +120,25 @@ def visualize_yield_timeseries(
         for y in years_sorted
     ]
     valid_regions = set.intersection(*regions_per_year) if regions_per_year else set()
+
+    # 2) Intersect with regions that have ALL timeseries predictors
+    if ts_dfs:
+        ts_region_sets = []
+        for name, ts_df in ts_dfs.items():
+            ts_years = ts_df[ts_df["date"].dt.year.isin(years_sorted)]
+
+            # per region: keep only those with at least one non-NaN for this predictor
+            non_nan_per_region = ts_years.groupby(KEY_LOC)[name].apply(
+                lambda s: s.notna().any()
+            )
+
+            regions_with_data = set(non_nan_per_region[non_nan_per_region].index)
+            ts_region_sets.append(regions_with_data)
+
+        valid_ts_regions = (
+            set.intersection(*ts_region_sets) if ts_region_sets else set()
+        )
+        valid_regions = valid_regions.intersection(valid_ts_regions)
 
     if not valid_regions:
         raise ValueError("No regions have yield data in all selected years.")
@@ -96,6 +154,13 @@ def visualize_yield_timeseries(
         unique_regions[idx] for idx in selected_indices if idx < n_total
     ]
 
+    quantiles = np.linspace(0.1, 0.9, n_regions)
+    unique_regions = df_sorted[KEY_LOC].unique()
+    selected_indices = [int(q * n_total) for q in quantiles]
+    selected_regions = [
+        unique_regions[idx] for idx in selected_indices if idx < n_total
+    ]
+
     region_colors = ["red", "magenta", "cyan", "orange", "purple", "green", "brown"][
         : len(selected_regions)
     ]
@@ -103,11 +168,14 @@ def visualize_yield_timeseries(
     # --- Fixed timeseries limits ---
     ts_limits = {}
     for name, ts_df in ts_dfs.items():
+        ts_df[name] = 0.001 * ts_df[name]
         ts_limits[name] = (ts_df[name].min(), ts_df[name].max())
 
     os.makedirs(output_dir, exist_ok=True)
     ncols = len(years_sorted)
-    nrows = 1 + len(timeseries)  # top: yield, rows: timeseries
+    nrows = (
+        1 + int(has_maxtwso) + len(timeseries)
+    )  # top: yield, optional MaxTWSO row, then timeseries rows
 
     fig, axes = plt.subplots(
         nrows=nrows,
@@ -126,7 +194,9 @@ def visualize_yield_timeseries(
 
     for i, year in enumerate(years_sorted):
         ax = axes[0, i]
-        df_year = merged[merged["harvest_year"] == year]
+        df_year = merged[
+            (merged["harvest_year"] == year) & (merged[KEY_LOC].isin(valid_regions))
+        ]
         world.plot(ax=ax, color="lightgrey", edgecolor="black", linewidth=0.1)
         df_year.plot(
             column="yield",
@@ -154,10 +224,53 @@ def visualize_yield_timeseries(
                     for g in geom.geoms:
                         ax.plot(*g.exterior.xy, color=color, linewidth=1)
 
+    # --- Optional: second row with MaxTWSO maps ---
+    if has_maxtwso and df_maxtwso is not None:
+        twso_norm = Normalize(vmin=maxtwso_limits[0], vmax=maxtwso_limits[1])
+        twso_cmap = cm.viridis
+
+        for i, year in enumerate(years_sorted):
+            ax = axes[1, i]
+            df_year_twso = df_maxtwso[
+                (df_maxtwso["harvest_year"] == year)
+                & (df_maxtwso[KEY_LOC].isin(valid_regions))
+            ]
+
+            world.plot(ax=ax, color="lightgrey", edgecolor="black", linewidth=0.1)
+            if not df_year_twso.empty:
+                df_year_twso.plot(
+                    column="MaxTWSO",
+                    ax=ax,
+                    cmap=twso_cmap,
+                    edgecolor="black",
+                    linewidth=0.2,
+                    legend=False,
+                    vmin=twso_norm.vmin,
+                    vmax=twso_norm.vmax,
+                )
+            ax.set_xlim(minx, maxx)
+            ax.set_ylim(miny, maxy)
+            ax.axis("off")
+            ax.set_title(f"MaxTWSO {year}", fontsize=12)
+
+            # Highlight selected regions
+            for region, color in zip(selected_regions, region_colors):
+                region_df = df_year_twso[df_year_twso[KEY_LOC] == region]
+                if not region_df.empty:
+                    geom = region_df.geometry.values[0]
+                    if geom.geom_type == "Polygon":
+                        ax.plot(*geom.exterior.xy, color=color, linewidth=1)
+                    elif geom.geom_type == "MultiPolygon":
+                        for g in geom.geoms:
+                            ax.plot(*g.exterior.xy, color=color, linewidth=1)
+
+    # --- Timeseries rows ---
+    ts_row_offset = 1 + int(has_maxtwso)  # rows 0:(yield), 1:(MaxTWSO if present)
+
     # --- Timeseries rows ---
     for r, ts_name in enumerate(timeseries):
         for i, year in enumerate(years_sorted):
-            ax = axes[r + 1, i]
+            ax = axes[ts_row_offset + r, i]
             ts_df = ts_dfs[ts_name]
             ts_year = ts_df[ts_df["date"].dt.year == year]
 
@@ -196,7 +309,7 @@ def visualize_yield_timeseries(
 
     # --- Save figure ---
     out_file = os.path.join(output_dir, f"{crop}_yield_timeseries.png")
-    fig.savefig(out_file, dpi=200, bbox_inches="tight")
+    fig.savefig(out_file, dpi=600, bbox_inches="tight")
     plt.close(fig)
     print(f"Saved figure: {out_file}")
 
@@ -216,6 +329,11 @@ if __name__ == "__main__":
     parser.add_argument(
         "--n_regions", type=int, default=5, help="Number of regions to highlight"
     )
+    parser.add_argument(
+        "--results",
+        nargs="+",
+        help="Result CSV files (e.g. maize_US_year_*.csv) that contain MaxTWSO",
+    )
     parser.add_argument("-o", "--output_dir", default="./", help="Output directory")
     args = parser.parse_args()
 
@@ -225,4 +343,5 @@ if __name__ == "__main__":
         years=args.years,
         n_regions=args.n_regions,
         output_dir=args.output_dir,
+        results=args.results,
     )

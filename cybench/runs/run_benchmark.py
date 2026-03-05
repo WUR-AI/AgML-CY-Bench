@@ -21,7 +21,7 @@ from cybench.evaluation.eval import (
     get_default_metrics,
     prepare_targets_preds,
 )
-from cybench.models.naive_models import AverageYieldModel
+from cybench.models.naive_models import AverageYieldModel, MaxPredictorModel
 from cybench.models.trend_models import TrendModel
 from cybench.models.sklearn_models import SklearnRidge, SklearnRandomForest
 from cybench.models.xgboost_model import XGBoostModel
@@ -43,6 +43,7 @@ from cybench.models.residual_models import (
 
 _BASELINE_MODEL_CONSTRUCTORS = {
     "AverageYieldModel": AverageYieldModel,
+    "MaxPredictorModel": MaxPredictorModel,
     "LinearTrend": TrendModel,
     "SklearnRidge": SklearnRidge,
     "RidgeRes": RidgeRes,
@@ -59,6 +60,8 @@ _BASELINE_MODEL_CONSTRUCTORS = {
 }
 
 BASELINE_MODELS = list(_BASELINE_MODEL_CONSTRUCTORS.keys())
+
+BASELINE_MODELS = ["AverageYieldModel", "MaxPredictorModel"]
 
 _BASELINE_MODEL_INIT_KWARGS = defaultdict(dict)
 
@@ -90,6 +93,45 @@ _BASELINE_MODEL_FIT_KWARGS["TransformerRes"] = {
     "epochs": NN_MODELS_EPOCHS,
     "device": "cuda" if torch.cuda.is_available() else "cpu",
 }
+_BASELINE_MODEL_INIT_KWARGS["MaxPredictorModel"] = {
+    "feature_column": "twso",
+}
+
+_BASELINE_MODEL_FIT_KWARGS["MaxPredictorModel"] = {
+    "feature_column": "twso",
+}
+
+
+def discover_datasets_from_disk(path_data_dir: str):
+    """
+    Discover datasets by checking for:
+      PATH_DATA_DIR/<crop>/<region>/twso_<crop>_<region>.csv
+    Returns list of dataset_name strings like "maize_FR".
+    """
+    found = []
+
+    # iterate crops as folders under PATH_DATA_DIR
+    if not os.path.isdir(path_data_dir):
+        raise FileNotFoundError(
+            f"PATH_DATA_DIR does not exist or is not a directory: {path_data_dir}"
+        )
+
+    for crop in sorted(os.listdir(path_data_dir)):
+        crop_dir = os.path.join(path_data_dir, crop)
+        if not os.path.isdir(crop_dir):
+            continue
+
+        # iterate regions as folders under crop
+        for region in sorted(os.listdir(crop_dir)):
+            region_dir = os.path.join(crop_dir, region)
+            if not os.path.isdir(region_dir):
+                continue
+
+            twso_file = os.path.join(region_dir, f"twso_{crop}_{region}.csv")
+            if os.path.exists(twso_file):
+                found.append(f"{crop}_{region}")
+
+    return found
 
 
 def run_benchmark(
@@ -164,6 +206,7 @@ def run_benchmark(
     else:
         sel_years = all_years
 
+    all_results = []
     for test_year in sel_years:
         train_years = [y for y in all_years if y != test_year]
         test_years = [test_year]
@@ -194,13 +237,14 @@ def run_benchmark(
         df = pd.DataFrame.from_dict(model_output)
         df[KEY_COUNTRY] = df[KEY_LOC].str[:2]
         df.set_index([KEY_COUNTRY, KEY_LOC, KEY_YEAR], inplace=True)
-        df.to_csv(os.path.join(path_results, f"{dataset_name}_year_{test_year}.csv"))
+        all_results.append(df)
 
-    df_metrics = compute_metrics(run_name, list(model_constructors.keys()))
+    df_all = pd.concat(all_results).sort_index()
 
-    return {
-        "df_metrics": df_metrics,
-    }
+    results_file = os.path.join(path_results, f"{dataset_name}.csv")
+    print(f"write results to {results_file}")
+    df_all.to_csv(results_file)
+    return
 
 
 def load_results(
@@ -228,6 +272,8 @@ def load_results(
 
     df_all = pd.DataFrame()
     for file in files:
+        if not file.lower().endswith(".csv"):
+            continue
         path = os.path.join(path_results, file)
         df = pd.read_csv(path)
         df_all = pd.concat([df_all, df], axis=0)
@@ -339,7 +385,12 @@ def run_benchmark_on_all_data():
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(prog="run_benchmark.py", description="Run cybench")
     parser.add_argument("-r", "--run-name")
-    parser.add_argument("-d", "--dataset-name")
+    parser.add_argument(
+        "-d",
+        "--dataset-name",
+        default=None,
+        help="Dataset name (e.g. maize_FR). If omitted or 'all'/'none', run all datasets.",
+    )
     parser.add_argument("-m", "--mode")
     parser.add_argument(
         "-y",
@@ -350,48 +401,45 @@ if __name__ == "__main__":
         help="Test year(s)",
     )
     args = parser.parse_args()
-    dataset_name = args.dataset_name
-    assert dataset_name is not None
 
-    if args.run_name is not None:
-        run_name = args.run_name
+    if args.dataset_name is None or str(args.dataset_name).lower() in ("none", "all"):
+        dataset_names = discover_datasets_from_disk(PATH_DATA_DIR)
+        if not dataset_names:
+            raise FileNotFoundError(
+                f"No datasets found. Expected files like "
+                f"{PATH_DATA_DIR}/<crop>/<region>/twso_<crop>_<region>.csv"
+            )
     else:
-        run_name = dataset_name
+        dataset_names = [args.dataset_name]
 
-    if args.years is None or [y.lower() for y in args.years] in (["none"], ["all"]):
-        args.years = None
-    else:
-        args.years = [int(y) for y in args.years]
-    sel_years = args.years
+    for dataset_name in dataset_names:
+        run_name = args.run_name if args.run_name is not None else dataset_name
 
-    if (args.mode is not None) and args.mode == "test":
-        # skipping some models
-        baseline_models = [
-            "AverageYieldModel",
-            "LinearTrend",
-            "SklearnRidge",
-            "RidgeRes",
-            "LSTM",
-            "LSTMRes",
-        ]
-        # override epochs for nn-models
-        nn_models_epochs = 5
-        results = run_benchmark(
-            run_name=run_name,
-            dataset_name=dataset_name,
-            baseline_models=baseline_models,
-            nn_models_epochs=nn_models_epochs,
-        )
-    else:
-        results = run_benchmark(
-            run_name=run_name, dataset_name=dataset_name, sel_years=sel_years
-        )
+        if args.years is None or [y.lower() for y in args.years] in (["none"], ["all"]):
+            args.years = None
+        else:
+            args.years = [int(y) for y in args.years]
+        sel_years = args.years
 
-    index_cols = results["df_metrics"].index.names
-    df_metrics = results["df_metrics"].reset_index()
-
-    metric_cols = [c for c in df_metrics.columns if c not in index_cols]
-
-    # Group and average all available metrics
-    agg_df = df_metrics.groupby("model")[metric_cols].mean().round(3)
-    print(agg_df)
+        if (args.mode is not None) and args.mode == "test":
+            # skipping some models
+            baseline_models = [
+                "AverageYieldModel",
+                "LinearTrend",
+                "SklearnRidge",
+                "RidgeRes",
+                "LSTM",
+                "LSTMRes",
+            ]
+            # override epochs for nn-models
+            nn_models_epochs = 5
+            results = run_benchmark(
+                run_name=run_name,
+                dataset_name=dataset_name,
+                baseline_models=baseline_models,
+                nn_models_epochs=nn_models_epochs,
+            )
+        else:
+            run_benchmark(
+                run_name=run_name, dataset_name=dataset_name, sel_years=sel_years
+            )
