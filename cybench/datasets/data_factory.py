@@ -89,7 +89,7 @@ class DataFactory:
             )
 
         # Caching Strategy: Save result
-        if use_cache:
+        if use_cache: #Torch?!
             torch.save(dataset, cache_path)
 
         return dataset

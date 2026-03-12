@@ -35,6 +35,7 @@ fastcore = "1.7.29"
 hydra-core = "^1.3.2"
 optuna = "^4.5.0"
 codecarbon = "^3.2.0"
+omegaconf = "^2.3.0"
 
 
 [build-system]

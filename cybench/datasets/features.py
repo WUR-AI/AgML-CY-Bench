@@ -284,9 +284,9 @@ def design_features(
     # Add location features if available
     if "location" in input_dfs:
         location_df = input_dfs["location"]
-        # Apply spherical transformations to geographic coordinates
-        spherical_features = {"lat_lon": {"lat": [-90, 90], "lon": [-180, 180]}}
-        location_df = apply_spherical_transformations(location_df, spherical_features)
+        # # Apply spherical transformations to geographic coordinates
+        # spherical_features = {"lat_lon": {"lat": [-90, 90], "lon": [-180, 180]}}
+        # location_df = apply_spherical_transformations(location_df, spherical_features)
         soil_features = soil_features.merge(location_df, on=[KEY_LOC], how="left")
 
     # Feature design for time series

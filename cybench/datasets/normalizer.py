@@ -99,6 +99,7 @@ class Normalizer:
         return self.normalize(dfs)
 
     def normalize(self, dfs):
+        ### WARNING: this is done in-place
         """
         Normalize using already-fitted parameters.
         Returns new list of DataFrames.

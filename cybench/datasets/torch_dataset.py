@@ -37,7 +37,7 @@ class TorchDataset(BaseDataset, torch.utils.data.Dataset):
         """Return the total number of samples in the dataset."""
         return len(self.y)
 
-    def __getitem__(self, index: int) -> Tuple[torch.Tensor, torch.Tensor, torch.Tensor]:
+    def __getitem__(self, index: int) -> Tuple[torch.Tensor, torch.Tensor, torch.Tensor, torch.Tensor]:
         """
         Get a sample from the dataset.
 
@@ -51,7 +51,7 @@ class TorchDataset(BaseDataset, torch.utils.data.Dataset):
     ) -> Tuple['TorchDataset', 'TorchDataset']:
         """
         Create two new datasets based on the provided split in years.
-        !!NOTE!!: This is a memory intensive operation, because its making two subsets by copying the original data.
+        !!NOTE!!: This is a memory intensive operation, because it's making two subsets by copying the original data.
         Future implementations might want to rely on more memory-efficiency, in case that becomes a bottleneck.
 
         :param years_split: Tuple of two lists, e.g., ([2012, 2014], [2015, 2017])

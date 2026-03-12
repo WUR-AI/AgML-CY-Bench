@@ -8,10 +8,10 @@ import json
 import os
 
 from cybench.datasets.dataset import Dataset
-from cybench.datasets.torch_dataset import TorchDataset
+from cybench.config import DatasetConfig
 
 
-def cfg_to_hash(cfg: OmegaConf, add_str: bool = True):
+def cfg_to_hash(cfg: DatasetConfig, add_str: bool = True):
     """
     Create a deterministic hash from a DatasetConfig, to use it as a keys e.g. in caching
 

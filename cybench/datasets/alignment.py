@@ -383,7 +383,6 @@ def align_inputs_and_labels(df_y: pd.DataFrame, dfs_x: dict) -> tuple:
     index_y_selection = set(df_y.index.values)
 
     for df_x in dfs_x.values():
-        #print(df_x.head(), len(index_y_selection))
         if len(df_x.index.names) == 1:
             index_y_selection = {
                 (loc_id, year)
@@ -483,42 +482,42 @@ def interpolate_time_series_data_items(X: list, max_season_window_length: int):
     return df_ts
 
 
-def aggregate_time_series_data(df_ts: pd.DataFrame, aggregate_time_series_to: str):
-    """Aggregate time series data to the specified resolution.
-
-    Args:
-        df_ts (pd.DataFrame): time series data in daily resolution
-        aggregate_time_series_to (str): resolution of aggregated data
-
-    Returns:
-        pd.DataFrame with interpolated data
-    """
-    if aggregate_time_series_to not in ["week", "dekad"]:
-        raise Exception(
-            f"Unsupported time series aggregation resolution {aggregate_time_series_to}"
-        )
-
-    if "date" not in df_ts.columns:
-        assert "date" in df_ts.index.names
-        df_ts.reset_index(inplace=True)
-
-    assert "date" in df_ts.columns
-    if aggregate_time_series_to == "week":
-        df_ts["week"] = df_ts["date"].dt.isocalendar().week
-    else:
-        df_ts["dekad"] = df_ts.apply(lambda r: dekad_from_date(r["date"]), axis=1)
-
-    ts_aggrs = {k: TIME_SERIES_AGGREGATIONS[k] for k in TIME_SERIES_PREDICTORS}
-    # Primarily to avoid losing the "date" column.
-    ts_aggrs["date"] = "min"
-    df_ts = (
-        df_ts.groupby([KEY_LOC, KEY_YEAR, aggregate_time_series_to], observed=True)
-        .agg(ts_aggrs)
-        .reset_index()
-    )
-    df_ts.drop(columns=[aggregate_time_series_to], inplace=True)
-
-    return df_ts
+# def aggregate_time_series_data(df_ts: pd.DataFrame, aggregate_time_series_to: str):
+#     """Aggregate time series data to the specified resolution.
+#
+#     Args:
+#         df_ts (pd.DataFrame): time series data in daily resolution
+#         aggregate_time_series_to (str): resolution of aggregated data
+#
+#     Returns:
+#         pd.DataFrame with interpolated data
+#     """
+#     if aggregate_time_series_to not in ["week", "dekad"]:
+#         raise Exception(
+#             f"Unsupported time series aggregation resolution {aggregate_time_series_to}"
+#         )
+#
+#     if "date" not in df_ts.columns:
+#         assert "date" in df_ts.index.names
+#         df_ts.reset_index(inplace=True)
+#
+#     assert "date" in df_ts.columns
+#     if aggregate_time_series_to == "week":
+#         df_ts["week"] = df_ts["date"].dt.isocalendar().week
+#     else:
+#         df_ts["dekad"] = df_ts.apply(lambda r: dekad_from_date(r["date"]), axis=1)
+#
+#     ts_aggrs = {k: TIME_SERIES_AGGREGATIONS[k] for k in TIME_SERIES_PREDICTORS}
+#     # Primarily to avoid losing the "date" column.
+#     ts_aggrs["date"] = "min"
+#     df_ts = (
+#         df_ts.groupby([KEY_LOC, KEY_YEAR, aggregate_time_series_to], observed=True)
+#         .agg(ts_aggrs)
+#         .reset_index()
+#     )
+#     df_ts.drop(columns=[aggregate_time_series_to], inplace=True)
+#
+#     return df_ts
 
 
 def make_aligned_tensors(
