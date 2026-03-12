@@ -19,21 +19,15 @@ from cybench.config import (
 from cybench.datasets.dataset import Dataset
 from cybench.evaluation.eval import (
     evaluate_predictions,
-    get_default_metrics,
     prepare_targets_preds,
 )
-from cybench.models.torch.nn_models import (
-    BaselineLSTM,
-)
-
-
 
 _BASELINE_MODEL_CONSTRUCTORS = {
     #"AverageYieldModel": AverageYieldModel,
     #"LinearTrend": TrendModel,
     #"SklearnRidge": SklearnRidge,
     #"SklearnRF": SklearnRandomForest,
-    "LSTM": BaselineLSTM,
+    #"LSTM": BaselineLSTM,
 }
 
 BASELINE_MODELS = list(_BASELINE_MODEL_CONSTRUCTORS.keys())

@@ -1,7 +1,6 @@
 import numpy as np
 from sklearn.metrics import mean_squared_error, mean_absolute_percentage_error, r2_score
 from scipy.stats import pearsonr
-from typing import Optional
 
 from cybench.models.model import BaseModel
 from cybench.datasets.dataset import Dataset
@@ -94,7 +93,7 @@ def mse(y_true: np.ndarray, y_pred: np.ndarray):
       y_pred (numpy.ndarray): Predicted values.
 
     Returns:
-      float: MSE value as a percentage.
+      float: MSE value
     """
 
     mse = mean_squared_error(y_true, y_pred)
