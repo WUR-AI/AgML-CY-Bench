@@ -66,20 +66,20 @@ def get_splits(
 
     #### 2. Step: Select the training-set based on the split methode
     if cfg.name == 'single':
-        # returning a single set of train- and hol-out- years
+        # returning a single set of train- and hold-out-years
         train_years = [y for y in dataset_years if y not in hold_out_years]
         assert train_years, f"No train years left. Hold-out-years: {hold_out_years} | Available years: {dataset_years}"
         yield train_years, hold_out_years
 
     elif cfg.name == 'rolling':
-        # returning a set of PAST train-years for each hol-out-year
+        # returning a set of PAST train-years for each hold-out-year
         for hold_out_year in sorted(hold_out_years):
             train_years = [y for y in dataset_years if y < hold_out_year]
             assert train_years, f"No train years left. Hold-out-year: {hold_out_year} | Available years: {dataset_years}"
             yield train_years, [hold_out_year]
 
     elif cfg.name == 'loyocv':
-        # returning a set of train-years for each hol-out-year
+        # returning a set of train-years for each hold-out-year
         for hold_out_year in sorted(hold_out_years):
             train_years = [y for y in dataset_years if y != hold_out_year]
             assert train_years, f"No train years left. Hold-out-year: {hold_out_year} | Available years: {dataset_years}"
