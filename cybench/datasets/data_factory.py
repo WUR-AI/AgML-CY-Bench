@@ -5,7 +5,7 @@ import numpy as np
 import pandas as pd
 import torch
 
-from cybench.config import DatasetConfig, DATASETS, PATH_DATA_DIR, KEY_LOC, KEY_YEAR, KEY_TARGET
+from cybench.config import DatasetConfig, DATASETS, PATH_DATA_DIR, KEY_LOC, KEY_YEAR, KEY_TARGET, KEY_CROP_SEASON
 from cybench.datasets.alignment import compute_crop_season_window, ensure_same_categories_union, \
     align_to_crop_season_window_numpy, restore_category_to_string, align_to_crop_season_window, align_inputs_and_labels, \
     interpolate_time_series_data, make_aligned_tensors
@@ -15,17 +15,32 @@ from cybench.datasets.torch_dataset import TorchDataset
 from cybench.util.store_and_cache import cfg_to_hash
 
 
+def _as_list(x):
+    if x is None:
+        return None
+    if isinstance(x, str):
+        return [x]
+    return list(x)
+
+
 class DataFactory:
     def __init__(self, cfg: DatasetConfig):
         self.cfg = cfg
 
         # test
         assert self.cfg.crop in DATASETS, f"Crop type '{self.cfg.crop}' is not supported. See DATASETS in config.py"
-        assert self.cfg.country in DATASETS[self.cfg.crop], f"Country '{self.cfg.country}' is not supported for crop type '{self.cfg.crop}'. See DATASETS in config.py"
+        countries = _as_list(self.cfg.country)
+
+        unsupported = [c for c in countries if c not in DATASETS[self.cfg.crop]]
+        assert not unsupported, (
+            f"Country/countries {unsupported} not supported for crop type "
+            f"'{self.cfg.crop}'. See DATASETS in config.py"
+        )
 
     def build(self) -> Dataset:
         # Caching Strategy: Check existing
         use_cache = getattr(self.cfg, 'use_cache', False)
+        use_memory_optimization = getattr(self.cfg, 'use_memory_optimization', True)
         cache_path = None
         if use_cache:
             dataset_hash = cfg_to_hash(self.cfg, add_str=self.cfg.name)
@@ -39,21 +54,11 @@ class DataFactory:
                 dataset = torch.load(cache_path, weights_only=False)
                 return dataset
 
-        if isinstance(self.cfg.country, list):
-            df_y = pd.DataFrame()
-            dfs_x = {}
-            for country in self.cfg.country:
-                df_y_cn, dfs_x_cn = self.load_dfs(crop=self.cfg.crop, country_code=country)
-
-                df_y = pd.concat([df_y, df_y_cn], axis=0)
-
-                if len(dfs_x) == 0:
-                    dfs_x = dfs_x_cn
-                else:
-                    for x, df_temporal_cn in dfs_x_cn.items():
-                        dfs_x[x] = pd.concat([dfs_x_cn[x], df_temporal_cn], axis=0)
-        else:
-            df_y, dfs_x = self.load_dfs(crop=self.cfg.crop, country_code=self.cfg.country)
+        df_y, dfs_x = self.load_dfs(
+            crop=self.cfg.crop,
+            country_code=self.cfg.country,
+            use_memory_optimization = use_memory_optimization
+        )
 
         if self.cfg.normalizer:
             normalizer = Normalizer(self.cfg.normalizer)
@@ -94,7 +99,7 @@ class DataFactory:
 
         return dataset
 
-    def load_dfs(self,
+    def _load_dfs_single(self,
                  crop: str,
                  country_code: str,
                  use_memory_optimization: bool = True) -> tuple:
@@ -117,12 +122,70 @@ class DataFactory:
         df_non_temporal = self.load_non_temporal(crop=crop, country_code=country_code)
 
         # temporal
-        dfs_x = self.load_temporal(crop=crop, country_code=country_code)
+        dfs_x = self.load_temporal(crop=crop, country_code=country_code, use_memory_optimization=use_memory_optimization)
 
         dfs_x["non_temporal"] = df_non_temporal
-        df_y, dfs_temporal = align_inputs_and_labels(df_y, dfs_x)
+        df_y, dfs_x = align_inputs_and_labels(df_y, dfs_x)
 
         return df_y, dfs_x
+
+
+    def load_dfs(
+        self,
+        crop: str,
+        country_code: str | list[str] | None = None,
+        use_memory_optimization: bool = True,
+    ) -> tuple:
+        """Load data for one or more countries.
+
+        If `country_code` is None, data for all supported countries for the crop
+        is loaded.
+
+        Args:
+            crop (str): crop name
+            country_code (str | list[str] | None): one or more 2-letter country codes
+            use_memory_optimization (bool): use (slower) memory-optimized function
+                for crop season alignment
+
+        Returns:
+            tuple:
+                (target DataFrame, dict of input DataFrames)
+        """
+        assert crop in DATASETS, f"Crop '{crop}' not found in DATASETS"
+
+        countries = _as_list(country_code)
+        if countries is None:
+            countries = DATASETS[crop]
+
+        unsupported = [c for c in countries if c not in DATASETS[crop]]
+        assert not unsupported, (
+            f"Country/countries {unsupported} not supported for crop type '{crop}'. "
+            f"See DATASETS in config.py"
+        )
+
+        df_y = pd.DataFrame()
+        dfs_x = {}
+
+        for cn in countries:
+            try:
+                df_y_cn, dfs_x_cn = self._load_dfs_single(
+                    crop=crop,
+                    country_code=cn,
+                    use_memory_optimization=use_memory_optimization,
+                )
+            except FileNotFoundError:
+                continue
+
+            df_y = pd.concat([df_y, df_y_cn], axis=0)
+
+            if not dfs_x:
+                dfs_x = dfs_x_cn
+            else:
+                for x, df_x_cn in dfs_x_cn.items():
+                    dfs_x[x] = pd.concat([dfs_x[x], df_x_cn], axis=0)
+
+        return df_y, dfs_x
+
 
     def load_target(self, crop: str, country_code: str):
         path_data_cn = os.path.join(PATH_DATA_DIR, crop, country_code)
@@ -165,7 +228,7 @@ class DataFactory:
         non_temp_df.set_index([KEY_LOC], inplace=True)
         return non_temp_df
 
-    def load_temporal(self, crop: str, country_code: str):
+    def load_temporal(self, crop: str, country_code: str, use_memory_optimization: bool=True):
         path_data_cn = os.path.join(PATH_DATA_DIR, crop, country_code)
 
         # crop calendar
@@ -182,8 +245,9 @@ class DataFactory:
             start_of_sequence=self.cfg.temporal.season.start_of_sequence,
             end_of_sequence=self.cfg.temporal.season.end_of_sequence,
         )
-
         dfs_x = {}
+        dfs_x[KEY_CROP_SEASON] = df_crop_cal.set_index([KEY_LOC, KEY_YEAR])
+
         for file_name, source_cfg in self.cfg.temporal.sources.items():
             df_ts = self.load_and_preprocess_time_series_data(
                 crop=crop,
@@ -191,7 +255,7 @@ class DataFactory:
                 file_name=file_name,
                 source_cfg=source_cfg,
                 crop_season_df=df_crop_cal,
-                use_memory_optimization=True,
+                use_memory_optimization=use_memory_optimization,
             )
             dfs_x[file_name] = df_ts
         return dfs_x
@@ -203,7 +267,7 @@ class DataFactory:
             file_name,
             source_cfg,
             crop_season_df,
-            use_memory_optimization=False,
+            use_memory_optimization=True,
             verbose=False,
     ):
         """A helper function to load and preprocess time series data.

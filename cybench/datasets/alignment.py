@@ -107,7 +107,6 @@ def compute_crop_season_window(df, min_year, max_year, start_of_sequence, end_of
 
     # drop redundant information
     df.drop(columns=CROP_CALENDAR_DOYS + ["season_length", "cutoff_days"], inplace=True)
-
     return df
 
 
@@ -288,7 +287,7 @@ def align_to_crop_season_window_numpy(
         start_of_sequence_date[crop_indices[valid_mask]]
     )
     valid_end[valid_mask] = (
-        date_max[valid_mask] + tolerance >= end_of_sequence_date[crop_indices[valid_mask]]
+        date_max[valid_mask] + tolerance > end_of_sequence_date[crop_indices[valid_mask]]
     )
     invalid_season_mask = (~valid_start) | (~valid_end)
     invalid_season_pairs = grouped.index[invalid_season_mask]

@@ -11,7 +11,7 @@ crop: maize
 country: DE
 
 # name will show in experiment name
-name: ${dataset.crop}_${dataset.country}
+name: ${crop}_${country}
 
 # years to be considered
 min_year: 2000

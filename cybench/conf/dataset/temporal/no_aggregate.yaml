@@ -18,8 +18,8 @@ sources:
       - tavg
       - prec
       - rad
-      - et0
-      - vpd
+      # - et0
+      # - vpd
       - cwb
 
   ndvi:
@@ -36,4 +36,4 @@ sources:
     name: soil_moisture
     features:
       - ssm
-      - rsm
+      # - rsm

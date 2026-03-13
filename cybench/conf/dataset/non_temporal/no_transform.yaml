@@ -1,10 +1,10 @@
 name: no_transform
 
 sources:
-  crop_calendar:
-    features:
-      - sos
-      - eos
+#  crop_calendar:
+#    features:
+#      - sos
+#      - eos
 
   location:
     features:
@@ -15,7 +15,7 @@ sources:
     features:
       - awc
       - bulk_density
-      - drainage_class
+      # - drainage_class
     # TODO implement:
     #transform:
     #  drainage_class: dummy

@@ -1,8 +1,12 @@
 import os
 import pandas as pd
+import pytest
+from hydra import compose, initialize
+import copy
+from omegaconf import open_dict
 
 from cybench.datasets.dataset import Dataset
-from cybench.datasets.configured import load_dfs
+from cybench.datasets.data_factory import DataFactory
 from cybench.config import (
     PATH_DATA_DIR,
     KEY_LOC,
@@ -17,13 +21,29 @@ from cybench.config import (
     RS_NDVI,
     SOIL_MOISTURE_INDICATORS,
     CROP_CALENDAR_DATES,
+    DatasetConfig,
 )
 
+@pytest.fixture
+def dataset_cfg():
+    with initialize(version_base=None, config_path="../../cybench/conf/dataset"):
+        cfg = compose(
+            config_name="default",
+            overrides=[
+                "crop=maize",
+                "country=NL",
+                "framework=sklearn",
+            ],
+        )
+    return cfg
 
-dataset = Dataset.load("maize_NL")
+
+@pytest.fixture
+def dataset(dataset_cfg):
+    return DataFactory(dataset_cfg).build()
 
 
-def test_dataset_item():
+def test_dataset_item(dataset):
     assert isinstance(dataset[0], dict)
     expected_indices = [KEY_LOC, KEY_YEAR, KEY_DATES]
     expected_data = (
@@ -34,14 +54,14 @@ def test_dataset_item():
     assert set(dataset[0].keys()) == set(expected_indices + expected_data)
 
 
-def test_split():
+def test_split(dataset_cfg):
     data_path_county_features = os.path.join(PATH_DATA_DIR, "features", "maize", "US")
     train_csv = os.path.join(data_path_county_features, "grain_maize_US_train.csv")
     train_df = pd.read_csv(train_csv, index_col=[KEY_LOC, KEY_YEAR])
     train_yields = train_df[[KEY_TARGET]].copy()
     feature_cols = [c for c in train_df.columns if c != KEY_TARGET]
     train_features = train_df[feature_cols].copy()
-    dataset_cv = Dataset("maize", train_yields, {KEY_COMBINED_FEATURES: train_features})
+    dataset_cv = Dataset(dataset_cfg, train_yields, {KEY_COMBINED_FEATURES: train_features})
 
     even_years = {x for x in dataset_cv.years if x % 2 == 0}
     odd_years = dataset_cv.years - even_years
@@ -51,19 +71,39 @@ def test_split():
     assert ds2.years == odd_years
 
 
-def test_load():
-    ds1 = Dataset.load("maize_NL")
-    ds2 = Dataset.load("maize_ES")
-    ds3 = Dataset.load("maize_NL_ES")
-    assert len(ds3) == (len(ds1) + len(ds2))
+def test_load(dataset_cfg):
+    cfg1 = copy.deepcopy(dataset_cfg)
+    with open_dict(cfg1):
+        cfg1.country = "NL"
+    ds1 = DataFactory(cfg1).build()
+
+    cfg2 = copy.deepcopy(dataset_cfg)
+    with open_dict(cfg2):
+        cfg2.country = "ES"
+    ds2 = DataFactory(cfg2).build()
+
+    cfg3 = copy.deepcopy(dataset_cfg)
+    with open_dict(cfg3):
+        cfg3.country = ["NL", "ES"]
+    ds3 = DataFactory(cfg3).build()
+
+    assert len(ds3) == len(ds1) + len(ds2)
 
 
-def test_memory_optimization():
-    df_y_default, dfs_x_default = load_dfs("maize", "ES", use_memory_optimization=False)
-    df_y_memory_optimized, dfs_x_memory_optimized = load_dfs(
-        "maize", "ES", use_memory_optimization=False
-    )
-    assert df_y_default.equals(df_y_memory_optimized)
+def test_memory_optimization(dataset_cfg):
+    cfg = copy.deepcopy(dataset_cfg)
+    with open_dict(cfg):
+        cfg.country = "ES"
+        cfg.use_memory_optimization = False
+    dataset_no_optimization = DataFactory(cfg).build()
+    df_y_no_optimization, dfs_x_no_optimization = dataset_no_optimization._df_y, dataset_no_optimization._dfs_x
 
-    for key in dfs_x_default:
-        assert dfs_x_default[key].equals(dfs_x_memory_optimized[key])
+    with open_dict(cfg):
+        cfg.country = "ES"
+        cfg.use_memory_optimization = True
+    dataset_memory_optimized = DataFactory(cfg).build()
+    df_y_memory_optimized, dfs_x_memory_optimized = dataset_memory_optimized._df_y, dataset_memory_optimized._dfs_x
+    assert df_y_no_optimization.equals(df_y_memory_optimized)
+
+    for key in dfs_x_no_optimization:
+        assert dfs_x_no_optimization[key].equals(dfs_x_memory_optimized[key])
