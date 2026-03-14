@@ -8,7 +8,6 @@ but is adapted to the CY-Bench codebase and a PyTorch regression setup.
 """
 import logging
 import os
-import random
 import time
 from functools import partial
 from typing import Any, Dict, Optional, Tuple
@@ -16,7 +15,6 @@ from typing import Any, Dict, Optional, Tuple
 import numpy as np
 import torch
 import torch.nn as nn
-from torch.optim.lr_scheduler import LRScheduler
 from torch.utils.data import DataLoader
 from tqdm import tqdm
 
@@ -316,7 +314,7 @@ class TorchTrainer(BaseModel):
         return preds, info
 
     def predict_items(self, X, **kwargs) -> Tuple[np.ndarray, Dict[str, Any]]:
-        raise NotImplementedError # TODO: evaluate whether this methode is necessary
+        raise NotImplementedError # TODO: evaluate whether this method is necessary
 
     # ------------------------------------------------------------------
     # Persistence
@@ -340,7 +338,7 @@ class TorchTrainer(BaseModel):
         torch.save(checkpoint, os.path.join(path, self.name + f"_{seed}.pt"))
 
     @classmethod
-    def load(cls, model_path: str, model: nn.Module, optimizer: torch.optim.Optimizer, **kwargs):
+    def load(cls, name: str, model_path: str, model: nn.Module, optimizer: torch.optim.Optimizer, **kwargs):
         """Load a saved checkpoint into a new Trainer instance."""
         device = kwargs.get('device', 'cuda' if torch.cuda.is_available() else 'cpu')
         ckpt = torch.load(model_path, map_location=device)
@@ -350,7 +348,8 @@ class TorchTrainer(BaseModel):
 
         # Create new trainer instance
         trainer = cls(
-            model=model,
+            name=name,
+            torch_model=model,
             optimizer=optimizer,
             device=device,
             dataloader=ckpt.get("dataloader", {}),

@@ -1,4 +1,4 @@
 name: default
 
 # Metrics to compute; must match names registered via @metric in cybench/evaluation/eval.py
-metrics: [mse, mape, r2]
+metrics: [mse, mape, r2, normalized_rmse]
