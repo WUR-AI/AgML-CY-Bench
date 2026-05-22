@@ -1,0 +1,61 @@
+cybench.datasets package
+========================
+
+Submodules
+----------
+
+cybench.datasets.alignment module
+---------------------------------
+
+.. automodule:: cybench.datasets.alignment
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+cybench.datasets.configured module
+----------------------------------
+
+.. automodule:: cybench.datasets.configured
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+cybench.datasets.dataset module
+-------------------------------
+
+.. automodule:: cybench.datasets.dataset
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+cybench.datasets.dataset\_overview module
+-----------------------------------------
+
+.. automodule:: cybench.datasets.dataset_overview
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+cybench.datasets.modified\_dataset module
+-----------------------------------------
+
+.. automodule:: cybench.datasets.modified_dataset
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+cybench.datasets.torch\_dataset module
+--------------------------------------
+
+.. automodule:: cybench.datasets.torch_dataset
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Module contents
+---------------
+
+.. automodule:: cybench.datasets
+   :members:
+   :undoc-members:
+   :show-inheritance:

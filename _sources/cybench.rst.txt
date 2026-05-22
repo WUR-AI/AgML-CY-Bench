@@ -1,0 +1,33 @@
+cybench package
+===============
+
+Subpackages
+-----------
+
+.. toctree::
+   :maxdepth: 4
+
+   cybench.datasets
+   cybench.evaluation
+   cybench.models
+   cybench.runs
+   cybench.util
+
+Submodules
+----------
+
+cybench.config module
+---------------------
+
+.. automodule:: cybench.config
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Module contents
+---------------
+
+.. automodule:: cybench
+   :members:
+   :undoc-members:
+   :show-inheritance:
