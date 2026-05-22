@@ -221,11 +221,11 @@ production / harvest_area)
 Please cite CY-bench as follows:
 
 <pre>
-@dataset{paudel_etal2024,
-  author       = {Paudel, Dilli and
+@dataset{kallenberg_etal2026,
+  author       = {Kallenberg, Michiel and
+                  Paudel, Dilli and
                   Baja, Hilmy and
                   van Bree, Ron and
-                  Kallenberg, Michiel and
                   Ofori-Ampofo, Stella and
                   Potze, Aike and
                   Poudel, Pratishtha and
@@ -257,7 +257,7 @@ Please cite CY-bench as follows:
                   Athanasiadis, Ioannis N.},
   title        = {{CY-Bench: A comprehensive benchmark dataset
                    for subnational crop yield forecasting}},
-  year         = 2024,
+  year         = 2026,
   publisher    = {AgML (https://www.agml.org/)},
   version      = {1.0},
   doi          = {10.5281/zenodo.11502142},
