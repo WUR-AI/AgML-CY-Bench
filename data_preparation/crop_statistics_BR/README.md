@@ -27,7 +27,7 @@ A translation is given in italic. Basic preprocessing of the downloaded csv file
 ### Selection process via interface on platform 
 First, make sure that you adjust the outline at the very top of the page to match the following structure. You can simply drag and drop elements to their correct position:
 
-![test](images%5CIBGE_layout.png)
+![test](images/IBGE_layout.png)
 
 
  **Variável** (*variable*): 

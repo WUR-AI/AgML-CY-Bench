@@ -8,11 +8,14 @@ from itertools import repeat
 import logging
 import argparse
 import warnings
+from tqdm import tqdm
+
 
 from cybench.util.geo import get_shapes_from_polygons
 from cybench.config import PATH_DATA_DIR, REPO_DIR
 
 warnings.filterwarnings("ignore")
+
 
 def init_worker_logging():
     """Disable file logging in worker processes to avoid RotatingFileHandler races."""
@@ -23,6 +26,7 @@ def init_worker_logging():
     # optional: silence workers completely
     root.addHandler(logging.NullHandler())
 
+
 log = logging.getLogger(__name__)
 
 
@@ -30,8 +34,9 @@ log = logging.getLogger(__name__)
 # Directory paths
 ##################
 
-DATA_DIR = r"/path_to_raw_data/predictors"
-OUTPUT_DIR = r"/path_to_raw_data/python-output"
+AGML_DATA_ROOT = r"/path_to_raw_data"
+DATA_DIR = os.path.join(AGML_DATA_ROOT, "predictors")
+OUTPUT_DIR = os.path.join(AGML_DATA_ROOT, "python-output")
 
 #####################
 # Start and end years
@@ -853,7 +858,9 @@ def process_file(
     else:
         crop_mask_file = "crop_mask_generic_asap.tif"
 
-    crop_mask_path = os.path.join(REPO_DIR, "data_preparation", "global_crop_AFIs_ESA_WC", crop_mask_file)
+    crop_mask_path = os.path.join(
+        REPO_DIR, "data_preparation", "global_crop_AFIs_ESA_WC", crop_mask_file
+    )
 
     basename = os.path.basename(indicator_file)
     fname, ext = os.path.splitext(basename)
@@ -861,6 +868,7 @@ def process_file(
         indicator_file = "netcdf:{indicator_file}:{variable}".format(
             indicator_file=indicator_file, variable=AGERA5_VARIABLES[indicator_name]
         )
+
     if is_time_series:
         date_str = fname[-8:]
         col_names = ["crop_name", "adm_id", "date", indicator_name]
@@ -872,7 +880,8 @@ def process_file(
     # get predictor value for each admin region
     ############################################
     df = pd.DataFrame(columns=col_names)
-    for adm_id, geometry in geometries.items():
+
+    for adm_id, geometry in tqdm(geometries.items(), desc="Processing geometries"):
         stats = geom_extract(
             geometry,
             indicator_file,
@@ -950,9 +959,27 @@ def process_indicators(crop, region, sel_indicators):
         if is_time_series:
             indicator_dir = os.path.join(DATA_DIR, pred_source, indicator)
             result_final = pd.DataFrame()
+            start_time = time.time()
             for yr in range(START_YEAR, END_YEAR + 1):
                 print("Start working on", crop, region, indicator, yr)
-                files = get_time_series_files(indicator_dir, year=yr)
+
+                out_csv_yr = "_".join([indicator, crop, region, str(yr)]) + ".csv"
+                out_path_yr = os.path.join(output_path, out_csv_yr)
+
+                # OPTIONAL: skip already processed years (for crash recovery)
+                if os.path.exists(out_path_yr):
+                    print(f"Year {yr} already processed, skipping.")
+                    result_final = pd.concat(
+                        [
+                            result_final,
+                            pd.read_csv(
+                                out_path_yr, keep_default_na=True, na_filter=True
+                            ),
+                        ],
+                        axis=0,
+                    )
+                    continue
+                files = get_time_series_files(indicator_dir, year=yr, crop=crop)
                 print("There are " + str(len(files)) + " files!")
                 if len(files) == 0:
                     continue
@@ -973,13 +1000,17 @@ def process_indicators(crop, region, sel_indicators):
                             repeat(aggr),
                         ),
                     )
-                    result_yr = pd.concat(dfs, axis=0)
+                    result_yr = pd.concat(dfs, axis=0).round(3)
+                    result_yr.to_csv(out_path_yr, index=False)
+                    print(f"Saved {out_path_yr}")
                     result_final = pd.concat([result_final, result_yr], axis=0)
-            result_final = result_final.round(3)
             out_csv = "_".join([indicator, crop, region]) + ".csv"
             print(os.path.join(output_path, out_csv))
-            result_final.to_csv(os.path.join(output_path, out_csv), index=False)
-
+            result_final.to_csv(
+                os.path.join(output_path, out_csv),
+                index=False,
+                na_rep="NaN",  # or "nan", or "NULL"
+            )
             m, s = divmod((time.time() - start_time), 60)
             h, m = divmod(m, 60)
 
