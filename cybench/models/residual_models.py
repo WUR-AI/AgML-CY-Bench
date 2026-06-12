@@ -7,6 +7,7 @@ from cybench.datasets.modified_dataset import ModifiedTargetsDataset
 from cybench.models.model import BaseModel
 from cybench.models.trend_models import TrendModel
 from cybench.models.sklearn_models import SklearnRidge, SklearnRandomForest
+from cybench.models.svr_model import SVRModel
 from cybench.models.xgboost_model import XGBoostModel
 from cybench.models.nn_models import (
     BaselineLSTM,
@@ -152,6 +153,12 @@ class RandomForestRes(ResidualModel):
     def __init__(self, feature_cols: list = None):
         """RandomForest model that predicts residuals from the trend."""
         super().__init__(SklearnRandomForest(feature_cols=feature_cols))
+
+
+class SVRRes(ResidualModel):
+    def __init__(self, **kwargs):
+        """SVR model that predicts residuals from the trend."""
+        super().__init__(SVRModel(**kwargs))
 
 
 class XGBoostRes(ResidualModel):

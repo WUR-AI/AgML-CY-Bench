@@ -24,6 +24,7 @@ from cybench.evaluation.eval import (
 from cybench.models.naive_models import AverageYieldModel
 from cybench.models.trend_models import TrendModel
 from cybench.models.sklearn_models import SklearnRidge, SklearnRandomForest
+from cybench.models.svr_model import SVRModel
 from cybench.models.xgboost_model import XGBoostModel
 from cybench.models.nn_models import (
     BaselineLSTM,
@@ -34,6 +35,7 @@ from cybench.models.nn_models import (
 from cybench.models.residual_models import (
     RidgeRes,
     RandomForestRes,
+    SVRRes,
     XGBoostRes,
     LSTMRes,
     InceptionTimeRes,
@@ -48,6 +50,8 @@ _BASELINE_MODEL_CONSTRUCTORS = {
     "RidgeRes": RidgeRes,
     "SklearnRF": SklearnRandomForest,
     "RFRes": RandomForestRes,
+    "SVRModel": SVRModel,
+    "SVRRes": SVRRes,
     "XGBoostModel": XGBoostModel,
     "XGBoostRes": XGBoostRes,
     "LSTM": BaselineLSTM,
